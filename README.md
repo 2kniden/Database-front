@@ -1,4 +1,4 @@
-# jiyi 前端
+# JiYi 前端
 
 > a vue project
 
