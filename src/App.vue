@@ -1,12 +1,12 @@
 <template>
   <div>
     <el-container>
-      <el-header><Header /></el-header>
+<!--      <el-header><Header /></el-header>-->
       <el-main><router-view/></el-main>
     </el-container>
   </div>
 
-   
+
 </template>
 
 <script>
