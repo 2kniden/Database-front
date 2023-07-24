@@ -15,18 +15,25 @@
       <el-tab-pane label="日志" name="journals"></el-tab-pane>
       <el-tab-pane label="旅游小队" name="teams"></el-tab-pane>
     </el-tabs>
-    <div class="account-tab" @click="goToPersonal">
-      <el-avatar
-        :size="25"
-        :src="require('@/assets/default_account.svg')"
-      ></el-avatar>
-      <span>账户1234</span>
+    <div class="nav-menu">
+      <SearchBtn></SearchBtn>
+      <div class="account-tab" @click="goToPersonal">
+        <el-avatar
+            :size="25"
+            :src="require('@/assets/default_account.svg')"
+        ></el-avatar>
+        <span>账户1234</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import SearchBtn from "@/views/Search/SearchBtn";
 export default {
+  components:{
+    SearchBtn,
+  },
   data() {
     return {
       //选中的选项卡
@@ -53,7 +60,7 @@ export default {
 .header {
   background-color: #ffffff;
   padding: 20px;
-  width: 100%;
+  width: 100vw;
   position: fixed;
   top: 0;
   left: 0;
@@ -76,12 +83,15 @@ export default {
   margin-left: 30px;
 }
 
+.nav-menu {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 .account-tab {
-  position: fixed;
-  top: 18px;
-  right: 20px;
-  height: 30px;
-  width: 100px;
-  cursor: pointer;
+  position: relative;
+  display: flex;
+  margin-right: 30px;
 }
 </style>
