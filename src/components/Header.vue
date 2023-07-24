@@ -58,7 +58,8 @@ export default {
 
 <style>
 .header {
-  background-color: #ffffff;
+  background-color: transparent;
+  /*background-color: #ffffff;*/
   padding: 20px;
   width: 100vw;
   position: fixed;

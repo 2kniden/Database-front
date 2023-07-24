@@ -2,10 +2,9 @@
   <div class="background">
 
     <!--加载上部背景图-->
-<!--    <img class="up-background" src="../assets/home/up-background.png"/>-->
-
-    <Header></Header>
-
+    <div class="up-background">
+      <Header></Header>
+    </div>
   </div>
 </template>
 
@@ -40,5 +39,8 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
+
+  background-image: url("../assets/home/up-background.png");
+  background-size: cover;
 }
 </style>
