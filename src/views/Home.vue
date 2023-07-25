@@ -16,6 +16,10 @@ export default {
   components:{
     Header
   },
+  data() {
+    return {
+    };
+  },
 }
 </script>
 

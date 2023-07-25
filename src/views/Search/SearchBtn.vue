@@ -43,7 +43,7 @@ export default {
   position: relative;
 
   background-color: #D9D9D920;
-  height:30px;
+  height:40px;
   border-radius: 20px;
 
   margin-right: 20px !important;

@@ -10,11 +10,18 @@ import $ from "jquery";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 
+// 创建一个全局变量，例如 globalData
+let globalData = {
+    navbarActive: 'home',
+};
+
+const app = createApp(App);
+
 // 全局注册 $
-createApp(App).config.globalProperties.$ = $;
+app.config.globalProperties.$ = $;
 
 // 挂载一个自定义属性$http
-createApp(App).config.globalProperties.$http = axios;
+app.config.globalProperties.$http = axios;
 // 全局配置axios请求根路径(axios.默认配置.请求根路径)
 
 //连接服务器用这个
@@ -22,7 +29,9 @@ createApp(App).config.globalProperties.$http = axios;
 //连接本地服务器用这个
 // axios.defaults.baseURL = "http://localhost:5000";
 
-const app = createApp(App);
+// 注册全局变量
+app.config.globalProperties.$globalData = globalData;
+
 app.use(store);
 app.use(router);
 app.use(ElementPlus);

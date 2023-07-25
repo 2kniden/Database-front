@@ -10,7 +10,7 @@ export default {
   name:"Personal",
   components:{
     Header,
-  }
+  },
 }
 </script>
 
