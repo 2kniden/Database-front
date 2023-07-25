@@ -8,9 +8,9 @@
 
     <!--进行选项的绘制-->
     <div class="nav-menu" :style="menuChangeColor">
-      <p class="nav-menu-item" :style="chooseChangeStyle('Attraction')" @click="handleTabChange('Attraction')">景点</p>
-      <p class="nav-menu-item" :style="chooseChangeStyle('Journal')" @click="handleTabChange('Journal')">日志</p>
-      <p class="nav-menu-item" :style="chooseChangeStyle('Team')" @click="handleTabChange('Team')">旅行小队</p>
+      <p class="nav-menu-item" @click="handleTabChange('Attraction')">景点</p>
+      <p class="nav-menu-item" @click="handleTabChange('Journal')">日志</p>
+      <p class="nav-menu-item" @click="handleTabChange('Team')">旅行小队</p>
     </div>
 
     <!--进行右侧图形的绘制-->
@@ -46,22 +46,9 @@ export default {
       }
       else{//如果在其他页面
         return{
-          color:"#808080",
+          color:"#4C4C4C",
         };
       }
-    },
-    chooseChangeStyle(){
-      //根据输入得到名字来确定是不是当前的页面，如果是当前的页面，那么就需要改变它的style
-      return (name) => {
-        // 根据 name 参数返回样式对象
-        if (this.$globalData.navbarActive === name) {
-          return {
-            fontWeight: "500",
-            borderBottom: "4px solid #8097FD",
-            color:"#3E3C3C",
-          };
-        }
-      };
     }
   },
   methods: {
