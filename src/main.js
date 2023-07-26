@@ -13,6 +13,9 @@ import 'vue3-video-play/dist/style.css' // 引入css
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 
+// 引入组件
+import VueSplide from '@splidejs/vue-splide'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 // 创建一个全局变量，例如 globalData
 let globalData = {
     navbarActive: 'home',
@@ -35,8 +38,14 @@ app.config.globalProperties.$http = axios;
 // 注册全局变量
 app.config.globalProperties.$globalData = globalData;
 
+app.use(VueSplide);
 app.use(store);
 app.use(router);
 app.use(ElementPlus);
 app.use(vue3videoPlay);
+
+// 注册elementui图标组件
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
+}
 app.mount("#app");
