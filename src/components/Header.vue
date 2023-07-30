@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div class="header" :style="changeBackgroundColor">
     <!--首先绘制左上角的网页名称-->
     <div class="main_logo">
       <img class="main_logo_icon" src="../assets/main_logo.svg"/>
@@ -62,6 +62,15 @@ export default {
           };
         }
       };
+    },
+    changeBackgroundColor(){
+      //根据页面是不是home来判断背景色应该是什么
+      if(this.$globalData.navbarActive!=='home'){
+        //如果不是home，那么背景色就应该变成白色
+        return{
+          backgroundColor:"#FFFFFF",
+        };
+      }
     }
   },
   methods: {
@@ -100,6 +109,7 @@ export default {
   display: flex;
   top: 0;
   left: 0;
+  z-index: 999;
 }
 
 .main_logo{
