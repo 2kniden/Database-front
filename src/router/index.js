@@ -5,12 +5,15 @@ import Journal from "@/views/Journal.vue";
 import Team from "@/views/Team.vue";
 import Personal from "@/views/Personal.vue";
 import SearchOut from "@/views/Search/SearchOut";
+import MyPublishedTeam from "@/views/Team/MyPublishedTeam.vue";
+import MyJoinedTeam from "@/views/Team/MyJoinedTeam.vue";
+import TeamDetails from "@/views/Team/TeamDetails.vue";
 
 const routes = [
   {
     path: "/",
-    name:"home",
-    component:Home
+    name: "home",
+    component: Home
   },
   {
     path: "/Attraction",
@@ -37,6 +40,21 @@ const routes = [
     path: "/Personal",
     name: "personal",
     component: Personal
+  },
+  {
+    path: "/Team/MyPublishedTeam",
+    name: "myPublishedTeams",
+    component: MyPublishedTeam
+  },
+  {
+    path: "/Team/MyJoinedTeam",
+    name: "myJoinedTeams",
+    component: MyJoinedTeam
+  },
+  {
+    path: "/Team/TeamDetails",
+    name: "teamDetails",
+    component: TeamDetails
   }
 ];
 
