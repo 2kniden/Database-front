@@ -49,7 +49,8 @@ import Header from "@/components/Header";
 import TeamNav from "@/components/TeamNav";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import axios  from "axios";
+import axios from "axios";
+import { ElMessage } from 'element-plus';
 
 // 进入小队详情页
 const router = useRouter()
@@ -63,21 +64,27 @@ const goDetails = (item) => {
 // 请求加入小队（未实现）
 const joinTeam = (item) => {
   console.log("请求加入小队")
-  alert("已发送加入请求")
+  ElMessage({
+    message: '成功发送加入小队请求！',
+    type: 'success',
+  })
   // 获取小队的id
   const team_id = item.team_id
-  // 获取用户id
-  // 将该用户添加到小队申请者列表applicants（后端）
+  // 获取当前用户id（未实现）
+
+  // 将该用户添加到小队申请者列表applicants（未实现）
+  // 如果该用户已经在applicants中，则不用添加
+
 }
 
 // 测试数据，实际调用后端时需要对部分内容进行更换，如需更换需同时更改相关页面template内容
 
 const teamList = ref()
 axios.get('/Team/TeamSquare/')
-    .then(res => {
-      console.log(res.data.team_info);
-      teamList.value = res.data.team_info
-    });
+  .then(res => {
+    console.log(res.data.team_info);
+    teamList.value = res.data.team_info
+  });
 </script>
 
 <style>

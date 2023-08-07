@@ -8,6 +8,8 @@ import SearchOut from "@/views/Search/SearchOut";
 import MyPublishedTeam from "@/views/Team/MyPublishedTeam.vue";
 import MyJoinedTeam from "@/views/Team/MyJoinedTeam.vue";
 import TeamDetails from "@/views/Team/TeamDetails.vue";
+import MyTeamDetails from "@/views/Team/MyTeamDetails.vue";
+import EditTeam from "@/views/Team/EditTeam.vue";
 
 const routes = [
   {
@@ -55,6 +57,16 @@ const routes = [
     path: "/Team/TeamDetails",
     name: "teamDetails",
     component: TeamDetails
+  },
+  {
+    path: "/Team/MyTeamDetails",
+    name: "myTeamDetails",
+    component: MyTeamDetails
+  },
+  {
+    path: "/Team/MyPublishedTeam/EditTeam",
+    name: "editTeam",
+    component: EditTeam
   }
 ];
 

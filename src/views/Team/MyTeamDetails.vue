@@ -47,11 +47,6 @@
                 </div>
                 <div class="clearfloat"></div>
             </div>
-            <!-- 第六行：按钮 -->
-            <div>
-                <el-button class="card-button" type="primary" size="large" color="#8097FD" plain
-                    @click="joinTeam(item)">加入小队</el-button>
-            </div>
         </div>
     </div>
 </template>
@@ -59,62 +54,12 @@
 <script setup>
 import Header from "@/components/Header";
 import TeamNav from "@/components/TeamNav";
-import { useRoute } from "vue-router";
-import { ElMessage } from 'element-plus';
+import { useRoute } from "vue-router"
 
 const route = useRoute()
-console.log("切换至小队详情页")
+console.log("切换至我的小队详情页")
 const item = route.query
 
-// 请求加入小队（未实现）
-// 同team.vue中的同名函数
-const joinTeam = (item) => {
-    console.log("请求加入小队")
-    ElMessage({
-        message: '成功发送加入小队请求！',
-        type: 'success',
-    })
-    // 获取小队的id
-    const team_id = item.team_id
-    // 获取用户id
-    // 将该用户添加到小队申请者列表（后端）
-}
 </script>
 
-<style>
-.detail-content {
-    margin: 130px auto;
-    padding: 50px;
-    background-color: #fff;
-    width: 1090px;
-    height: auto;
-}
-
-.float-left {
-    float: left;
-}
-
-.line-name {
-    float: left;
-    margin-right: 20px;
-}
-
-.padding-h-five {
-    padding: 5px 0;
-}
-
-.publisher {
-    float: left;
-    margin-left: 10px;
-    padding: 5px 10px;
-    background-color: #8A80FD;
-    border-radius: 10px;
-    font-size: 14px;
-    color: #fff;
-}
-
-.member {
-    margin-top: 16px;
-    text-align: left;
-}
-</style>
+<style></style>
