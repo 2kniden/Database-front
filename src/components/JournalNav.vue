@@ -26,7 +26,7 @@
       <!-- 图片展示 -->
       <li class="clearfix">
         <!-- 这里应该做成图片的动态展示 -->
-        <img class="bgImg" :src="require('../assets/journal/'+page-info)" alt />
+        <!-- <img class="bgImg" :src="require('../assets/journal/'+page-info)" alt /> -->
   
       <!-- 我的日志 的导航栏背景图片应当可以穿出盒子 -->
       </li>
