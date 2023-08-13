@@ -8,6 +8,9 @@ import SearchOut from "@/views/Search/SearchOut";
 import MyPublishedTeam from "@/views/Team/MyPublishedTeam.vue";
 import MyJoinedTeam from "@/views/Team/MyJoinedTeam.vue";
 import TeamDetails from "@/views/Team/TeamDetails.vue";
+import JournalDetails from "@/views/Journal/JournalDetails.vue";
+import MyJournal from "@/views/Journal/MyJournal.vue";
+import JournalPlaza from "@/views/Journal/JournalPlaza.vue"
 
 const routes = [
   {
@@ -22,8 +25,26 @@ const routes = [
   },
   {
     path: "/Journal",
-    name: "journals",
-    component: Journal
+    name: "Journal",
+    component:Journal,
+    children:[
+      {
+        path: "/Journal/MyJournal",
+        name: "myJournal",
+        component: MyJournal
+      },
+      {
+        path: "/Journal/JournalPlaza",
+        name: "journalPlaza",
+        component: JournalPlaza
+      }
+    ],
+    redirect:"/Journal/JournalPlaza"
+  },
+  {//日志详情展示
+    path: "/Journal/JournalDetails",
+    name: "journalDetails",
+    component: JournalDetails
   },
   {
     path: "/Team",
