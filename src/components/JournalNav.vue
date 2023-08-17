@@ -23,6 +23,18 @@
            </div>
         </router-link>
       </li>
+
+      <li class="choice clearfix">
+        <router-link to="/Journal/PostJournal">
+          <div class="nav-icon">
+            <img src="../assets/journal/my-journal-icon.png">
+          </div>
+          <div class="nav-text">
+            <p>发布日志</p>
+           </div>
+        </router-link>
+      </li>
+
       <!-- 图片展示 -->
       <li class="clearfix">
         <!-- 这里应该做成图片的动态展示 -->

@@ -11,6 +11,7 @@ import TeamDetails from "@/views/Team/TeamDetails.vue";
 import JournalDetails from "@/views/Journal/JournalDetails.vue";
 import MyJournal from "@/views/Journal/MyJournal.vue";
 import JournalPlaza from "@/views/Journal/JournalPlaza.vue"
+import PostJournal from "@/views/Journal/PostJournal.vue";
 
 const routes = [
   {
@@ -37,7 +38,12 @@ const routes = [
         path: "/Journal/JournalPlaza",
         name: "journalPlaza",
         component: JournalPlaza
-      }
+      },
+      {
+        path: "/Journal/PostJournal",
+        name: "PostJournal",
+        component: PostJournal
+      },
     ],
     redirect:"/Journal/JournalPlaza"
   },
