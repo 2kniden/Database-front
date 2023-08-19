@@ -6,6 +6,14 @@
                 这里展示我的日志
             </p>
         </div>
+
+        <div>
+            <router-link to="/Journal/JournalDetails">
+             <div>
+                <p>前往日志详情</p>
+            </div>
+            </router-link>
+        </div>
     </div>
 </template>
 

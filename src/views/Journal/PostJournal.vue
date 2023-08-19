@@ -104,6 +104,21 @@ import { nextTick, ref } from 'vue'
 import { ElInput } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 
+function formatDateTime(date) {  
+            var y = date.getFullYear();  
+            var m = date.getMonth() + 1;  
+            m = m < 10 ? ('0' + m) : m;  
+            var d = date.getDate();  
+            d = d < 10 ? ('0' + d) : d;  
+            var h = date.getHours();  
+            h = h < 10 ? ('0' + h) : h;  
+            var minute = date.getMinutes();  
+            minute = minute < 10 ? ('0' + minute) : minute;  
+            var second=date.getSeconds();  
+            second=second < 10 ? ('0' + second) : second;  
+            return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;  
+        };
+
 export default{
     name: "PostJournal",    
     components:{
@@ -113,6 +128,8 @@ export default{
     },
   data() {
     return {
+      poster_id: "001",
+
       is_post: true,
       
       cover_url: '',
@@ -218,11 +235,19 @@ export default{
       }
       input.click()
     },
-    saveContent() {
-      //console.log(this.content);      //查看内容，这里暂时保存为文件便于查看
+    saveContent() {    
       this.is_post = false;
-      const blob = new Blob([this.content], { type: 'text/html;charset=utf-8' })
-      saveAs(blob, 'article.html')
+      const blob = new Blob([this.content], { type: 'text/html;charset=utf-8' });
+      saveAs(blob, 'article.html');
+
+      const now_time = new Date();
+      console.log(this.poster_id);
+      console.log(this.cover_url);
+      console.log(this.title);
+      //console.log(this.content);                //查看内容，这里暂时保存为文件便于查看
+      console.log(formatDateTime(now_time));        //发布时间
+      console.log(this.selected_tabs);
+      console.log(this.is_public);
     }
   }
 
@@ -309,11 +334,9 @@ export default{
   margin-left: 10px;
   margin-right: 10px;
   font-weight: bold;
-  height: 50px;
-  line-height: 40px;
+  line-height: 20px;
 }
 .tabs-container {
-  height: 20px;
   display: flex;
   flex-wrap: wrap;
   gap: 5px;  
