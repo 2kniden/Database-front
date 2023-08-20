@@ -14,7 +14,6 @@
                     <div class="comword">
                         {{comword}}
                     </div>
-                    <!-- 这里很奇怪渲染不出来 而且没有添加样式 希望旁边两个是圆角-->
                     <div class="comdetailimg">
 
                         <div v-for="pic in picsrc" :key="pic">
@@ -35,7 +34,6 @@
                         <img class="licon" src="../../../assets/iconfont/unlike.svg" alt="">
                         {{comunlikes}}
                     </div>
-                    <div class="attrreply ">回复</div>
                 </div>
 
             </div>

@@ -58,11 +58,14 @@
 <script>
 import SearchView from '../../components/Attraction/searchview.vue'
 export default {
+    props: ['selectedAttractions'],
     components: {
         SearchView,
     },
     data() {
         return {
+            // 接收传进来的选择
+            receivedAttractions: [],
             // 导航栏
             activeMenu: 'home-1',
             isMenuCollapse: false,
@@ -164,6 +167,11 @@ export default {
             // 评分系统
             rating: 4.5,
         };
+    },
+    mounted() {
+        // 这里的传递参数有点问题，一直是undefined
+        this.receivedAttractions=this.selectedAttractions;
+       console.log(this.receivedAttractions);
     },
     methods: {
         handleMenuSelect(index) {
