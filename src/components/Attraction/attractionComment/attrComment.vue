@@ -62,6 +62,8 @@ export default{
 </script>
 
 <style>
+/* 有时间再设置图片样式 */
+
 .userattrcom {
     display: flex;
     flex-direction: column;
