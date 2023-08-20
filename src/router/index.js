@@ -5,12 +5,14 @@ import Journal from "@/views/Journal.vue";
 import Team from "@/views/Team.vue";
 import Personal from "@/views/Personal.vue";
 import SearchOut from "@/views/Search/SearchOut";
+import AttractionSearch from '@/views/Attraction/AttractionSearch';
+import AttractionDetail from '@/views/Attraction/AttractionDetail';
 
 const routes = [
   {
     path: "/",
-    name:"home",
-    component:Home
+    name: "home",
+    component: Home
   },
   {
     path: "/Attraction",
@@ -37,7 +39,9 @@ const routes = [
     path: "/Personal",
     name: "personal",
     component: Personal
-  }
+  },
+  { path: "/attraction-search", name: "attractionsearchs", component: AttractionSearch },
+  { path: "/attraction-detail", name: "attractiondetails", component: AttractionDetail }
 ];
 
 const router = createRouter({
