@@ -18,14 +18,14 @@
 
         <div class="leftcontainer">
             <!-- 这里连接数据库 -->
-            <div class="tolnum">共123455条</div>
+            <div class="tolnum">共{{ totalItems }}条</div>
             <!-- 搜索景点缩览图 -->
             <div>
                 <div class="noneresult" v-if="searchMatchList.length === 0">
                     ----没有搜索结果请重新搜索----
                 </div>
                 <div v-else>
-                    <SearchView v-for="item in searchMatchList" :key="item.id" :picsrc="item.pic" :title="item.title"
+                    <SearchView v-for="item in currentPageData" :key="item.id" :picsrc="item.pic" :title="item.title"
                         :location="item.location" :score="item.score" :commentnum="item.commentnum"
                         :username="item.username" :commentdetail="item.commentdetail"></SearchView>
                 </div>
@@ -33,21 +33,21 @@
 
             </div>
             <div class="endword">
-                <div class="endright">1-10/12355条</div>
+                <!-- 这里也要改 -->
+                <div class="endright">{{ pagestartIndex }}-{{ pageendIndex }}/{{ totalItems }}条</div>
                 <div class="endleft">
                     <div class="eltabs">
-                       
+                        <!-- 分页展示数据 -->
                         <el-tabs v-model="activeTab" @tab-click="handleTabClick">
-                            <el-tab-pane label="上一页" name="1"></el-tab-pane>
-                            <el-tab-pane label="1" name="2"></el-tab-pane>
-                            <el-tab-pane label="2" name="3"></el-tab-pane>
-                            <el-tab-pane label="3" name="4"></el-tab-pane>
-                            <el-tab-pane label="4" name="5"></el-tab-pane>
-                            <el-tab-pane label="5" name="6"></el-tab-pane>
-                            <el-tab-pane label="下一页" name="7"></el-tab-pane>
+                            <el-tab-pane label="上一页" name="prev" 
+                                :disabled="activeTab === '1'"></el-tab-pane>
+                            <el-tab-pane v-for="page in displayedPages" :label="page" :name="page.toString()"
+                                :key="page"></el-tab-pane>
+                            <el-tab-pane label="下一页" name="next"
+                                :disabled="activeTab === pageCount.toString()"></el-tab-pane>
                         </el-tabs>
                     </div>
-                    <div class="tolpage">1234页</div>
+                    <div class="tolpage">{{ pageCount }}页</div>
                 </div>
 
             </div>
@@ -68,7 +68,7 @@ export default {
     },
     data() {
         return {
-            // 接收传进来的选择
+            // 接收传进来的选择，之类传输有问题不知道为什么
             receivedAttractions: '上海',
             // 导航栏
             activeMenu: 'home-1',
@@ -83,7 +83,7 @@ export default {
                 id: 1,
                 pic: require('../../assets/attractions/highrank/1.jpg'),
                 title: '外滩1',
-                location: '北京市浦东新区川沙新镇黄赵路310号',
+                location: '上海市浦东新区川沙新镇黄赵路310号',
                 score: '4.6',
                 commentnum: '1234',
                 username: 'user1',
@@ -92,7 +92,7 @@ export default {
                 id: 2,
                 pic: require('../../assets/attractions/highrank/2.jpg'),
                 title: '外滩',
-                location: '北京市浦东新区川沙新镇黄赵路310号',
+                location: '上海市浦东新区川沙新镇黄赵路310号',
                 score: '4.6',
                 commentnum: '1234',
                 username: 'user1',
@@ -169,9 +169,106 @@ export default {
                 commentnum: '1234',
                 username: 'user1',
                 commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            },],
+            }, {
+                id: 11,
+                pic: require('../../assets/attractions/highrank/1.jpg'),
+                title: '外滩1',
+                location: '上海市浦东新区川沙新镇黄赵路310号',
+                score: '4.6',
+                commentnum: '1234',
+                username: 'user1',
+                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
+            }, {
+                id: 12,
+                pic: require('../../assets/attractions/highrank/2.jpg'),
+                title: '外滩',
+                location: '上海市浦东新区川沙新镇黄赵路310号',
+                score: '4.6',
+                commentnum: '1234',
+                username: 'user1',
+                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
+            }, {
+                id: 13,
+                pic: require('../../assets/attractions/highrank/3.jpg'),
+                title: '外滩',
+                location: '上海市浦东新区川沙新镇黄赵路310号',
+                score: '4.6',
+                commentnum: '1234',
+                username: 'user1',
+                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
+            }, {
+                id: 14,
+                pic: require('../../assets/attractions/highrank/4.jpg'),
+                title: '外滩',
+                location: '上海市浦东新区川沙新镇黄赵路310号',
+                score: '4.6',
+                commentnum: '1234',
+                username: 'user1',
+                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
+            }, {
+                id: 15,
+                pic: require('../../assets/attractions/highrank/6.jpg'),
+                title: '外滩',
+                location: '上海市浦东新区川沙新镇黄赵路310号',
+                score: '4.6',
+                commentnum: '1234',
+                username: 'user1',
+                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
+            }, {
+                id: 16,
+                pic: require('../../assets/attractions/highrank/1.jpg'),
+                title: '外滩',
+                location: '上海市浦东新区川沙新镇黄赵路310号',
+                score: '4.6',
+                commentnum: '1234',
+                username: 'user1',
+                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
+            }, {
+                id: 17,
+                pic: require('../../assets/attractions/highrank/3.jpg'),
+                title: '外滩',
+                location: '上海市浦东新区川沙新镇黄赵路310号',
+                score: '4.6',
+                commentnum: '1234',
+                username: 'user1',
+                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
+            }, {
+                id: 18,
+                pic: require('../../assets/attractions/highrank/4.jpg'),
+                title: '外滩',
+                location: '上海市浦东新区川沙新镇黄赵路310号',
+                score: '4.6',
+                commentnum: '1234',
+                username: 'user1',
+                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
+            }, {
+                id: 19,
+                pic: require('../../assets/attractions/highrank/6.jpg'),
+                title: '外滩',
+                location: '上海市浦东新区川沙新镇黄赵路310号',
+                score: '4.6',
+                commentnum: '1234',
+                username: 'user1',
+                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
+            }, {
+                id: 20,
+                pic: require('../../assets/attractions/highrank/1.jpg'),
+                title: '外滩',
+                location: '上海市浦东新区川沙新镇黄赵路310号',
+                score: '4.6',
+                commentnum: '1234',
+                username: 'user1',
+                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
+            }],
             // 评分系统
             rating: 4.5,
+            // 展示页面部分
+            currentPage: 1, // 当前页数
+            pageSize: 10,  // 每页显示的条数
+            pagestartIndex: '',//每页开始
+            pageendIndex: '',//每页结束
+            totalItems: 100, // 总数据条数
+            activeTab: '1'
         };
     },
     mounted() {
@@ -180,6 +277,55 @@ export default {
         // console.log(this.receivedAttractions);
         this.filterSearchResults(this.receivedAttractions);
         //开始匹配
+    },
+    computed: {
+        // 计算总页数
+        pageCount() {
+            //this.totalItems = this.searchMatchList.length;
+            this.totalPage = Math.ceil(this.totalItems / this.pageSize);
+            return this.totalPage;
+        },
+        // 计算当前页的数据
+        currentPageData() {
+            const allData = this.searchMatchList;
+            // 根据当前页和每页的条数计算数据的起始和结束索引
+            const startIndex = (this.currentPage - 1) * this.pageSize;
+            const endIndex = startIndex + this.pageSize;
+
+            // 设置 pagestartIndex 和 pageendIndex
+            this.pagestartIndex = startIndex + 1;
+            this.pageendIndex = endIndex;
+
+            // 从 'allData' 中提取当前页的数据
+            return allData.slice(startIndex, endIndex);
+        },
+        displayedPages() {
+            const dcurrentPage = parseInt(this.activeTab);
+            const halfDisplay = 2; // 显示当前页前后各2页
+            const pages = [];
+            if (this.pageCount < 5) {
+                for (let i = 1; i <= this.pageCount; i++) {
+                    pages.push(i);
+                }
+            } else {
+                let startPage = Math.max(1, dcurrentPage - halfDisplay);
+                let endPage = Math.min(this.pageCount, dcurrentPage + halfDisplay);
+
+                // 调整页码范围，确保显示 5 个页码
+                while (endPage - startPage < 4) {
+                    if (startPage > 1) {
+                        startPage--;
+                    } else if (endPage < this.pageCount) {
+                        endPage++;
+                    }
+                }
+                for (let i = startPage; i <= endPage; i++) {
+                    pages.push(i);
+                }
+            }
+            return pages;
+        },
+
     },
     methods: {
         handleMenuSelect(index) {
@@ -195,19 +341,42 @@ export default {
                 );
             });
         },
-
+        handleTabClick(tab) {
+            if (tab.name === 'prev') {
+                this.prevPage();
+            } else if (tab.name === 'next') {
+                this.nextPage();
+            } else {
+                this.currentPage = parseInt(tab.name);
+            }
+            
+            
+        },
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                
+            }
+        },
+        nextPage() {
+            if (this.currentPage < this.pageCount) {
+                this.currentPage++;
+                
+            }
+        }
 
     },
 };
 </script>
   
 <style>
-.noneresult{
+.noneresult {
     font-size: 14px;
     margin: 20px 0;
     color: #999;
 
 }
+
 .container {
     display: flex;
 
