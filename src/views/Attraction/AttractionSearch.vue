@@ -15,27 +15,28 @@
 
             </el-menu>
         </div>
-        
+
         <div class="leftcontainer">
             <!-- 这里连接数据库 -->
             <div class="tolnum">共123455条</div>
             <!-- 搜索景点缩览图 -->
             <div>
-                <SearchView v-for="item in searchlist" :key="item.id" 
-                :picsrc="item.pic"
-                :title="item.title"
-                :location="item.location"
-                :score="item.score"
-                :commentnum="item.commentnum"
-                :username="item.username"
-                :commentdetail="item.commentdetail"></SearchView>
-                
+                <div class="noneresult" v-if="searchMatchList.length === 0">
+                    ----没有搜索结果请重新搜索----
+                </div>
+                <div v-else>
+                    <SearchView v-for="item in searchMatchList" :key="item.id" :picsrc="item.pic" :title="item.title"
+                        :location="item.location" :score="item.score" :commentnum="item.commentnum"
+                        :username="item.username" :commentdetail="item.commentdetail"></SearchView>
+                </div>
+
+
             </div>
             <div class="endword">
                 <div class="endright">1-10/12355条</div>
                 <div class="endleft">
                     <div class="eltabs">
-                        <!-- 使用 el-tabs 组件这里不知道为什么有点问题 -->
+                       
                         <el-tabs v-model="activeTab" @tab-click="handleTabClick">
                             <el-tab-pane label="上一页" name="1"></el-tab-pane>
                             <el-tab-pane label="1" name="2"></el-tab-pane>
@@ -56,28 +57,33 @@
 </template>
   
 <script>
+import { useRoute } from 'vue-router'
 import SearchView from '../../components/Attraction/searchview.vue'
 export default {
-    props: ['selectedAttractions'],
+
+
     components: {
         SearchView,
+        useRoute,
     },
     data() {
         return {
             // 接收传进来的选择
-            receivedAttractions: [],
+            receivedAttractions: '上海',
             // 导航栏
             activeMenu: 'home-1',
             isMenuCollapse: false,
             // 下方选项卡设置默认选中的选项卡为 "2"
-            activeTab: "2", 
+            activeTab: "2",
             showTabContent: false, // 初始设置选项卡内容不显示
-            //搜索内容列表
+            //搜索内容匹配列表
+            searchMatchList: [],
+            //搜索内容总数据列表
             searchlist: [{
                 id: 1,
                 pic: require('../../assets/attractions/highrank/1.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
+                title: '外滩1',
+                location: '北京市浦东新区川沙新镇黄赵路310号',
                 score: '4.6',
                 commentnum: '1234',
                 username: 'user1',
@@ -86,7 +92,7 @@ export default {
                 id: 2,
                 pic: require('../../assets/attractions/highrank/2.jpg'),
                 title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
+                location: '北京市浦东新区川沙新镇黄赵路310号',
                 score: '4.6',
                 commentnum: '1234',
                 username: 'user1',
@@ -136,7 +142,7 @@ export default {
                 commentnum: '1234',
                 username: 'user1',
                 commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            },{
+            }, {
                 id: 8,
                 pic: require('../../assets/attractions/highrank/1.jpg'),
                 title: '外滩',
@@ -145,7 +151,7 @@ export default {
                 commentnum: '1234',
                 username: 'user1',
                 commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            },{
+            }, {
                 id: 9,
                 pic: require('../../assets/attractions/highrank/1.jpg'),
                 title: '外滩',
@@ -154,7 +160,7 @@ export default {
                 commentnum: '1234',
                 username: 'user1',
                 commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            },{
+            }, {
                 id: 10,
                 pic: require('../../assets/attractions/highrank/1.jpg'),
                 title: '外滩',
@@ -170,21 +176,38 @@ export default {
     },
     mounted() {
         // 这里的传递参数有点问题，一直是undefined
-        this.receivedAttractions=this.selectedAttractions;
-       console.log(this.receivedAttractions);
+        // this.receivedAttractions = this.$route.params.selectedAttractions;
+        // console.log(this.receivedAttractions);
+        this.filterSearchResults(this.receivedAttractions);
+        //开始匹配
     },
     methods: {
         handleMenuSelect(index) {
             this.activeMenu = index;
             // 在这里处理菜单项点击事件，可以进行页面跳转或其他操作
         },
-        // 星星评分
+        filterSearchResults(keywords) {
+            // 使用keywords过滤searchlist，只保留包含关键词的项
+            this.searchMatchList = this.searchlist.filter(item => {
+                return (
+                    item.title.includes(keywords) || // 标题包含关键词
+                    item.location.includes(keywords) // 地点包含关键词
+                );
+            });
+        },
+
 
     },
 };
 </script>
   
 <style>
+.noneresult{
+    font-size: 14px;
+    margin: 20px 0;
+    color: #999;
+
+}
 .container {
     display: flex;
 
@@ -246,9 +269,11 @@ export default {
 
 .eltabs {
     transform: translate(0, -20%);
-    
+
 }
+
 .tolpage {
     margin-left: 10px;
-}</style>
+}
+</style>
   

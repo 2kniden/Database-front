@@ -1,6 +1,6 @@
 <template>
     <el-autocomplete class="inline-input" v-model="state1" :fetch-suggestions="querySearch" placeholder="请输入内容"
-        @select="handleSelect" @clear="clearInput"></el-autocomplete>
+        @select="handleSelect" @clear="clearInput" @focus="showTopResults"></el-autocomplete>
     <el-button type="primary" plain color="#8097FD" @click="search">
         搜索
     </el-button>
@@ -9,14 +9,28 @@
 export default {
     data() {
         return {
+            // 这里默认先呈现20个
             attractions: [],
-            // 保存已经选择了的数组项，若直接搜索就是保存关键词，如果选择了某个选项那把关键词变成那个名称和城市
-            selectedAttractions: [],//你这个东西要传到searchlist里面的
+            selectedAttractions: '',//这个保存关键词，如果选中了一个就直接传递进来景区名字就可以，关键词东西要传到searchlist里面的
+            //显示哪个数据
             state1: '',
-            state2: ''
+            state2: '',
         };
     },
+    // 这里暂时不知道怎么渲染上去
+    computed: {
+        formattedStates() {
+            // 限制 state1 最多显示6个字，多余的部分用省略号表示
+            const truncatedState1 = this.state1.length > 6 ? this.state1.slice(0, 6) + '...' : this.state1;
+            // 拼接 state1 和 state2，并使用空格分开
+            return `${truncatedState1} ${this.state2}`;
+        }
+    },
     methods: {
+        showTopResults() {
+            // 获取焦点时展示前10条数据
+            this.attractions = this.loadAll().slice(0, 10);
+        },
         querySearch(queryString, cb) {
             var attractions = this.attractions;
             var results = queryString ? attractions.filter(this.createFilter(queryString)) : attractions;
@@ -35,60 +49,61 @@ export default {
         },
         loadAll() {
             return [
+                //这里就放你选择的地点里面的从前往后排序的景点吧，这里给20个选项
 
-                { "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
-                { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
-                { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" },
-                { "value": "泷千家(天山西路店)", "address": "天山西路438号" },
-                { "value": "胖仙女纸杯蛋糕（上海凌空店）", "address": "上海市长宁区金钟路968号1幢18号楼一层商铺18-101" },
-                { "value": "贡茶", "address": "上海市长宁区金钟路633号" },
-                { "value": "豪大大香鸡排超级奶爸", "address": "上海市嘉定区曹安公路曹安路1685号" },
-                { "value": "茶芝兰（奶茶，手抓饼）", "address": "上海市普陀区同普路1435号" },
-                { "value": "十二泷町", "address": "上海市北翟路1444弄81号B幢-107" },
-                { "value": "星移浓缩咖啡", "address": "上海市嘉定区新郁路817号" },
-                { "value": "阿姨奶茶/豪大大", "address": "嘉定区曹安路1611号" },
-                { "value": "新麦甜四季甜品炸鸡", "address": "嘉定区曹安公路2383弄55号" },
-                { "value": "Monica摩托主题咖啡店", "address": "嘉定区江桥镇曹安公路2409号1F，2383弄62号1F" },
-                { "value": "浮生若茶（凌空soho店）", "address": "上海长宁区金钟路968号9号楼地下一层" },
-                { "value": "NONO JUICE  鲜榨果汁", "address": "上海市长宁区天山西路119号" },
-                { "value": "CoCo都可(北新泾店）", "address": "上海市长宁区仙霞西路" },
-                { "value": "快乐柠檬（神州智慧店）", "address": "上海市长宁区天山西路567号1层R117号店铺" },
-                { "value": "Merci Paul cafe", "address": "上海市普陀区光复西路丹巴路28弄6号楼819" },
-                { "value": "猫山王（西郊百联店）", "address": "上海市长宁区仙霞西路88号第一层G05-F01-1-306" },
-                { "value": "枪会山", "address": "上海市普陀区棕榈路" },
-                { "value": "纵食", "address": "元丰天山花园(东门) 双流路267号" },
-                { "value": "钱记", "address": "上海市长宁区天山西路" },
-                { "value": "壹杯加", "address": "上海市长宁区通协路" },
-                { "value": "唦哇嘀咖", "address": "上海市长宁区新泾镇金钟路999号2幢（B幢）第01层第1-02A单元" },
-                { "value": "爱茜茜里(西郊百联)", "address": "长宁区仙霞西路88号1305室" },
-                { "value": "爱茜茜里(近铁广场)", "address": "上海市普陀区真北路818号近铁城市广场北区地下二楼N-B2-O2-C商铺" },
-                { "value": "鲜果榨汁（金沙江路和美广店）", "address": "普陀区金沙江路2239号金沙和美广场B1-10-6" },
-                { "value": "开心丽果（缤谷店）", "address": "上海市长宁区威宁路天山路341号" },
-                { "value": "超级鸡车（丰庄路店）", "address": "上海市嘉定区丰庄路240号" },
-                { "value": "妙生活果园（北新泾店）", "address": "长宁区新渔路144号" },
-                { "value": "香宜度麻辣香锅", "address": "长宁区淞虹路148号" },
-                { "value": "凡仔汉堡（老真北路店）", "address": "上海市普陀区老真北路160号" },
-                { "value": "港式小铺", "address": "上海市长宁区金钟路968号15楼15-105室" },
-                { "value": "蜀香源麻辣香锅（剑河路店）", "address": "剑河路443-1" },
-                { "value": "北京饺子馆", "address": "长宁区北新泾街道天山西路490-1号" },
-                { "value": "饭典*新简餐（凌空SOHO店）", "address": "上海市长宁区金钟路968号9号楼地下一层9-83室" },
-                { "value": "焦耳·川式快餐（金钟路店）", "address": "上海市金钟路633号地下一层甲部" },
-                { "value": "动力鸡车", "address": "长宁区仙霞西路299弄3号101B" },
-                { "value": "浏阳蒸菜", "address": "天山西路430号" },
-                { "value": "四海游龙（天山西路店）", "address": "上海市长宁区天山西路" },
-                { "value": "樱花食堂（凌空店）", "address": "上海市长宁区金钟路968号15楼15-105室" },
-                { "value": "壹分米客家传统调制米粉(天山店)", "address": "天山西路428号" },
-                { "value": "福荣祥烧腊（平溪路店）", "address": "上海市长宁区协和路福泉路255弄57-73号" },
-                { "value": "速记黄焖鸡米饭", "address": "上海市长宁区北新泾街道金钟路180号1层01号摊位" },
-                { "value": "红辣椒麻辣烫", "address": "上海市长宁区天山西路492号" },
-                { "value": "(小杨生煎)西郊百联餐厅", "address": "长宁区仙霞西路88号百联2楼" },
-                { "value": "阳阳麻辣烫", "address": "天山西路389号" },
-                { "value": "南拳妈妈龙虾盖浇饭", "address": "普陀区金沙江路1699号鑫乐惠美食广场A13" }
+                { "value": "三全鲜食（北新泾店）", "address": "上海" },
+                { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海" },
+                { "value": "新旺角茶餐厅", "address": "上海" },
+                { "value": "泷千家(天山西路店)", "address": "上海" },
+                { "value": "胖仙女纸杯蛋糕（上海凌空店）", "address": "上海" },
+                { "value": "贡茶", "address": "上海" },
+                { "value": "豪大大香鸡排超级奶爸", "address": "上海" },
+                { "value": "茶芝兰（奶茶，手抓饼）", "address": "上海" },
+                { "value": "十二泷町", "address": "上海" },
+                { "value": "星移浓缩咖啡", "address": "上海" },
+                { "value": "阿姨奶茶/豪大大", "address": "北京" },
+                { "value": "新麦甜四季甜品炸鸡", "address": "北京" },
+                { "value": "Monica摩托主题咖啡店", "address": "北京" },
+                { "value": "浮生若茶（凌空soho店）", "address": "北京" },
+                { "value": "NONO JUICE  鲜榨果汁", "address": "北京" },
+                { "value": "CoCo都可(北新泾店）", "address": "北京" },
+                { "value": "快乐柠檬（神州智慧店）", "address": "北京" },
+                { "value": "Merci Paul cafe", "address": "北京" },
+                { "value": "猫山王（西郊百联店）", "address": "北京" },
+                { "value": "枪会山", "address": "广州" },
+                { "value": "纵食", "address": "广州" },
+                { "value": "钱记", "address": "广州" },
+                { "value": "壹杯加", "address": "广州" },
+                { "value": "唦哇嘀咖", "address": "广州" },
+                { "value": "爱茜茜里(西郊百联)", "address": "广州" },
+                { "value": "爱茜茜里(近铁广场)", "address": "广州" },
+                { "value": "鲜果榨汁（金沙江路和美广店）", "address": "广州" },
+                { "value": "开心丽果（缤谷店）", "address": "广州" },
+                { "value": "超级鸡车（丰庄路店）", "address": "广州" },
+                { "value": "妙生活果园（北新泾店）", "address": "广州" },
+                { "value": "香宜度麻辣香锅", "address": "南京" },
+                { "value": "凡仔汉堡（老真北路店）", "address": "南京" },
+                { "value": "港式小铺", "address": "南京" },
+                { "value": "蜀香源麻辣香锅（剑河路店）", "address": "南京" },
+                { "value": "北京饺子馆", "address": "南京" },
+                { "value": "饭典*新简餐（凌空SOHO店）", "address": "南京" },
+                { "value": "焦耳·川式快餐（金钟路店）", "address": "南京" },
+                { "value": "动力鸡车", "address": "南京" },
+                { "value": "浏阳蒸菜", "address": "南京" },
+                { "value": "四海游龙（天山西路店）", "address": "南京" },
+                { "value": "樱花食堂（凌空店）", "address": "江西" },
+                { "value": "壹分米客家传统调制米粉(天山店)", "address": "江西" },
+                { "value": "福荣祥烧腊（平溪路店）", "address": "江西" },
+                { "value": "速记黄焖鸡米饭", "address": "江西" },
+                { "value": "红辣椒麻辣烫", "address": "江西" },
+                { "value": "(小杨生煎)西郊百联餐厅", "address": "江西" },
+                { "value": "阳阳麻辣烫", "address": "江西" },
+                { "value": "南拳妈妈龙虾盖浇饭", "address": "江西" }
             ];
         },
         ToSearchList() {
             //传过去接收到的参数
-        
+
             this.$router.push({ path: "/attraction-search", name: 'attractionsearchs', params: { selectedAttractions: this.selectedAttractions } });
         },
         clearInput() {
@@ -96,8 +111,8 @@ export default {
         },
         handleSelect(item) {
             if (item) {
-                this.selectedAttractions = [];
-                this.selectedAttractions.push(item);
+                this.selectedAttractions = '';
+                this.selectedAttractions = item.value;
                 console.log(this.selectedAttractions);
                 this.$nextTick(() => {
                     this.ToSearchList();
@@ -109,15 +124,9 @@ export default {
         search() {
             if (this.state1.trim() !== '') {
                 // 清空selectedAttractions数组
-                this.selectedAttractions = [];
-
-                // 在搜索按钮点击事件中调用querySearch，传递当前输入的state1
-                this.querySearch(this.state1, (results) => {
-                    // 将匹配的结果保存到selectedAttractions数组中
-                    this.selectedAttractions = results;
-                });
-
-                //console.log(this.selectedAttractions);
+                this.selectedAttractions = '';
+                this.selectedAttractions = this.state1.trim();
+                console.log(this.selectedAttractions);
 
                 // 使用this.$nextTick确保在DOM更新后执行路由跳转
                 this.$nextTick(() => {
