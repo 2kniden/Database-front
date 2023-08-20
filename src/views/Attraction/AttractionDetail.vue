@@ -1,5 +1,5 @@
 <template>
-    <div class="title">上海迪士尼度假区</div>
+    <div class="bigtitle">上海迪士尼度假区</div>
     <div class="detailhead">
         <!-- 轮播图 -->
         <Splide class="slides" :options="{ rewind: true }">
@@ -117,10 +117,10 @@ export default {
 </script>
   
 <style>
-.title {
+.bigtitle {
     display: flex;
-    margin-left: 40px;
-    font-size: 14px;
+    padding:5px 0 0 35px;
+    font-size: 16px;
     font-weight: bold;
 }
 
@@ -133,7 +133,7 @@ export default {
 .detailhead {
     display: flex;
     flex-direction: row;
-    margin: 20px 35px 20px 0;
+    margin: 10px 35px 20px 0;
 
 }
 
