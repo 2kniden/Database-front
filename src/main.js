@@ -2,7 +2,6 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-
 import axios from "axios";
 import $ from "jquery";
 // 引入jQuery、bootstrap

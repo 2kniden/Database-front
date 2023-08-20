@@ -48,8 +48,10 @@
             <div class="usercomment">
                 <div class="chead">
                     <div class="cheadleft">
-                        <span class="maintitle">用户点评:</span>
-                        <div class="comnum"> (1234条)</div>
+                        <div>
+                            <div class="maintitle">用户点评:</div>
+                            <div class="comnum"> (1234条)</div>
+                        </div>
 
                     </div>
                     <el-button type="primary" plain color="#8097FD">
@@ -58,7 +60,18 @@
                         </el-icon>
                         写评论
                     </el-button>
+
                 </div>
+                <!-- 这里是用户评论部分 -->
+                <div>
+                    <attrComment v-for="item in commentlist" :key="item.id" :userlog="item.userlog"
+                        :attrname="item.attrname" :attrstar="item.attrstar" :comword="item.comword" :comtime="item.comtime"
+                        :comlikes="item.comlikes" :comunlikes="item.comunlikes" :picsrc="item.picsrc">
+
+                    </attrComment>
+                </div>
+
+
             </div>
         </div>
         <div class="rightdetail"></div>
@@ -67,7 +80,7 @@
   
 <script >
 import { Splide, SplideSlide } from '@splidejs/vue-splide'
-
+import attrComment from '../../components/Attraction/attractionComment/attrComment.vue'
 import '@splidejs/splide/dist/css/themes/splide-default.min.css'
 import DetailView from '../../components/Attraction/viewdetail.vue'
 import ViewTicket from '../../components/Attraction/viewticket.vue'
@@ -100,7 +113,33 @@ export default {
                 isbuy: "可定",
                 price: 689,
                 buynum: 4000,
-            }
+            },
+            
+            // 评论相关数据
+            commentlist: [{
+                id: 1,
+                userlog: require("../../assets/attractions/highrank/1.jpg"),
+                attrname: "吃掉米麻薯的头",
+                attrstar: "4.9",
+                comword: "我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论",
+                comtime: "2023-01-01 12:34",
+                comlikes: 23,
+                comunlikes: 23,
+                picsrc: [
+                    require("../../assets/attractions/highrank/1.jpg"),
+                    require("../../assets/attractions/highrank/2.jpg"),
+                    require("../../assets/attractions/highrank/3.jpg")
+                ]
+            }, {
+                id: 2,
+                userlog: require("../../assets/attractions/highrank/1.jpg"),
+                attrname: "吃掉米麻薯的头",
+                attrstar: "4.9",
+                comword: "我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论",
+                comtime: "2023-01-01 12:34",
+                comlikes: 23,
+                comunlikes: 23
+            },]
         };
     },
     methods: {
@@ -110,16 +149,18 @@ export default {
         Splide,
         SplideSlide,
         DetailView,
-        ViewTicket
+        ViewTicket,
+        attrComment
     }
 }
 
 </script>
   
 <style>
+/* 其他部分 */
 .bigtitle {
     display: flex;
-    padding:5px 0 0 35px;
+    padding: 5px 0 0 35px;
     font-size: 16px;
     font-weight: bold;
 }
