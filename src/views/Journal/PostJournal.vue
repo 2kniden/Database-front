@@ -103,6 +103,7 @@ import { saveAs } from 'file-saver'
 import { nextTick, ref } from 'vue'
 import { ElInput } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
+import axios  from "axios";
 
 function formatDateTime(date) {  
             var y = date.getFullYear();  
@@ -130,16 +131,17 @@ export default{
     return {
       poster_id: "001",
 
-      is_post: true,
+      is_post: true,    
       
       cover_url: '',
+      cover_id: '',
 
       title: '',
       editorConfig: {
         language_url: '/tinymce/langs/zh_CN.js',
         language: 'zh_CN',
         skin_url: '/tinymce/skins/ui/oxide',
-        toolbar: 'undo redo | bold italic underline | image',
+        toolbar: 'undo redo | bold italic underline | image | fontsizeselect',
         plugins: 'lists image',
         height: 500,
         file_picker_types: 'image',
@@ -156,18 +158,32 @@ export default{
       selected_tabs: [],
       input_tab_Visible: false,
       Input_tab_Ref: null,
-      re_tabs:['休闲','打卡','美食'],
+      re_tabs:[''],
 
       is_public: false,
 
       gifPath: {url: require('../../assets/journal/journal-upload.gif')},
     }
   },
+  mounted() {
+    this.initializeData();
+  },
   methods: {
+    initializeData(){
+      var that = this;
+      
+      that.poster_id = "001";     //这个暂时不知道怎么获得，先写死
+
+      axios.get('/Journal/PostJournal/getTabs/').then(res =>{
+        that.re_tabs = res.data.tabs;
+      });
+    },
+
     handleClick_cover() {
       this.$refs.fileInput.click();
     },
     handleCoverUpload(event) {
+      var that = this;
       const files = event.target.files;
       const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
 
@@ -178,16 +194,21 @@ export default{
       const formData = new FormData();
       formData.append('file', files[0]);
       //console.log(formData.get('file'));
-      this.cover_url = 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg';
-      /*
-      axios.post('/upload', formData)
-        .then(response => {
+      
+      axios.post('/Journal/PostJournal/uploadCover/', {
+        id: that.poster_id,
+        cover: formData.get('file'),
+        })
+        .then(res => {
           // 处理服务器返回的响应
+          that.cover_url = res.data.cover_url;
+          that.cover_id = res.data.cover_id;
         })
         .catch(error => {
           // 处理错误
+          alert('上传失败！');
         });
-        */
+        
     },
 
     handleClose(tag) {
@@ -235,10 +256,11 @@ export default{
       }
       input.click()
     },
-    saveContent() {    
-      this.is_post = false;
-      const blob = new Blob([this.content], { type: 'text/html;charset=utf-8' });
-      saveAs(blob, 'article.html');
+    saveContent() {
+      var that = this;
+
+      //const blob = new Blob([this.content], { type: 'text/html;charset=utf-8' });
+      //saveAs(blob, 'article.html');   //保存正文html
 
       const now_time = new Date();
       console.log(this.poster_id);
@@ -248,6 +270,25 @@ export default{
       console.log(formatDateTime(now_time));        //发布时间
       console.log(this.selected_tabs);
       console.log(this.is_public);
+
+      axios.post('/Journal/PostJournal/uploadArticle/', {
+        poster_id: that.poster_id,
+        cover_id: that.cover_id,
+        title: that.title,
+        body: that.content,
+        tabs: that.selected_tabs,
+        is_public: that.is_public,
+        post_time: formatDateTime(now_time),
+        })
+        .then(res => {
+          // 处理服务器返回的响应
+          that.is_post = false;
+          console.log(res.data.article_id);
+        })
+        .catch(error => {
+          // 处理错误
+          alert('上传失败！');
+        });
     }
   }
 

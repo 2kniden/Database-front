@@ -270,6 +270,222 @@ if (useMock) {
             }
         ]
     })
+
+
+    /* 发布日志 */
+    Mock.mock('/Journal/PostJournal/uploadCover/', 'post', (options) => {       
+        const file = JSON.parse(options.body);
+
+        console.log(file.id);
+        console.log(file.cover);
+
+        const imageUrl = 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg';
+        const imageId = '1234567890';
+        
+        return {
+          cover_url: imageUrl,
+          cover_id: imageId
+        };
+    })
+
+    Mock.mock('/Journal/PostJournal/getTabs/', 'get', {
+        tabs: ['休闲','打卡','美食','亲子'],
+    })
+
+    Mock.mock('/Journal/PostJournal/uploadArticle/', 'post',(options) =>{
+        console.log(options);
+
+        const articleId = "12345678";
+
+        return {
+            article_id: articleId
+        };        
+    })
+
+    /* 日志详情 */
+    Mock.mock(/Journal\/JournalDetails\/getUserInformation\?id=.*/, 'get',{
+        avatar_url: 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
+        name: '一个读者',
+    })
+
+    Mock.mock(/Journal\/JournalDetails\/getUserInteraction\?id=.*&article_id=.*/, 'get',{
+        is_like: false,
+        is_collect: false,
+        is_followed: false,
+    })
+
+    Mock.mock(/Journal\/JournalDetails\/getDetails\?article_id=.*/, 'get',{
+        cover_url:  'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
+        title: '【魔都暴走记】你是我脑海中鲜明的记忆，做一场与上海有关的白日梦。',
+        poster_avatar: 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
+        poster_name: '一个作者',
+        poster_id: '001',
+        read_num: 12,
+        kudos_num: 3,
+        collect_num: 2,
+        post_date: '2023-01-01 12:00:00',
+        tabs:  ['休闲','打卡','美食'],
+        body: '<p>begin</p> <p>啦啦啦</p> <p>end</p>',
+    })
+
+    Mock.mock(/Journal\/JournalDetails\/getComments\?id=.*&article_id=.*/, 'get',{
+        comments: [         //日志的评论
+        {
+            comment_id: "003",
+            poster_id: "003",
+            poster_avatar: "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
+            poster_name: "user1",
+            poster_review: "啦啦啦",
+            post_time: "2023-1-1 12:00:00",
+            post_likes: 0,
+            is_like: false,
+            permission_of_delete: false,
+        },
+        {
+            comment_id: "004",
+            poster_id: "004",
+            poster_avatar: "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
+            poster_name: "user2",
+            poster_review: "lalala",
+            post_time: "2023-1-1 12:40:00",
+            post_likes: 0,
+            is_like: false,
+            permission_of_delete: false,
+        },
+        {
+            comment_id: "005",
+            poster_id: "005",
+            poster_avatar: "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
+            poster_name: "user3",
+            poster_review: "lala1234567890",
+            post_time: "2023-1-1 13:40:00",
+            post_likes: 0,
+            is_like: false,
+            permission_of_delete: false,
+        },
+        ],
+        
+        comments_of_comments: [         //日志评论的评论（包括评论的评论的评论），与comments一一对应
+        [],
+        [
+            {
+                comment_id: "006",
+                poster_id: "006",
+                poster_avatar: "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
+                poster_name: "user4",
+                poster_review: "一条回复",
+                post_time: "2023-1-1 12:40:00",
+                post_likes: 0,
+                is_like: false,
+                replied_name: "user2",
+                replied_id: "",
+                permission_of_delete: false,
+            },
+            {
+                comment_id: "007",
+                poster_id: "007",
+                poster_avatar: "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
+                poster_name: "user5",
+                poster_review: "一条回复的回复",
+                post_time: "2023-1-1 12:40:00",
+                post_likes: 0,
+                is_like: false,
+                replied_name: "user4",
+                replied_id: "",
+                permission_of_delete: false,
+            },
+        ],
+        [
+            {
+                comment_id: "008",
+                poster_id: "008",
+                poster_avatar: "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
+                poster_name: "user6",
+                poster_review: "一条回复",
+                post_time: "2023-1-1 12:40:00",
+                post_likes: 0,
+                is_like: false,
+                replied_name: "user3",
+                replied_id: "",
+                permission_of_delete: false,
+            }
+        ],
+        ],
+    })
+
+    Mock.mock('/Journal/JournalDetails/changeLikeStatus/', 'post',(options) =>{
+        console.log(options.body);
+        const data = JSON.parse(options.body);
+        const is_like = data.is_like;
+      
+        console.log(is_like); // 输出 is_like
+        let num = 3;
+        if(is_like)
+            num++;
+        
+        return {
+            kudos_num: num,
+            status: true,
+        };
+    })
+
+    Mock.mock('/Journal/JournalDetails/changeCollectStatus/', 'post',(options) =>{
+        console.log(options.body);
+        const data = JSON.parse(options.body);
+        const is_collect = data.is_collect;
+      
+        console.log(is_collect); // 输出 is_collect
+        let num = 2;
+        if(is_collect)
+            num++;
+        
+        return {
+            collect_num: num,
+            status: true,
+        };
+    })
+
+    Mock.mock('/Journal/JournalDetails/changeFollowStatus/', 'post',(options) =>{
+        console.log(options.body);
+        return true;
+    })
+
+    Mock.mock('/Journal/JournalDetails/changeCommentsLikeStatus/', 'post',(options) =>{
+        console.log(options.body);
+        const data = JSON.parse(options.body);
+        const is_like = data.is_like;
+      
+        console.log(is_like); // 输出 is_like
+        let num = 0;
+        if(is_like)
+            num++;
+        
+        return {
+            post_likes: num,
+            status: true,
+        };
+    })
+
+    Mock.mock('/Journal/JournalDetails/postComments/', 'post',(options) =>{
+        console.log(options.body);
+        return{
+            comment_id: "12345678",
+            status: true,
+        };
+    })
+
+    Mock.mock('/Journal/JournalDetails/postResponse/', 'post',(options) =>{
+        console.log(options.body);
+        return{
+            comment_id: "12345678",
+            status: true,
+        };
+    })
+
+    Mock.mock('/Journal/JournalDetails/deleteComments/', 'post',(options) =>{
+        console.log(options.body);
+        return true;
+    })
 }
 
 export default Mock
