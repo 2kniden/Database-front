@@ -1,57 +1,57 @@
 
 <template>
   <!-- 头部展示图部分 -->
-  <div class="front">
-    <Header></Header>
-    <img class="imghead" src="../assets/travel.png" alt="一张美丽的海景图片">
-    <!-- 先设置一个跳转框 -->
-    <!-- <div class="attractionsearch" @click="toSearch">搜索框</div> -->
-    <!-- 搜索部分 -->
-    <div class="attractionsearch">
-      <!-- 这里搜索部分设定搜索词为景区名称和地点（如迪士尼 北京），有历史搜索 -->
-      <!-- 这里设置一个景区搜索组件 -->
-      <Search></Search>
-    </div>
-    <div class="imgtitle">TRAVEL</div>
-    <div class="location">
-      选择你所在的城市
-      <img src="../assets/location.svg" alt="location icon" class="imgicon" @click="choosemap">
-      上海
-      <!-- 这里需要设立自己来选择定位的逻辑，这里可以用谷歌的逻辑去写 -->
-    </div>
-  </div>
-  <!-- 模态框 -->
-  <div v-if="showMapModal" class="modal">
-    <div class="modal-content">
-      <!-- 关闭按钮 -->
-      <span class="close" @click="closeModal">&times;</span>
-      
-    </div>
-  </div>
-  <!-- 热门景点部分 -->
-  <div class="middle">
-    <StartTitle title="热门景点"></StartTitle>
-    <!-- 热门景点缩略图 -->
-    <div class="rec">
-      <RecView v-for="item in recommendpiclist" :key="item.id" :picsrc="item.picsrc" :title="item.title"
-      @click="ToDetail()"></RecView>
-    </div>
-    
-  </div>
+  <div class="bigback">
 
-  <!-- 高分推荐部分 -->
-  <div class="bottom">
-    <StartTitle title="高分推荐"></StartTitle>
-    <!-- 高分推荐缩略图 -->
-    <div class="rank">
-      <div class="container">
-        <RankView  v-for="item in highranklist" :key="item.id" :picsrc="item.picsrc" :title="item.title" :score="item.score" :dec="item.dec"></RankView>
+
+    <div class="front">
+      <!-- 这里稍微有点问题先 -->
+      <Header></Header>
+      <img class="imghead" src="../assets/travel.png" alt="一张美丽的海景图片">
+
+      <div class="attractionsearch">
+        <Search></Search>
       </div>
-      <div class="endline">
-        -- 搜索查看更多精彩 --
+      <div class="imgtitle">TRAVEL</div>
+      <div class="location">
+        选择你所在的城市
+        <img src="../assets/location.svg" alt="location icon" class="imgicon" @click="choosemap">
+        上海
+        <!-- 这里需要设立自己来选择定位的逻辑，这里可以用谷歌的逻辑去写 -->
       </div>
     </div>
+    <div class="smallback">
 
+
+      <!-- 热门景点部分 -->
+      <div class="middle">
+        <StartTitle title="热门景点" entitle="Famous Attraction"></StartTitle>
+        <!-- 热门景点缩略图 -->
+        <div class="rec">
+          <RecView v-for="item in recommendpiclist" :key="item.id" :picsrc="item.picsrc" :title="item.title"
+            @click="ToDetail()"></RecView>
+        </div>
+        <!-- 这里改成滚动条 -->
+
+
+      </div>
+
+      <!-- 高分推荐部分 -->
+      <div class="bottom">
+        <StartTitle title="高分推荐" entitle="Highly recommended"></StartTitle>
+        <!-- 高分推荐缩略图 -->
+        <div class="rank">
+          <div class="container">
+            <RankView v-for="item in highranklist" :key="item.id" :picsrc="item.picsrc" :title="item.title"
+              :score="item.score" :dec="item.dec"></RankView>
+          </div>
+          <div class="endline">
+            -- 搜索查看更多精彩 --
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 </template>
 
@@ -83,7 +83,7 @@ export default {
         picsrc: require('../assets/attractions/recommendpic/waitan.png'),
         title: '外滩',
       },],
-   
+
       // 高分推荐列表
       highranklist: [{
         id: 1,
@@ -129,10 +129,9 @@ export default {
 
     }
   },
+
   methods: {
-    toSearch() {
-      this.$router.push('/attraction-search');
-    },
+
     ToDetail() {
       this.$router.push('/attraction-detail');
     },
@@ -141,13 +140,14 @@ export default {
       this.showMapModal = true;//点击按钮，显示地图模态框
     }
   },
-  components:{
-    // MyMap
+  components: {
+    // MyMap,
     RecView,
     RankView,
     StartTitle,
     Search,
-    Header
+    Header,
+
   }
 }
 
@@ -155,6 +155,16 @@ export default {
 </script>
 
 <style>
+.bigback {
+  background-color: #F1F3FF;
+}
+
+.smallback {
+  width: 90%;
+  margin: 0 auto;
+  background-color: #fff;
+}
+
 .front {
   position: relative;
 }
@@ -222,10 +232,10 @@ export default {
 
 /* 热门景点缩略图排版 */
 .rec {
-    display: flex;
-    flex-direction: flex;
-    justify-content: center;
-    margin: 0 10px;
+  display: flex;
+  flex-direction: flex;
+  justify-content: center;
+  margin: 0 10px;
 }
 
 
