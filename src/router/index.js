@@ -7,6 +7,7 @@ import Personal from "@/views/Personal.vue";
 import SearchOut from "@/views/Search/SearchOut";
 import AttractionSearch from '@/views/Attraction/AttractionSearch';
 import AttractionDetail from '@/views/Attraction/AttractionDetail';
+import CommentEdit from '@/views/Attraction/editcomment'
 
 const routes = [
   {
@@ -41,7 +42,8 @@ const routes = [
     component: Personal
   },
   { path: "/attraction-search", name: "attractionsearchs", component: AttractionSearch },
-  { path: "/attraction-detail", name: "attractiondetails", component: AttractionDetail }
+  { path: "/attraction-detail", name: "attractiondetails", component: AttractionDetail },
+  { path: "/comment-edit", name: "commentedit", component: CommentEdit }
 ];
 
 const router = createRouter({

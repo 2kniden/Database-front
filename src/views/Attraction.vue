@@ -31,8 +31,6 @@
           <RecView v-for="item in recommendpiclist" :key="item.id" :picsrc="item.picsrc" :title="item.title"
             @click="ToDetail()"></RecView>
         </div>
-        <!-- 这里改成滚动条 -->
-
 
       </div>
 
@@ -56,7 +54,6 @@
 </template>
 
 <script>
-// import MyMap from '@/components/Attraction/Amap.vue'
 import RecView from '@/components/Attraction/recview.vue'
 import RankView from '@/components/Attraction/highrankview.vue'
 import Search from '@/components/Attraction/search.vue'
@@ -123,9 +120,7 @@ export default {
         dec: '上海市浦东新区川沙新镇黄赵路310号',
       },],
       // 地图展示相关数据
-      showMapModal: false, // 控制地图展示模态框显示与隐藏
-      mapLongitude: 116.46,
-      mapLatitude: 39.92,
+      
 
     }
   },
@@ -135,10 +130,10 @@ export default {
     ToDetail() {
       this.$router.push('/attraction-detail');
     },
-    // 选择定位
-    choosemap() {
-      this.showMapModal = true;//点击按钮，显示地图模态框
+    choosemap(){
+      
     }
+    
   },
   components: {
     // MyMap,

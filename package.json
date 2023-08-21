@@ -8,9 +8,11 @@
   },
   "dependencies": {
     "@splidejs/vue-splide": "^0.6.12",
+    "@tinymce/tinymce-vue": "^5.1.0",
     "axios": "^1.4.0",
     "core-js": "^3.8.3",
     "element-plus": "^2.3.7",
+    "file-saver": "^2.0.5",
     "jquery": "^3.7.0",
     "video.js": "^8.3.0",
     "vue": "^3.2.13",

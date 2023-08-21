@@ -54,7 +54,7 @@
                         </div>
 
                     </div>
-                    <el-button type="primary" plain color="#8097FD">
+                    <el-button type="primary" plain color="#8097FD" @click="ToEdit">
                         <el-icon>
                             <EditPen />
                         </el-icon>
@@ -143,7 +143,9 @@ export default {
         };
     },
     methods: {
-
+        ToEdit(){
+            this.$router.push("/comment-edit");
+        }
     },
     components: {
         Splide,
