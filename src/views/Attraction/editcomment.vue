@@ -1,84 +1,126 @@
 <template>
     <div class="dialog-body">
         <el-form :model="form">
-            <el-form-item label="主题" :label-width="formLabelWidth">
-                <el-input v-model="team.title" maxlength="18" placeholder="请输入小队的重点信息" show-word-limit type="text" />
+            <el-form-item label="评分" :label-width="formLabelWidth">
+                <div class="scores">
+                    <div class="totalscore">
+                        <el-rate v-model="calvalue" disabled show-score text-color="#8097FD" score-template="{value}"
+                            :size="'big'">
+                        </el-rate>
+                    </div>
+                    <div class="scorebg">
+                        <div class="detailscore">
+                            <div class="scoreword">景色</div>
+
+                            <el-rate v-model="iconvalue1" show-text :texts="texts" @click="showScore" :size="'small'"
+                                text-color="#8097FD">
+                            </el-rate>
+                        </div>
+                        <div class="detailscore">
+
+                            <div class="scoreword">趣味</div>
+                            <el-rate v-model="iconvalue2" show-text :texts="texts" @click="showScore" :size="'small'"
+                                text-color="#8097FD">
+                            </el-rate>
+                        </div>
+                        <div class="detailscore">
+                            <div class="scoreword">性价比</div>
+                            <el-rate v-model="iconvalue3" show-text :texts="texts" @click="showScore" :size="'small'"
+                                text-color="#8097FD">
+                            </el-rate>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
             </el-form-item>
             <el-form-item label="详情" :label-width="formLabelWidth">
-                <el-input v-model="team.detail" :autosize="{ minRows: 3 }" maxlength="200" placeholder="请输入小队的详细信息"
+                <el-input class="eleinput" v-model="detail" :autosize="{ minRows: 3 }" maxlength="200" placeholder="请输入评论详情"
                     show-word-limit type="textarea" />
             </el-form-item>
-            <el-form-item label="人数上限" :label-width="formLabelWidth">
-                <el-input-number v-model="team.total" :min="1" />
-            </el-form-item>
-            <el-form-item label="标签" :label-width="formLabelWidth">
-                <el-checkbox-group v-model="team.tags" :max="5">
-                    <el-checkbox-button label="年轻人" />
-                    <el-checkbox-button label="限男生" />
-                    <el-checkbox-button label="限女生" />
-                    <el-checkbox-button label="自驾" />
-                    <el-checkbox-button label="报团" />
-                    <el-checkbox-button label="奢华" />
-                    <el-checkbox-button label="穷游" />
-                    <el-checkbox-button label="休闲" />
-                    <el-checkbox-button label="充实" />
-                </el-checkbox-group>
+            <el-form-item label="上传图片" :label-width="formLabelWidth">
+                <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
+                    :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3"
+                    :on-exceed="handleExceed" :file-list="fileList">
+                    <el-button size="small" type="primary">点击上传</el-button>
+                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                </el-upload>
             </el-form-item>
         </el-form>
     </div>
 
     <div class="dialog-footer">
         <el-button size="large" @click="dialogInvisible">取消</el-button>
-        <el-button size="large" type="primary" @click="commitTeamMessage">提交</el-button>
+        <el-button size="large" type="primary" @click="commitCommet">发表</el-button>
     </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-import { ElMessage } from 'element-plus';
+<script>
 
-// 信息名称长度
-const formLabelWidth = '80px'
+export default {
+    data() {
+        return {
+            formLabelWidth: "80px",
+            iconvalue1: 0,
+            iconvalue2: 0,
+            iconvalue3: 0,
+            texts: ['极差', '失望', '一般', '满意', '惊喜'],
+            detail: '',
+            comment:{
+                // 确定是哪条评论
+                attractionid:"123",//景区id
+                commentid:"123",//评论id
+                userid:"123",//用户id
+                username:"123",//用户名
+                uesrsrc:'123',//用户头像
+                // 评论里要有啥
+                avgscore:0,//评分带小数点
+                detail:"评论详情",
+                picList:[],//照片列表
+                likes:0,
+                unlikes:0,
+                // 其他信息
+                commentDate:'',//时间
+                commentCity:'',//ip地址这个不方便就不加
+            }
+        }
+    },
+    computed: {
+        calvalue() {
+            return ((this.iconvalue1 + this.iconvalue2 + this.iconvalue3) / 3).toFixed(1);
 
-// 向父组件传递窗口不可见信息
-const emit = defineEmits(['getData'])
-const dialogInvisible = () => {
-    emit('getData', false)
+        }
+    },
+    methods: {
+        showScore() {
+            console.log(this.iconvalue1, this.iconvalue2, this.iconvalue3);
+        },
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePreview(file) {
+            console.log(file);
+        },
+        // 这里还要设置一下如果选择了其他类型文件也要报错
+        handleExceed(files, fileList) {
+            this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+        },
+        beforeRemove(file, fileList) {
+            return this.$confirm(`确定移除 ${file.name}？`);
+        },
+        commitCommet(){
+            // console.log(this.fileList);
+        }
+
+
+
+        // 这里要加一下三张的限制
+
+    }
 }
 
-const team = ref({
-    team_id: "1",
-    title: "",
-    detail: "",
-    status: "招募中",
-    tags: [],
-    publisher: "",
-    members: [],
-    applicants: [],
-    total: 1
-})
-
-// 提交小队信息
-// 需要在后端数据库中插入该小队（未实现）
-const commitTeamMessage = () => {
-    ElMessage({
-        message: '成功提交小队信息！',
-        type: 'success',
-    })
-    // 输入的小队信息保存在team里
-    // 如小队主题的值为team.value.title
-    // 这里在控制台打印小队主题进行测试
-    console.log(team.value.title)
-
-    // team.publiser需要获取当前用户的用户信息（未实现）
-
-    // team.team_id需要生成唯一team_id（未实现）
-
-    // 将小队信息保存进数据库（未实现）
-
-    // 关闭窗口
-    dialogInvisible()
-}
 </script>
 
 <style>
@@ -88,6 +130,35 @@ const commitTeamMessage = () => {
 
 .dialog-footer button:first-child {
     margin-right: 10px;
+}
+
+.scores {
+    display: flex;
+    flex-direction: column;
+}
+
+.scoreword {
+    font-size: 8px;
+    color: #777;
+    width: 60px;
+    text-align: left;
+    transform: translate(0, -10%);
+}
+
+.detailscore {
+    display: flex;
+    flex-direction: row;
+}
+
+.totalscore {
+    text-align: left;
+}
+
+.scorebg {
+    background-color: #F1F3FF;
+    width: 200px;
+    padding: 10px;
+    border-radius: 10px;
 }
 
 /* .el-checkbox-button {
