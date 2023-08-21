@@ -40,7 +40,7 @@ const routes = [
     name: "personal",
     component: Personal
   },
-  { path: "/attraction-search", name: "attractionsearchs", component: AttractionSearch,props:true },
+  { path: "/attraction-search", name: "attractionsearchs", component: AttractionSearch },
   { path: "/attraction-detail", name: "attractiondetails", component: AttractionDetail }
 ];
 

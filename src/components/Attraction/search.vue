@@ -104,7 +104,7 @@ export default {
         ToSearchList() {
             //传过去接收到的参数
 
-            this.$router.push({ path: "/attraction-search", name: 'attractionsearchs', params: { selectedAttractions: this.selectedAttractions } });
+            this.$router.push({ name: 'attractionsearchs', query: { selectedAttractions: this.selectedAttractions } });
         },
         clearInput() {
             this.selectedAttractions = [];
@@ -126,8 +126,6 @@ export default {
                 // 清空selectedAttractions数组
                 this.selectedAttractions = '';
                 this.selectedAttractions = this.state1.trim();
-                console.log(this.selectedAttractions);
-
                 // 使用this.$nextTick确保在DOM更新后执行路由跳转
                 this.$nextTick(() => {
                     this.ToSearchList();

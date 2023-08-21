@@ -39,8 +39,7 @@
                     <div class="eltabs">
                         <!-- 分页展示数据 -->
                         <el-tabs v-model="activeTab" @tab-click="handleTabClick">
-                            <el-tab-pane label="上一页" name="prev" 
-                                :disabled="activeTab === '1'"></el-tab-pane>
+                            <el-tab-pane label="上一页" name="prev" :disabled="activeTab === '1'"></el-tab-pane>
                             <el-tab-pane v-for="page in displayedPages" :label="page" :name="page.toString()"
                                 :key="page"></el-tab-pane>
                             <el-tab-pane label="下一页" name="next"
@@ -69,7 +68,7 @@ export default {
     data() {
         return {
             // 接收传进来的选择，之类传输有问题不知道为什么
-            receivedAttractions: '上海',
+            receivedAttractions: '',
             // 导航栏
             activeMenu: 'home-1',
             isMenuCollapse: false,
@@ -83,7 +82,7 @@ export default {
                 id: 1,
                 pic: require('../../assets/attractions/highrank/1.jpg'),
                 title: '外滩1',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
+                location: '北京市浦东新区川沙新镇黄赵路310号',
                 score: '4.6',
                 commentnum: '1234',
                 username: 'user1',
@@ -91,8 +90,8 @@ export default {
             }, {
                 id: 2,
                 pic: require('../../assets/attractions/highrank/2.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
+                title: '外滩2',
+                location: '北京市浦东新区川沙新镇黄赵路310号',
                 score: '4.6',
                 commentnum: '1234',
                 username: 'user1',
@@ -100,7 +99,7 @@ export default {
             }, {
                 id: 3,
                 pic: require('../../assets/attractions/highrank/3.jpg'),
-                title: '外滩',
+                title: '横沙岛',
                 location: '上海市浦东新区川沙新镇黄赵路310号',
                 score: '4.6',
                 commentnum: '1234',
@@ -267,21 +266,21 @@ export default {
             pageSize: 10,  // 每页显示的条数
             pagestartIndex: '',//每页开始
             pageendIndex: '',//每页结束
-            totalItems: 100, // 总数据条数
+            totalItems: '', // 总数据条数
             activeTab: '1'
         };
     },
     mounted() {
         // 这里的传递参数有点问题，一直是undefined
-        // this.receivedAttractions = this.$route.params.selectedAttractions;
-        // console.log(this.receivedAttractions);
+        this.receivedAttractions = this.$route.query.selectedAttractions;
+        // console.log(this.$route.query.selectedAttractions);
         this.filterSearchResults(this.receivedAttractions);
         //开始匹配
     },
     computed: {
         // 计算总页数
         pageCount() {
-            //this.totalItems = this.searchMatchList.length;
+            this.totalItems = this.searchMatchList.length;
             this.totalPage = Math.ceil(this.totalItems / this.pageSize);
             return this.totalPage;
         },
@@ -290,11 +289,12 @@ export default {
             const allData = this.searchMatchList;
             // 根据当前页和每页的条数计算数据的起始和结束索引
             const startIndex = (this.currentPage - 1) * this.pageSize;
-            const endIndex = startIndex + this.pageSize;
+            const endIndex = this.pageSize < this.searchMatchList.length - startIndex ? this.pageSize + startIndex : this.searchMatchList.length;
 
             // 设置 pagestartIndex 和 pageendIndex
             this.pagestartIndex = startIndex + 1;
             this.pageendIndex = endIndex;
+
 
             // 从 'allData' 中提取当前页的数据
             return allData.slice(startIndex, endIndex);
@@ -341,27 +341,32 @@ export default {
                 );
             });
         },
-        handleTabClick(tab) {
-            if (tab.name === 'prev') {
+        handleTabClick(tab, event) {
+
+            //这样才能获取每个el-tab-pane的name属性
+
+            if (tab.props.name === 'prev') {
                 this.prevPage();
-            } else if (tab.name === 'next') {
+            } else if (tab.props.name === 'next') {
                 this.nextPage();
             } else {
-                this.currentPage = parseInt(tab.name);
+                this.currentPage = parseInt(tab.props.name);
             }
-            
-            
+
+
         },
         prevPage() {
             if (this.currentPage > 1) {
                 this.currentPage--;
-                
+                this.activeTab = this.currentPage.toString();
+
             }
         },
         nextPage() {
             if (this.currentPage < this.pageCount) {
                 this.currentPage++;
-                
+                this.activeTab = this.currentPage.toString();
+
             }
         }
 
