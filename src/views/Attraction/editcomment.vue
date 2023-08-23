@@ -37,13 +37,14 @@
 
             </el-form-item>
             <el-form-item label="详情" :label-width="formLabelWidth">
-                <el-input class="eleinput" v-model="detail" :autosize="{ minRows: 3 }" maxlength="200" placeholder="请输入评论详情"
-                    show-word-limit type="textarea" />
+                <el-input class="eleinput" v-model="comment.detail" :autosize="{ minRows: 3 }" maxlength="200"
+                    placeholder="请输入评论详情" show-word-limit type="textarea" />
             </el-form-item>
             <el-form-item label="上传图片" :label-width="formLabelWidth">
                 <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
                     :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3"
-                    :on-exceed="handleExceed" :file-list="fileList">
+                    :on-exceed="handleExceed" :file-list="fileList" :on-success="uploadFileSuccess"
+                    :on-error="uploadFileError">
                     <el-button size="small" type="primary">点击上传</el-button>
                     <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                 </el-upload>
@@ -58,7 +59,7 @@
 </template>
 
 <script>
-
+import { ElMessage } from 'element-plus';
 export default {
     data() {
         return {
@@ -67,25 +68,27 @@ export default {
             iconvalue2: 0,
             iconvalue3: 0,
             texts: ['极差', '失望', '一般', '满意', '惊喜'],
-            detail: '',
-            comment:{
+            comment: {
                 // 确定是哪条评论
-                attractionid:"123",//景区id
-                commentid:"123",//评论id
-                userid:"123",//用户id
-                username:"123",//用户名
-                uesrsrc:'123',//用户头像
+                attractionid: "123",//景区id
+                commentid: "123",//评论id
+                userid: "123",//用户id
+                username: "123",//用户名
+                uesrsrc: '123',//用户头像
                 // 评论里要有啥
-                avgscore:0,//评分带小数点
-                detail:"评论详情",
-                picList:[],//照片列表
-                likes:0,
-                unlikes:0,
+                avgscore: 0,//评分带小数点
+                detail: '',
+                picList: [],//照片列表
+                likes: 0,
+                unlikes: 0,
                 // 其他信息
-                commentDate:'',//时间
-                commentCity:'',//ip地址这个不方便就不加
+                commentDate: '',//时间
+                commentCity: '',//ip地址这个不方便就不加
             }
         }
+    },
+    conponents: {
+        ElMessage
     },
     computed: {
         calvalue() {
@@ -93,14 +96,27 @@ export default {
 
         }
     },
+
     methods: {
         showScore() {
             console.log(this.iconvalue1, this.iconvalue2, this.iconvalue3);
         },
+        //上传失败
+        uploadFileError(err, file, fileList) {
+            this.$message.error("上传失败！")
+        },
+        //上传成功
+        uploadFileSuccess(response, file, fileList) {
+            this.comment.picList.push(file);
+            console.log(this.comment.picList);
+
+        },
         handleRemove(file, fileList) {
-            console.log(file, fileList);
+
+            this.comment.picList = fileList;
         },
         handlePreview(file) {
+
             console.log(file);
         },
         // 这里还要设置一下如果选择了其他类型文件也要报错
@@ -110,13 +126,42 @@ export default {
         beforeRemove(file, fileList) {
             return this.$confirm(`确定移除 ${file.name}？`);
         },
-        commitCommet(){
-            // console.log(this.fileList);
+        commitCommet() {
+            // 获取时间
+            const currentDate = new Date();
+            this.comment.commentDate = this.formatDateTime(currentDate);
+            // 获取分数
+            this.comment.avgscore = this.calvalue;
+            if (this.comment.calvalue === 0 || this.comment.detail.trim() === "") {
+                // 如果评分为0或详情为空，不允许提交
+                // 可以显示错误提示或采取其他适当的操作
+                ElMessage({
+                    message: '评分和详情不能为空!',
+                    type: 'error',
+                })
+                return;
+            }
+            console.log(this.comment);
+            // 先把某条comment存到本地
+        },
+        formatDateTime(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            m = m < 10 ? ('0' + m) : m;
+            var d = date.getDate();
+            d = d < 10 ? ('0' + d) : d;
+            var h = date.getHours();
+            h = h < 10 ? ('0' + h) : h;
+            var minute = date.getMinutes();
+            minute = minute < 10 ? ('0' + minute) : minute;
+            var second = date.getSeconds();
+            second = second < 10 ? ('0' + second) : second;
+            return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
         }
 
 
 
-        // 这里要加一下三张的限制
+       
 
     }
 }
