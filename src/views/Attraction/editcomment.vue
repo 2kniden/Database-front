@@ -1,7 +1,7 @@
 <template>
     <div class="dialog-body">
         <el-form :model="form">
-            <el-form-item label="评分" :label-width="formLabelWidth">
+            <el-form-item label="景区评分" :label-width="formLabelWidth">
                 <div class="scores">
                     <div class="totalscore">
                         <el-rate v-model="calvalue" disabled show-score text-color="#8097FD" score-template="{value}"
@@ -36,7 +36,7 @@
 
 
             </el-form-item>
-            <el-form-item label="详情" :label-width="formLabelWidth">
+            <el-form-item label="评论详情" :label-width="formLabelWidth">
                 <el-input class="eleinput" v-model="comment.detail" :autosize="{ minRows: 3 }" maxlength="200"
                     placeholder="请输入评论详情" show-word-limit type="textarea" />
             </el-form-item>
@@ -63,7 +63,7 @@ import { ElMessage } from 'element-plus';
 export default {
     data() {
         return {
-            formLabelWidth: "80px",
+            formLabelWidth: "70px",
             iconvalue1: 0,
             iconvalue2: 0,
             iconvalue3: 0,
@@ -141,8 +141,23 @@ export default {
                 })
                 return;
             }
+
+            ElMessage({
+                message: '发布成功！',
+                type: 'success',
+            })
+            // 打印一下
             console.log(this.comment);
             // 先把某条comment存到本地
+            // 这里要存到后端数据库里，逻辑还没写
+            // 发表完也要关闭
+            this.$emit('getData', false);
+
+        },
+        // 关闭页面
+        dialogInvisible() {
+            // 发出关闭弹窗的事件给父组件监听
+            this.$emit('getData', false);
         },
         formatDateTime(date) {
             var y = date.getFullYear();
@@ -161,7 +176,7 @@ export default {
 
 
 
-       
+
 
     }
 }

@@ -25,12 +25,19 @@
             <div class="tickitbtn">
                 <el-button type="primary" round size="small" plain color="#8097FD">今日</el-button>
                 <el-button type="primary" round size="small" plain color="#8097FD">明日</el-button>
-                <el-button type="primary" round size="small" plain color="#8097FD">7.25</el-button>
-                <el-button type="primary" round size="small" plain color="#8097FD">
+                <el-button type="primary" round size="small" plain color="#8097FD">{{ tomtomday }}</el-button>
+                <el-button type="primary" round size="small" plain color="#8097FD" @click="showtimepicker">
                     更多信息<el-icon class="el-icon--right">
                         <DArrowRight />
                     </el-icon>
                 </el-button>
+                <el-dialog title="选择更多日期" v-model="showpicker" width="50%" destroy-on-close 
+                    :show-dialog="showpicker">
+                    <!-- 这里逻辑还没写不确定加不加 -->
+                    <el-date-picker v-model="morevalue1" type="date" placeholder="选择日期">
+                    </el-date-picker>
+                </el-dialog>
+
             </div>
             <!-- 显示票价信息 -->
             <div>
@@ -54,19 +61,29 @@
                         </div>
 
                     </div>
-                    <el-button type="primary" plain color="#8097FD" @click="ToEdit">
-                        <el-icon>
-                            <EditPen />
-                        </el-icon>
-                        写评论
-                    </el-button>
+                    <div>
+                        <!-- 这里会移动一下最后实在不行就固定位置吧 -->
+                        <el-button type="primary" plain color="#8097FD" @click="ToEdit">
+                            <el-icon>
+                                <EditPen />
+                            </el-icon>
+                            写评论
+                        </el-button>
+
+                        <!-- 弹窗组件 -->
+                        <el-dialog title="发布评论" v-model="showDialog" width="50%" destroy-on-close :show-close="false"
+                            :show-dialog="showDialog">
+                            <EitComment @getData="getData"></EitComment>
+                        </el-dialog>
+                    </div>
 
                 </div>
-                <!-- 这里是用户评论部分 -->
+                <!-- 这里是用户评论部分，这里名称改了一下 -->
                 <div>
-                    <attrComment v-for="item in commentlist" :key="item.id" :userlog="item.userlog"
-                        :attrname="item.attrname" :attrstar="item.attrstar" :comword="item.comword" :comtime="item.comtime"
-                        :comlikes="item.comlikes" :comunlikes="item.comunlikes" :picsrc="item.picsrc">
+                    <attrComment v-for="item in commentlist" :key="item.commentid" :userlog="item.userlog"
+                        :attrname="item.username" :attrstar="item.avgscore" :comword="item.detail"
+                        :comtime="item.commentDate" :comlikes="item.likes" :comunlikes="item.unlikes"
+                        :picsrc="item.picList">
 
                     </attrComment>
                 </div>
@@ -84,9 +101,22 @@ import attrComment from '../../components/Attraction/attractionComment/attrComme
 import '@splidejs/splide/dist/css/themes/splide-default.min.css'
 import DetailView from '../../components/Attraction/viewdetail.vue'
 import ViewTicket from '../../components/Attraction/viewticket.vue'
+import EitComment from '../Attraction/editcomment.vue'
 export default {
+    created() {
+        // 获取评论数据
+
+        // 获取日期
+        const time = new Date();
+        // 获取后日日期
+        time.setDate(time.getDate() + 2); // 将日期增加2天（后天）
+        this.tomtomday = this.formatDateTime(time);
+        console.log(this.tomtomday)
+
+    },
     data() {
         return {
+            showDialog: false, // 控制发布评论弹窗的显示和隐藏
             // 轮播图图片
             slides: [
                 require("../../assets/attractions/highrank/1.jpg"),
@@ -94,6 +124,37 @@ export default {
                 require("../../assets/attractions/highrank/3.jpg"),
 
             ],
+            // 票价日期（今日、明日、后日，后日显示日期：
+            today: '',
+            tomtomday: '',
+            // 更多日期，可查看从进来开始往后7天
+            showpicker: false,
+            pickerOptions: {
+                disabledDate(time) {
+                    return time.getTime() > Date.now();
+                },
+                shortcuts: [{
+                    text: '今天',
+                    onClick(picker) {
+                        picker.$emit('pick', new Date());
+                    }
+                }, {
+                    text: '昨天',
+                    onClick(picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() - 3600 * 1000 * 24);
+                        picker.$emit('pick', date);
+                    }
+                }, {
+                    text: '一周前',
+                    onClick(picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                        picker.$emit('pick', date);
+                    }
+                }]
+            },
+            morevalue1: '',
             // 简介栏
             declist: {
                 title: "上海迪士尼度假区",
@@ -114,45 +175,71 @@ export default {
                 price: 689,
                 buynum: 4000,
             },
-            
+            //评论数据
+
             // 评论相关数据
             commentlist: [{
-                id: 1,
+                commentid: 1,
                 userlog: require("../../assets/attractions/highrank/1.jpg"),
-                attrname: "吃掉米麻薯的头",
-                attrstar: "4.9",
-                comword: "我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论",
-                comtime: "2023-01-01 12:34",
-                comlikes: 23,
-                comunlikes: 23,
-                picsrc: [
+                username: "吃掉米麻薯的头",
+                avgscore: "4.9",
+                detail: "我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论",
+                commentDate: "2023-01-01 12:34",
+                likes: 23,
+                unlikes: 23,
+                picList: [
                     require("../../assets/attractions/highrank/1.jpg"),
                     require("../../assets/attractions/highrank/2.jpg"),
                     require("../../assets/attractions/highrank/3.jpg")
                 ]
             }, {
-                id: 2,
+                commentid: 2,
                 userlog: require("../../assets/attractions/highrank/1.jpg"),
-                attrname: "吃掉米麻薯的头",
-                attrstar: "4.9",
-                comword: "我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论",
-                comtime: "2023-01-01 12:34",
-                comlikes: 23,
-                comunlikes: 23
+                username: "吃掉米麻薯的头",
+                avgscore: "4.9",
+                detail: "我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论",
+                commentDate: "2023-01-01 12:34",
+                likes: 23,
+                unlikes: 23,
+
             },]
         };
     },
+
     methods: {
-        ToEdit(){
-            this.$router.push("/comment-edit");
+        ToEdit() {
+            this.showDialog = true;
+        },
+        // 处理关闭逻辑
+        getData(val) {
+            this.showDialog = val;
+        },
+        formatDateTime(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            m = m < 10 ? ('0' + m) : m;
+            var d = date.getDate();
+            d = d < 10 ? ('0' + d) : d;
+            var h = date.getHours();
+            h = h < 10 ? ('0' + h) : h;
+            var minute = date.getMinutes();
+            minute = minute < 10 ? ('0' + minute) : minute;
+            var second = date.getSeconds();
+            second = second < 10 ? ('0' + second) : second;
+            return m + '-' + d;
+        },
+        showtimepicker() {
+            this.showpicker = true;
         }
+
     },
     components: {
         Splide,
         SplideSlide,
         DetailView,
         ViewTicket,
-        attrComment
+        attrComment,
+        EitComment
     }
 }
 
