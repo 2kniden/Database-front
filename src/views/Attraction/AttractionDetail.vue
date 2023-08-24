@@ -194,7 +194,7 @@ export default {
         getData(val) {
             if (val != false) {
                 console.log(val);//获取传回来的数据
-                // 添加一条评论数据，然后现在push进comment里面
+                // 添加一条评论数据，然后现在push进comment
                 this.addcommentdata();
 
             }
