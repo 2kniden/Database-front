@@ -79,12 +79,10 @@ export default {
                 avgscore: 0,//评分带小数点
                 detail: '',
                 picList: [],//照片列表
-                likes: 0,
-                unlikes: 0,
                 // 其他信息
                 commentDate: '',//时间
                 commentCity: '',//ip地址这个不方便就不加
-            }
+            },
         }
     },
     conponents: {
@@ -148,8 +146,9 @@ export default {
             })
             // 打印一下
             console.log(this.comment);
-            // 先把某条comment存到本地
-            // 这里要存到后端数据库里，逻辑还没写
+            // 把这条东西存入数据库
+           
+
             // 发表完也要关闭
             this.$emit('getData', false);
 

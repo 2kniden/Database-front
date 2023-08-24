@@ -39,7 +39,6 @@
 export default {
     props: {
         title: String,
-        picsrc: String,
         score: String,
         commentnum: Number,
         location: String,

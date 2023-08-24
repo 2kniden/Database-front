@@ -306,15 +306,16 @@ if (useMock) {
 
     })
     // 获取景点信息：图片信息、景点介绍、景点简介、景点票价但是逻辑还没有处理好所以先不动
-    Mock.mock(/Attraction\/getattrdata\?attraction_id=.*/, 'get', {
-        slides: [
-            require("../assets/attractions/highrank/1.jpg"),
-            require("../assets/attractions/highrank/2.jpg"),
-            require("../assets/attractions/highrank/3.jpg"),
-        ],
+    Mock.mock(/Attraction\/getattrdata\?attraction_id=.*&checkattr_date=.*/, 'get', {      
         declist: {
+            // 轮播图
+            slides: [
+                require("../assets/attractions/highrank/1.jpg"),
+                require("../assets/attractions/highrank/2.jpg"),
+                require("../assets/attractions/highrank/3.jpg"),
+            ],
+            // 景点介绍
             title: "上海迪士尼度假区",
-            picsrc: require('../assets/attractions/recommendpic/disney.png'),
             score: 4.9,
             commentnum: 1234,
             location: "上海市浦东新区川沙新镇黄赵路310号",
@@ -322,13 +323,16 @@ if (useMock) {
             weekend: "8:00-22:00",
             phone: "13880235123",
             price: 689,
-            date: 7.22,//这里要获取的
+            // 景点详情
+            attrdetail: '我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介',
+            // 景点天气
             weather: ''//这里还不知道咋办
         },
-        attrdetail: '我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介',
 
     })
     // 发布评论相关的所有测试接口
+    // 用户表，这里先就返回名字和用户头像
+
     // 写评论
     Mock.mock('/Attraction/postComments/', 'post', (options) => {
         console.log(options.body);

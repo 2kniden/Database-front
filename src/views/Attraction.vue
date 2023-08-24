@@ -62,7 +62,6 @@ import Header from '@/components/Header.vue'
 import axios from 'axios'
 export default {
   mounted() {
-    // 这里mock有问题
     this.initializeData();//默认位置是上海
   },
   data() {

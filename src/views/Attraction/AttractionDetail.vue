@@ -3,16 +3,16 @@
     <div class="detailhead">
         <!-- 轮播图 -->
         <Splide class="slides" :options="{ rewind: true }">
-            <SplideSlide v-for="item in slides" :key="item">
+            <SplideSlide v-for="item in declist.slides" :key="item">
                 <img :src="item">
             </SplideSlide>
 
         </Splide>
         <!-- 简介栏 -->
         <div>
-            <DetailView :title="declist.title" :picsrc="declist.picsrc" :score="declist.score"
-                :commentnum="declist.commentnum" :location="declist.location" :weekday="declist.weekday"
-                :weekend="declist.weekend" :phone="declist.phone" :price="declist.price" :date="declist.date"></DetailView>
+            <DetailView :title="declist.title" :score="declist.score" :commentnum="declist.commentnum"
+                :location="declist.location" :weekday="declist.weekday" :weekend="declist.weekend" :phone="declist.phone"
+                :price="declist.price" :date="today"></DetailView>
         </div>
     </div>
 
@@ -45,7 +45,7 @@
             </div>
             <div class="viewdes">
                 <span class="maintitle">景点简介:</span>
-                <div class="vdetail">{{attrdetail}}</div>
+                <div class="vdetail">{{ declist.attrdetail }}</div>
             </div>
             <div class="usercomment">
                 <div class="chead">
@@ -104,10 +104,8 @@ export default {
     },
     data() {
         return {
-            
-            // 轮播图图片
-            slides: [],
-            // 票价日期（今日、明日、后日，后日显示日期：
+            // 景区日期，票价日期（今日、明日、后日，后日显示日期：
+            today: '',
             tomtomday: '',
             // 更多日期，可查看从进来开始往后7天、以下全是日期选择相关参数
             showpicker: false,
@@ -141,9 +139,9 @@ export default {
             // 景点id和userid先写死
             user_id: '123',
             attraction_id: '123455',
+
             // 景点介绍+简介栏
-            declist:'',
-            attrdetail:'',
+            declist: '',
             // 售票，这里的逻辑还没有处理的很好，先放着
             ticketlist: {
                 title: "成人票",
@@ -154,7 +152,9 @@ export default {
             },
             showDialog: false, // 控制发布评论弹窗的显示和隐藏
             // 评论相关数据
-            commentlist: []
+            commentlist: [],
+            // 相关日志数据
+            journallist: []
         };
     },
 
@@ -162,17 +162,17 @@ export default {
         initializeData() {
             // 获取票价日期
             const time = new Date();
+            this.today = this.formatDateTime(time);
             time.setDate(time.getDate() + 2); // 将日期增加2天（后天）
             this.tomtomday = this.formatDateTime(time);
             console.log(this.tomtomday)
 
-            // 获取景点相关信息：获取景点图片、介绍、景点简介、相关售票信息
+            // 获取景点相关信息：获取景点图片、介绍、景点简介信息
             axios
-                .get('/Attraction/getattrdata?attraction_id=' + this.attraction_id)
+                .get('/Attraction/getattrdata?attraction_id=' + this.attraction_id + '&checkattr_date=' + this.today)
                 .then((response) => {
                     this.slides = response.data.slides;
-                    this.declist=response.data.declist;
-                    this.attrdetail=response.data.attrdetail;
+                    this.declist = response.data.declist;
                 })
                 .catch((error) => {
                     console.error('Error fetching data:', error);
