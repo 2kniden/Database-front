@@ -145,12 +145,12 @@ export default {
                 type: 'success',
             })
             // 打印一下
-            console.log(this.comment);
+            // console.log(this.comment);
             // 把这条东西存入数据库
            
 
             // 发表完也要关闭
-            this.$emit('getData', false);
+            this.$emit('getData', this.comment);
 
         },
         // 关闭页面

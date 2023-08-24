@@ -192,7 +192,41 @@ export default {
         },
         // 处理关闭逻辑
         getData(val) {
-            this.showDialog = val;
+            if (val != false) {
+                console.log(val);//获取传回来的数据
+                // 添加一条评论数据，然后现在push进comment里面
+                this.addcommentdata();
+
+            }
+            this.showDialog = false;
+        },
+        addcommentdata() {
+            // var that = this;
+            // axios.post('/Attraction/postComments/', {
+            //     poster_id: that.reader.reader_id,
+            //     article_id: that.article_id,
+            //     content: that.reader.post_comment,
+            //     post_time: formatDateTime(now_time),
+            //     post_likes: 0,
+            // })
+            //     .then(res => {
+            //         if (res.data.status) {
+            //             that.comments.push({
+            //                 comment_id: res.data.comment_id,
+            //                 poster_id: that.reader.reader_id,
+            //                 poster_avatar: that.reader.reader_avatar,
+            //                 poster_name: that.reader.reader_name,
+            //                 poster_review: that.reader.post_comment,
+            //                 post_time: formatDateTime(now_time),
+            //                 post_likes: 0,
+            //                 is_like: false,
+            //                 permission_of_delete: true,    //删除评论权限     
+            //             });
+            //         }
+            //     })
+            //     .catch(error => {
+            //         alert('操作失败！');
+            //     });
         },
         formatDateTime(date) {
             var y = date.getFullYear();
