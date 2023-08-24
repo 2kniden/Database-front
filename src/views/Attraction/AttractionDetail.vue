@@ -12,7 +12,7 @@
         <div>
             <DetailView :title="declist.title" :picsrc="declist.picsrc" :score="declist.score"
                 :commentnum="declist.commentnum" :location="declist.location" :weekday="declist.weekday"
-                :weekend="declist.weekend" :phone="declist.phone" :price="declist.price"></DetailView>
+                :weekend="declist.weekend" :phone="declist.phone" :price="declist.price" :date="declist.date"></DetailView>
         </div>
     </div>
 
@@ -31,8 +31,7 @@
                         <DArrowRight />
                     </el-icon>
                 </el-button>
-                <el-dialog title="选择更多日期" v-model="showpicker" width="50%" destroy-on-close 
-                    :show-dialog="showpicker">
+                <el-dialog title="选择更多日期" v-model="showpicker" width="50%" destroy-on-close :show-dialog="showpicker">
                     <!-- 这里逻辑还没写不确定加不加 -->
                     <el-date-picker v-model="morevalue1" type="date" placeholder="选择日期">
                     </el-date-picker>
@@ -46,11 +45,7 @@
             </div>
             <div class="viewdes">
                 <span class="maintitle">景点简介:</span>
-                <div class="vdetail">我是简介我是简介我是简介我是简介我是简介我是简介我是
-                    简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我
-                    是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介
-                    我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简
-                    介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介</div>
+                <div class="vdetail">{{attrdetail}}</div>
             </div>
             <div class="usercomment">
                 <div class="chead">
@@ -102,32 +97,19 @@ import '@splidejs/splide/dist/css/themes/splide-default.min.css'
 import DetailView from '../../components/Attraction/viewdetail.vue'
 import ViewTicket from '../../components/Attraction/viewticket.vue'
 import EitComment from '../Attraction/editcomment.vue'
+import axios from 'axios'
 export default {
-    created() {
-        // 获取评论数据
-
-        // 获取日期
-        const time = new Date();
-        // 获取后日日期
-        time.setDate(time.getDate() + 2); // 将日期增加2天（后天）
-        this.tomtomday = this.formatDateTime(time);
-        console.log(this.tomtomday)
-
+    mounted() {
+        this.initializeData();
     },
     data() {
         return {
-            showDialog: false, // 控制发布评论弹窗的显示和隐藏
+            
             // 轮播图图片
-            slides: [
-                require("../../assets/attractions/highrank/1.jpg"),
-                require("../../assets/attractions/highrank/2.jpg"),
-                require("../../assets/attractions/highrank/3.jpg"),
-
-            ],
+            slides: [],
             // 票价日期（今日、明日、后日，后日显示日期：
-            today: '',
             tomtomday: '',
-            // 更多日期，可查看从进来开始往后7天
+            // 更多日期，可查看从进来开始往后7天、以下全是日期选择相关参数
             showpicker: false,
             pickerOptions: {
                 disabledDate(time) {
@@ -155,19 +137,14 @@ export default {
                 }]
             },
             morevalue1: '',
-            // 简介栏
-            declist: {
-                title: "上海迪士尼度假区",
-                picsrc: require('../../assets/attractions/recommendpic/disney.png'),
-                score: 4.9,
-                commentnum: 1234,
-                location: "上海市浦东新区川沙新镇黄赵路310号",
-                weekday: "9:00-21:00",
-                weekend: "8:00-22:00",
-                phone: "13880235123",
-                price: 689
-            },
-            // 售票
+
+            // 景点id和userid先写死
+            user_id: '123',
+            attraction_id: '123455',
+            // 景点介绍+简介栏
+            declist:'',
+            attrdetail:'',
+            // 售票，这里的逻辑还没有处理的很好，先放着
             ticketlist: {
                 title: "成人票",
                 standard: "标准:12周岁以上12周岁以上12周岁以上12周岁以上12周岁以上",
@@ -175,38 +152,41 @@ export default {
                 price: 689,
                 buynum: 4000,
             },
-            //评论数据
-
+            showDialog: false, // 控制发布评论弹窗的显示和隐藏
             // 评论相关数据
-            commentlist: [{
-                commentid: 1,
-                userlog: require("../../assets/attractions/highrank/1.jpg"),
-                username: "吃掉米麻薯的头",
-                avgscore: "4.9",
-                detail: "我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论",
-                commentDate: "2023-01-01 12:34",
-                likes: 23,
-                unlikes: 23,
-                picList: [
-                    require("../../assets/attractions/highrank/1.jpg"),
-                    require("../../assets/attractions/highrank/2.jpg"),
-                    require("../../assets/attractions/highrank/3.jpg")
-                ]
-            }, {
-                commentid: 2,
-                userlog: require("../../assets/attractions/highrank/1.jpg"),
-                username: "吃掉米麻薯的头",
-                avgscore: "4.9",
-                detail: "我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论",
-                commentDate: "2023-01-01 12:34",
-                likes: 23,
-                unlikes: 23,
-
-            },]
+            commentlist: []
         };
     },
 
     methods: {
+        initializeData() {
+            // 获取票价日期
+            const time = new Date();
+            time.setDate(time.getDate() + 2); // 将日期增加2天（后天）
+            this.tomtomday = this.formatDateTime(time);
+            console.log(this.tomtomday)
+
+            // 获取景点相关信息：获取景点图片、介绍、景点简介、相关售票信息
+            axios
+                .get('/Attraction/getattrdata?attraction_id=' + this.attraction_id)
+                .then((response) => {
+                    this.slides = response.data.slides;
+                    this.declist=response.data.declist;
+                    this.attrdetail=response.data.attrdetail;
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+            // 获取评论信息
+            axios
+                .get('/Attraction/getcommentdata?user_id=' + this.user_id + '&attraction_id=' + this.attraction_id)
+                .then((response) => {
+                    this.commentlist = response.data.commentlist;
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+        },
         ToEdit() {
             this.showDialog = true;
         },

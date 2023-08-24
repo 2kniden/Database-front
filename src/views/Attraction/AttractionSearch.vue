@@ -58,6 +58,7 @@
 <script>
 import { useRoute } from 'vue-router'
 import SearchView from '../../components/Attraction/searchview.vue'
+import axios from 'axios';
 export default {
 
 
@@ -67,200 +68,15 @@ export default {
     },
     data() {
         return {
-            // 接收传进来的选择，之类传输有问题不知道为什么
+            // 接收选择关键词
             receivedAttractions: '',
             // 导航栏
             activeMenu: 'home-1',
             isMenuCollapse: false,
-            // 下方选项卡设置默认选中的选项卡为 "2"
-            activeTab: "2",
-            showTabContent: false, // 初始设置选项卡内容不显示
-            //搜索内容匹配列表
+            //搜索内容匹配列表,这里如果后端写逻辑的话我这里得到的就是一个匹配列表
             searchMatchList: [],
-            //搜索内容总数据列表
-            searchlist: [{
-                id: 1,
-                pic: require('../../assets/attractions/highrank/1.jpg'),
-                title: '外滩1',
-                location: '北京市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 2,
-                pic: require('../../assets/attractions/highrank/2.jpg'),
-                title: '外滩2',
-                location: '北京市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 3,
-                pic: require('../../assets/attractions/highrank/3.jpg'),
-                title: '横沙岛',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 4,
-                pic: require('../../assets/attractions/highrank/4.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 5,
-                pic: require('../../assets/attractions/highrank/6.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 6,
-                pic: require('../../assets/attractions/highrank/1.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 7,
-                pic: require('../../assets/attractions/highrank/1.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 8,
-                pic: require('../../assets/attractions/highrank/1.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 9,
-                pic: require('../../assets/attractions/highrank/1.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 10,
-                pic: require('../../assets/attractions/highrank/1.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 11,
-                pic: require('../../assets/attractions/highrank/1.jpg'),
-                title: '外滩1',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 12,
-                pic: require('../../assets/attractions/highrank/2.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 13,
-                pic: require('../../assets/attractions/highrank/3.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 14,
-                pic: require('../../assets/attractions/highrank/4.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 15,
-                pic: require('../../assets/attractions/highrank/6.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 16,
-                pic: require('../../assets/attractions/highrank/1.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 17,
-                pic: require('../../assets/attractions/highrank/3.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 18,
-                pic: require('../../assets/attractions/highrank/4.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 19,
-                pic: require('../../assets/attractions/highrank/6.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }, {
-                id: 20,
-                pic: require('../../assets/attractions/highrank/1.jpg'),
-                title: '外滩',
-                location: '上海市浦东新区川沙新镇黄赵路310号',
-                score: '4.6',
-                commentnum: '1234',
-                username: 'user1',
-                commentdetail: '我是user1的点评我是user1的点评我是user1的点评我是user1的点评我是user1的点评',
-            }],
-            // 评分系统
-            rating: 4.5,
+            //搜索内容总数据列表,这里如果后端写逻辑就不要
+            // searchlist: [],
             // 展示页面部分
             currentPage: 1, // 当前页数
             pageSize: 10,  // 每页显示的条数
@@ -271,11 +87,19 @@ export default {
         };
     },
     mounted() {
-        // 这里的传递参数有点问题，一直是undefined
         this.receivedAttractions = this.$route.query.selectedAttractions;
-        // console.log(this.$route.query.selectedAttractions);
-        this.filterSearchResults(this.receivedAttractions);
+        // 获取与关键词匹配的列表
+        axios
+        .get('/Attraction/searchmatch?keyWord=' + this.receivedAttractions)
+        .then((response) => {
+          this.searchMatchList = response.data.searchmatchlist;
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+        });
         //开始匹配
+        // this.filterSearchResults(this.receivedAttractions);
+        
     },
     computed: {
         // 计算总页数
@@ -328,19 +152,22 @@ export default {
 
     },
     methods: {
+        initializeData(){
+
+        },
         handleMenuSelect(index) {
             this.activeMenu = index;
             // 在这里处理菜单项点击事件，可以进行页面跳转或其他操作
         },
-        filterSearchResults(keywords) {
-            // 使用keywords过滤searchlist，只保留包含关键词的项
-            this.searchMatchList = this.searchlist.filter(item => {
-                return (
-                    item.title.includes(keywords) || // 标题包含关键词
-                    item.location.includes(keywords) // 地点包含关键词
-                );
-            });
-        },
+        // 这里是匹配，如果后端写逻辑就不要
+        // filterSearchResults(keywords) {
+        //     this.searchMatchList = this.searchlist.filter(item => {
+        //         return (
+        //             item.title.includes(keywords) || 
+        //             item.location.includes(keywords) 
+        //         );
+        //     });
+        // },
         handleTabClick(tab, event) {
 
             //这样才能获取每个el-tab-pane的name属性

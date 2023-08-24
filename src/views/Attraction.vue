@@ -72,9 +72,6 @@ export default {
       chosencity: '上海',
       // 高分推荐列表
       highranklist: [],
-
-
-
     }
   },
 

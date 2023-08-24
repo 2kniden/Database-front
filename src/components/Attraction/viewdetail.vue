@@ -30,7 +30,7 @@
             <!-- 这里要导入当天日期，并导入天气查看插件 -->
             <!-- 这里的图标也要随天气改变，暂时写死 -->
             <img class="dwimg" src="../../assets/attractions/weather/weather_1晴.svg" alt="">
-            7.22
+            {{date}}
             <div class="other">(点击查看更多)</div>
         </div>
     </div>
@@ -46,7 +46,8 @@ export default {
         weekday: String,
         weekend: String,
         phone: String,
-        price: Number
+        price: Number,
+        date:String
     }
 }
 </script>
