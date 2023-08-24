@@ -4,6 +4,7 @@ import router from "./router";
 import store from "./store";
 import axios from "axios";
 import $ from "jquery";
+import './mock/mock';
 // 引入jQuery、bootstrap
 
 import vue3videoPlay from 'vue3-video-play' // 引入组件

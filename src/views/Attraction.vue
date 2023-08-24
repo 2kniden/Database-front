@@ -59,68 +59,21 @@ import RankView from '@/components/Attraction/highrankview.vue'
 import Search from '@/components/Attraction/search.vue'
 import StartTitle from '@/components/Attraction/smallfunc/startline.vue'
 import Header from '@/components/Header.vue'
+import axios from 'axios'
 export default {
+  mounted() {
+    // 这里mock有问题
+    this.initializeData();//默认位置是上海
+  },
   data() {
     return {
-      // 热门景点缩略图列表（先自己写列表）
-      recommendpiclist: [{
-        id: 1,
-        picsrc: require('../assets/attractions/recommendpic/disney.png'),
-        title: '迪士尼',
-      }, {
-        id: 2,
-        picsrc: require('../assets/attractions/recommendpic/happyland.png'),
-        title: '横沙岛',
-      }, {
-        id: 3,
-        picsrc: require('../assets/attractions/recommendpic/hengsha.png'),
-        title: '欢乐谷',
-      }, {
-        id: 4,
-        picsrc: require('../assets/attractions/recommendpic/waitan.png'),
-        title: '外滩',
-      },],
-
+      // 热门景点缩略图列表
+      recommendpiclist: [],
+      chosencity: '上海',
       // 高分推荐列表
-      highranklist: [{
-        id: 1,
-        title: '景点名称景点名称景点名称',
-        picsrc: require('../assets/attractions/highrank/1.jpg'),
-        score: '4.9',
-        dec: '上海市浦东新区川沙新镇黄赵路310号',
-      }, {
-        id: 2,
-        title: '景点名称景点名称景点名称',
-        picsrc: require('../assets/attractions/highrank/2.jpg'),
-        score: '4.9',
-        dec: '上海市浦东新区川沙新镇黄赵路310号',
-      }, {
-        id: 3,
-        title: '景点名称景点名称景点名称',
-        picsrc: require('../assets/attractions/highrank/3.jpg'),
-        score: '4.9',
-        dec: '上海市浦东新区川沙新镇黄赵路310号',
-      }, {
-        id: 4,
-        title: '景点名称景点名称景点名称',
-        picsrc: require('../assets/attractions/highrank/4.jpg'),
-        score: '4.9',
-        dec: '上海市浦东新区川沙新镇黄赵路310号',
-      }, {
-        id: 5,
-        title: '景点名称景点名称景点名称',
-        picsrc: require('../assets/attractions/highrank/5.jpg'),
-        score: '4.9',
-        dec: '上海市浦东新区川沙新镇黄赵路310号',
-      }, {
-        id: 6,
-        title: '景点名称景点名称景点名称',
-        picsrc: require('../assets/attractions/highrank/6.jpg'),
-        score: '4.9',
-        dec: '上海市浦东新区川沙新镇黄赵路310号',
-      },],
-      // 地图展示相关数据
-      
+      highranklist: [],
+
+
 
     }
   },
@@ -128,12 +81,39 @@ export default {
   methods: {
 
     ToDetail() {
+      this.goToTop();
       this.$router.push('/attraction-detail');
     },
-    choosemap(){
-      
-    }
-    
+    choosemap() {
+
+    },
+    goToTop() {
+      window.scrollTo(0, 0);
+    },
+    initializeData() {
+      // 获取热门景点
+      axios
+        .get('/Attraction/recommendAttr?attr_position=' + this.chosencity)
+        .then((response) => {
+          this.recommendpiclist = response.data.recommendList;
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+        });
+        // 获取高分推荐
+      axios
+        .get('/Attraction/highrank?attr_position=' + this.chosencity)
+        .then((response) => {
+          this.highranklist = response.data.highrankList;
+          console.log(this.highranklist)
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+        });
+
+    },
+
+
   },
   components: {
     // MyMap,
@@ -142,7 +122,7 @@ export default {
     StartTitle,
     Search,
     Header,
-
+    axios
   }
 }
 
