@@ -119,20 +119,6 @@ const getCurrentTime = () => {
     return currentTime
 }
 
-// 获取当前时间
-const getCurrentTime = () => {
-    var date = new Date()
-    var year = date.getFullYear()
-    var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth()+ 1
-    var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-    var hour = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
-    var minute = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
-    var second = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
-    // 格式如："2023-08-30 13:48:44"
-    const currentTime = year + "-" + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
-    return currentTime
-}
-
 // 提交小队信息
 const commitTeamMessage = () => {
     // 获取发布时间
