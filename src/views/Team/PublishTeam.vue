@@ -11,9 +11,6 @@
             <el-form-item label="目的地" :label-width="formLabelWidth">
                 <el-input v-model="team.destination" maxlength="10" placeholder="请输入旅行省份/市/景区" show-word-limit type="text" />
             </el-form-item>
-            <el-form-item label="目的地" :label-width="formLabelWidth">
-                <el-input v-model="team.destination" maxlength="10" placeholder="请输入旅行省份/市/景区" show-word-limit type="text" />
-            </el-form-item>
             <el-form-item label="人数上限" :label-width="formLabelWidth">
                 <el-input-number v-model="team.total" :min="1" />
             </el-form-item>
@@ -29,22 +26,6 @@
                     <el-checkbox-button label="休闲" />
                     <el-checkbox-button label="充实" />
                 </el-checkbox-group>
-            </el-form-item>
-            <el-form-item label="旅行时间" :label-width="formLabelWidth">
-                <div class="demo-date-picker">
-                    <div class="block">
-                    <el-date-picker
-                        v-model="team.time"
-                        type="daterange"
-                        range-separator="-"
-                        start-placeholder="开始时间"
-                        end-placeholder="结束时间"
-                        format="YYYY/MM/DD"
-                        value-format="YYYY-MM-DD"
-                        :size="default"
-                    />
-                    </div>
-                </div>
             </el-form-item>
             <el-form-item label="旅行时间" :label-width="formLabelWidth">
                 <div class="demo-date-picker">
