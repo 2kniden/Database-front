@@ -72,7 +72,7 @@
                         <el-button class="card-button" type="primary" size="large" color="#8097FD" plain
                             @click="goDetails(item)">查看详情</el-button>
                         <el-button class="card-button" type="primary" size="large" color="#8097FD" plain
-                            @click="quitTeam(item)">退出小队</el-button>
+                            @click="quitTeam(item,index)">退出小队</el-button>
                     </div>
                 </el-card>
             </div>
@@ -85,10 +85,13 @@
 <script setup>
 import Header from "@/components/Header";
 import TeamNav from "@/components/TeamNav";
-import { ref } from "vue";
+import { ref, nextTick } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { ElMessage } from 'element-plus';
+
+//当前用户id
+const cur_user_id="haha"
 
 // 进入我的小队详情页
 const router = useRouter()
@@ -99,53 +102,43 @@ const goDetails = (item) => {
     })
 }
 
-// 测试数据，审核中的小队
-// 实际使用时需筛选出审核数组applicants包含当前用户的小队（未实现）
-const myJoiningList = ref()
+const myJoiningList = ref([])
+const myJoinedList = ref([])
 
-// 测试数据，已加入的小队
-// 实际使用时需筛选出成员数组members包含当前用户的小队（未实现）
-const myJoinedList = ref()
-
+// 获取我已申请正在审核中的小队
 axios.get('/Team/MyJoinedTeam/Joining')
     .then(res => {
         console.log(res.data.team_info);
         myJoiningList.value = res.data.team_info
     });
-
+// 获取我加入的小队信息
 axios.get('/Team/MyJoinedTeam/Joined')
     .then(res => {
         console.log(res.data.team_info);
         myJoinedList.value = res.data.team_info
     });
 
-// 退出小队（未实现）
-const quitTeam = (item) => {
-    // 当前小队信息
-    const team = ref({
-        team_id: item.team_id,
-        title: item.title,
-        detail: item.detail,
-        status: item.status,
-        tags: item.tags,
-        publisher: item.publisher,
-        members: item.members,
-        applicants: item.applicants,
-        total: item.total
-    })
-    // 要退出的小队id
-    const team_id = team.value.team_id
-    // 获取当前用户id（未实现）
-
-    // 在team.value.members中找到当前用户id元素，并将其从members数组中删除（未实现）
-
-    // 根据team_id找到数据库中该小队信息，替换为更新后的team信息（未实现）
-
-    // 弹出提示
-    ElMessage({
-        message: '成功退出小队！',
-        type: 'success',
-    })
+// 退出小队
+const quitTeam = (item,index) => {
+    // 在team.value.members中找到当前用户id元素，并将其从members数组中删除
+    axios.delete('/Team/DeleteJoinedTeam/', {
+            user_id: cur_user_id,
+            team_id: item.team_id,
+        })
+        .then(res => {
+            //如果成功删除,先在前端模拟删除myJoinedList中的元素
+            if (res.data) {
+                if (index !== -1) {
+                    myJoinedList.value.splice(index, 1);
+                } 
+                ElMessage({
+                    message: '成功退出小队！' ,
+                    type: 'success',
+                });
+    
+            }
+        }
+        )
 }
 
 </script>

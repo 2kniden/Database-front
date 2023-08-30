@@ -113,6 +113,7 @@ const goDetails = (item) => {
     })
 }
 
+
 // 进入编辑小队页面
 const editTeam = (item) => {
     router.push({
@@ -128,20 +129,16 @@ const getData = (val) => {
     dialogFormVisible.value = val
 }
 
-// 测试数据，招募中的小队
-// 实际使用时需筛选出发布者为当前用户且小队状态为“招募中”的小队（未实现）
 const myRecruitingList = ref()
-
-// 测试数据，招募完成的小队
-// 实际使用时需筛选出发布者为当前用户且小队状态为“招募完成”的小队（未实现）
 const myRecruitedList = ref()
 
+// 实际使用时需筛选出发布者为当前用户且小队状态为“招募中”的小队
 axios.get('/Team/MyPublishedTeam/Recruiting')
     .then(res => {
         console.log(res.data.team_info);
         myRecruitingList.value = res.data.team_info
     });
-
+// 实际使用时需筛选出发布者为当前用户且小队状态为“招募完成”的小队
 axios.get('/Team/MyPublishedTeam/Recruited')
     .then(res => {
         console.log(res.data.team_info);

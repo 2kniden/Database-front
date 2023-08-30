@@ -24,7 +24,19 @@
                 <div class="status float-left">{{ item.status }}</div>
                 <div class="clearfloat"></div>
             </div>
-            <!-- 第四行：小队标签 -->
+            <!-- 第四行：预计出发时间 -->
+            <div class="card-line">
+                <div class="line-name">出发时间</div>
+                <div class="status float-left">{{ item.travelBeginTime }}</div>
+                <div class="clearfloat"></div>
+            </div>
+            <!-- 第五行：预计终止时间 -->
+            <div class="card-line">
+                <div class="line-name">结束时间</div>
+                <div class="status float-left">{{ item.travelEndTime }}</div>
+                <div class="clearfloat"></div>
+            </div>
+            <!-- 第6行：小队标签 -->
             <div class="card-line">
                 <div class="line-name">小队标签</div>
                 <div v-for="(tag, tagIndex) in item.tags" :key="tagIndex">
@@ -32,7 +44,7 @@
                 </div>
                 <div class="clearfloat"></div>
             </div>
-            <!-- 第五行：小队成员 -->
+            <!-- 第7行：小队成员 -->
             <div class="card-line">
                 <div class="line-name padding-h-five">小队成员</div>
                 <div class="float-left">
@@ -46,6 +58,10 @@
                     </div>
                 </div>
                 <div class="clearfloat"></div>
+            </div>
+            <!-- 第8行：发布日期 -->
+            <div class="posttime">
+              {{ item.postTime }}
             </div>
         </div>
     </div>

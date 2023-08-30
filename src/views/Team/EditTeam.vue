@@ -86,6 +86,7 @@ import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Check, Delete } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
+import axios from "axios";
 
 const router = useRouter()
 
@@ -94,7 +95,7 @@ const route = useRoute()
 console.log("切换至编辑小队页面")
 const item = route.query
 
-// 小队信息
+// 当前小队信息
 const team = ref({
     team_id: item.team_id,
     title: item.title,
@@ -166,12 +167,24 @@ const cancelEdit = () => {
     goMyPublishedTeam()
 }
 
+const cur_user_id="haha"
 // 确认修改（未实现）
 const commitEdit = () => {
-    // 当前小队id
-    const team_id = team.value.team_id
-    // 当前修改后的小队信息保存在team中
-    // 根据team_id从数据库中查找到该小队信息，进行更新（未实现）
+    // 这里在控制台打印小队主题进行测试验证修改成功
+    console.log(team.value.title)
+
+    // 根据team_id从数据库中查找到该小队信息，进行更新
+    axios.put('/Team/EditTeamInfo/',{
+        user_id: cur_user_id,
+        new_team: team.value,
+    })
+    .then(res => {
+        //将返回新的小队列表
+        //获取到新的小队列表后 需要刷新页面 即可实现更新
+    })
+    .catch(error => {
+      alert('操作失败！');
+    });
 
     ElMessage({
         message: '成功修改我的小队信息！',

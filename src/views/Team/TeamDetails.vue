@@ -24,7 +24,19 @@
                 <div class="status float-left">{{ item.status }}</div>
                 <div class="clearfloat"></div>
             </div>
-            <!-- 第四行：小队标签 -->
+            <!-- 第四行：预计出发时间 -->
+            <div class="card-line">
+                <div class="line-name">出发时间</div>
+                <div class="status float-left">{{ item.travelBeginTime }}</div>
+                <div class="clearfloat"></div>
+            </div>
+            <!-- 第五行：预计终止时间 -->
+            <div class="card-line">
+                <div class="line-name">结束时间</div>
+                <div class="status float-left">{{ item.travelEndTime }}</div>
+                <div class="clearfloat"></div>
+            </div>
+            <!-- 第六行：小队标签 -->
             <div class="card-line">
                 <div class="line-name">小队标签</div>
                 <div v-for="(tag, tagIndex) in item.tags" :key="tagIndex">
@@ -32,7 +44,7 @@
                 </div>
                 <div class="clearfloat"></div>
             </div>
-            <!-- 第五行：小队成员 -->
+            <!-- 第七行：小队成员 -->
             <div class="card-line">
                 <div class="line-name padding-h-five">小队成员</div>
                 <div class="float-left">
@@ -47,7 +59,11 @@
                 </div>
                 <div class="clearfloat"></div>
             </div>
-            <!-- 第六行：按钮 -->
+            <!-- 第七行：发布日期 -->
+            <div class="posttime">
+              {{ item.postTime }}
+            </div>
+            <!-- 第八行：按钮 -->
             <div>
                 <el-button class="card-button" type="primary" size="large" color="#8097FD" plain
                     @click="joinTeam(item)">加入小队</el-button>
@@ -59,25 +75,47 @@
 <script setup>
 import Header from "@/components/Header";
 import TeamNav from "@/components/TeamNav";
+import { ref } from 'vue';
 import { useRoute } from "vue-router";
 import { ElMessage } from 'element-plus';
+import axios from "axios";
 
 const route = useRoute()
 console.log("切换至小队详情页")
+const cur_user_id = route.params.user_id
 const item = route.query
 
-// 请求加入小队（未实现）
-// 同team.vue中的同名函数
+// 请求加入小队
 const joinTeam = (item) => {
-    console.log("请求加入小队")
-    ElMessage({
-        message: '成功发送加入小队请求！',
+  // 将该用户添加到小队申请者列表applicants
+  axios.post('/Team/AddTeamApplicants/',{
+    user_id: cur_user_id,
+    team_id: item.team_id,
+  })
+  .then(res => {
+    if(res.data.status==1){
+      item.applicants=res.data.cur_team.applicants; //将返回的小队申请列表赋予当前item
+      ElMessage({
+        message: cur_user_id+'成功发送加入小队请求！'+item.team_id,
         type: 'success',
-    })
-    // 获取小队的id
-    const team_id = item.team_id
-    // 获取用户id
-    // 将该用户添加到小队申请者列表（后端）
+      })
+    }
+    else if(res.data.status==2){
+      ElMessage({
+        message: cur_user_id+'已发送申请，正在审核中！'+item.team_id,
+        type: 'success',
+      })
+    }
+    else if(res.data.status==3){
+      ElMessage({
+        message: cur_user_id+'已加入该小队！'+item.team_id,
+        type: 'success',
+      })
+    }
+  })
+  .catch(error => {
+    alert('操作失败！');
+  });
 }
 </script>
 
@@ -117,4 +155,11 @@ const joinTeam = (item) => {
     margin-top: 16px;
     text-align: left;
 }
+
+.posttime{
+  font-size: 14px;
+  text-align: right;
+  color: #808080;
+}
+
 </style>

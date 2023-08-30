@@ -36,6 +36,7 @@
 <script setup>
 import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
+import axios from "axios";
 
 // 信息名称长度
 const formLabelWidth = '80px'
@@ -58,26 +59,32 @@ const team = ref({
     total: 1
 })
 
+//当前用户id
+const cur_user_id="haha"
+
 // 提交小队信息
-// 需要在后端数据库中插入该小队（未实现）
 const commitTeamMessage = () => {
-    ElMessage({
+    // 这里在控制台打印小队主题进行测试
+    console.log(team.value.title)
+    axios.post('/Team/PublishTeamInfo/',{
+        user_id: cur_user_id,
+        new_team: team.value,
+    })
+    .then(res => {
+        //将返回新的小队列表
+        //获取到新的小队列表后 需要刷新页面 即可实现更新
+    })
+    .catch(error => {
+      alert('操作失败！');
+    });
+
+  ElMessage({
         message: '成功提交小队信息！',
         type: 'success',
     })
-    // 输入的小队信息保存在team里
-    // 如小队主题的值为team.value.title
-    // 这里在控制台打印小队主题进行测试
-    console.log(team.value.title)
-
-    // team.publiser需要获取当前用户的用户信息（未实现）
-
-    // team.team_id需要生成唯一team_id（未实现）
-
-    // 将小队信息保存进数据库（未实现）
-
     // 关闭窗口
     dialogInvisible()
+    location.reload();
 }
 </script>
 
