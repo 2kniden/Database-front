@@ -15,6 +15,10 @@
                     <el-input v-model="team.detail" :autosize="{ minRows: 3 }" maxlength="200" placeholder="请输入小队的详细信息"
                         show-word-limit type="textarea" />
                 </el-form-item>
+                <!-- 目的地 -->
+                <el-form-item label="目的地" :label-width="formLabelWidth">
+                    <el-input v-model="team.destination" maxlength="10" placeholder="请输入旅行省份/市/景区" show-word-limit type="text" />
+                </el-form-item>
                 <!-- 人数上限 -->
                 <el-form-item label="人数上限" :label-width="formLabelWidth">
                     <el-input-number v-model="team.total" :min="1" />
@@ -37,6 +41,23 @@
                 <el-form-item label="招募状态" :label-width="formLabelWidth">
                     <el-switch v-model="team.status" active-text="招募中" inactive-text="招募结束" active-value="招募中"
                         inactive-value="招募结束" />
+                </el-form-item>
+                <!-- 旅行时间 -->
+                <el-form-item label="旅行时间" :label-width="formLabelWidth">
+                    <div class="demo-date-picker">
+                        <div class="block">
+                        <el-date-picker
+                            v-model="team.time"
+                            type="daterange"
+                            range-separator="-"
+                            start-placeholder="开始时间"
+                            end-placeholder="结束时间"
+                            format="YYYY/MM/DD"
+                            value-format="YYYY-MM-DD"
+                            :size="default"
+                        />
+                        </div>
+                    </div>
                 </el-form-item>
                 <!-- 小队成员 -->
                 <el-form-item label="小队成员" :label-width="formLabelWidth">
@@ -98,6 +119,7 @@ const item = route.query
 // 当前小队信息
 const team = ref({
     team_id: item.team_id,
+    destination: item.destination,
     title: item.title,
     detail: item.detail,
     status: item.status,
@@ -105,7 +127,8 @@ const team = ref({
     publisher: item.publisher,
     members: item.members,
     applicants: item.applicants,
-    total: item.total
+    total: item.total,
+    time: item.time
 })
 
 // 信息名称长度
@@ -168,7 +191,7 @@ const cancelEdit = () => {
 }
 
 const cur_user_id="haha"
-// 确认修改（未实现）
+// 确认修改
 const commitEdit = () => {
     // 这里在控制台打印小队主题进行测试验证修改成功
     console.log(team.value.title)

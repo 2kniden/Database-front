@@ -52,6 +52,14 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { ElMessage } from 'element-plus';
 
+//进入小队详情
+const router = useRouter()
+const goDetails = (item) => {
+  router.push({
+    path: '/Team/TeamDetails',
+    query: item,
+  })
+}
 
 // // 获取当前用户id
 // const cur_user_id=ref();
@@ -63,61 +71,60 @@ import { ElMessage } from 'element-plus';
 //   .catch(error => {
 //     console.error("获取用户ID失败:", error);
 //   });
-const cur_user_id="haha"
+
+const cur_user_id="843526A2B7784E73B28E73C797A2C81C"
+var temp1,temp2,temp3,temp4;
 // 获取小队的信息
-const teamList = ref()
-axios.get('/Team/TeamSquare/')
+const teamList = ref([])
+axios.get('http://8.130.25.70:5555/api/Teams')
   .then(res => {
-    console.log(res.data);
-    teamList.value = res.data.team_info
+    // console.log(res.data);
+    // temp1=res.data[2];
+    // temp2=res.data[1];
+    // temp3=res.data[2];
+    // temp4=res.data[3];
+    // teamList.value.push(temp1);
+    // teamList.value.push(temp2);
+    // teamList.value.push(temp3);
+    // teamList.value.push(temp4);
+    teamList.value=res.data;
   })
   .catch(error => {
       console.error("获取小队列表失败:", error);
     });
 
-
-const router = useRouter()
-const goDetails = (item) => {
-  router.push({
-    path: '/Team/TeamDetails',
-    params: {
-      user_id: "haha",
-    },
-    query: item,
-  })
-}
-
 // 请求加入小队
 const joinTeam = (item) => {
   // 将该用户添加到小队申请者列表applicants
-  // axios.post('/Team/AddTeamApplicants/',{
-  //   user_id: cur_user_id.value,
-  //   team_id: item.team_id,
-  // })
-  // .then(res => {
-  //   if(res.data.status==1){
-  //     item.applicants=res.data.cur_team.applicants; //将返回的小队申请列表赋予当前item
-  //     ElMessage({
-  //       message: cur_user_id.value+'成功发送加入小队请求！'+item.team_id,
-  //       type: 'success',
-  //     })
-  //   }
-  //   else if(res.data.status==2){
-  //     ElMessage({
-  //       message: cur_user_id.value+'已发送申请，正在审核中！'+item.team_id,
-  //       type: 'success',
-  //     })
-  //   }
-  //   else if(res.data.status==3){
-  //     ElMessage({
-  //       message: cur_user_id.value+'已加入该小队！'+item.team_id,
-  //       type: 'success',
-  //     })
-  //   }
-  // })
-  // .catch(error => {
-  //   alert('操作失败！');
-  // });
+  axios.post('http://8.130.25.70:5555/api/Teams/Apply',{
+    UserID: cur_user_id,
+    TeamID: item.teamId,
+  })
+  .then(res => {
+    console.log(res.data);
+    console.log(res.status);
+    ElMessage({
+      message: '成功发送加入小队请求！',
+      type: 'success',
+    })
+  })
+  .catch(function (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else if (error.request) {
+      // The request was made but no response was received
+      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+      // http.ClientRequest in node.js
+      console.log(error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.log('Error', error.message);
+    }
+  });
 }
 </script>
 
