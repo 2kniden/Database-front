@@ -24,16 +24,16 @@
                 <div class="status float-left">{{ item.status }}</div>
                 <div class="clearfloat"></div>
             </div>
-            <!-- 第四行：预计出发时间 -->
+            <!-- 第四行：目的地 -->
             <div class="card-line">
-                <div class="line-name">出发时间</div>
-                <div class="time float-left">{{ item.travelBeginTime }}</div>
+                <div class="line-name">旅行地点</div>
+                <div class="float-left">{{ item.destination }}</div>
                 <div class="clearfloat"></div>
             </div>
-            <!-- 第五行：预计终止时间 -->
+            <!-- 第五行：旅行时间 -->
             <div class="card-line">
-                <div class="line-name">结束时间</div>
-                <div class="time float-left">{{ item.travelEndTime }}</div>
+                <div class="line-name">旅行时间</div>
+                <div class="time float-left">{{ item.time[0] }} 至 {{ item.time[1] }}</div>
                 <div class="clearfloat"></div>
             </div>
             <!-- 第六行：小队标签 -->
@@ -59,11 +59,11 @@
                 </div>
                 <div class="clearfloat"></div>
             </div>
-            <!-- 第七行：发布日期 -->
+            <!-- 第八行：发布日期 -->
             <div class="posttime">
               {{ item.postTime }}
             </div>
-            <!-- 第八行：按钮 -->
+            <!-- 第九行：按钮 -->
             <div>
                 <el-button class="card-button" type="primary" size="large" color="#8097FD" plain
                     @click="joinTeam(item)">加入小队</el-button>
