@@ -27,13 +27,13 @@
             <!-- 第四行：预计出发时间 -->
             <div class="card-line">
                 <div class="line-name">出发时间</div>
-                <div class="status float-left">{{ item.travelBeginTime }}</div>
+                <div class="time float-left">{{ item.travelBeginTime }}</div>
                 <div class="clearfloat"></div>
             </div>
             <!-- 第五行：预计终止时间 -->
             <div class="card-line">
                 <div class="line-name">结束时间</div>
-                <div class="status float-left">{{ item.travelEndTime }}</div>
+                <div class="time float-left">{{ item.travelEndTime }}</div>
                 <div class="clearfloat"></div>
             </div>
             <!-- 第6行：小队标签 -->
