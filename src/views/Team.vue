@@ -78,7 +78,7 @@ var temp1,temp2,temp3,temp4;
 const teamList = ref([])
 axios.get('http://8.130.25.70:5555/api/Teams')
   .then(res => {
-    // console.log(res.data);
+    console.log(res.data);
     // temp1=res.data[2];
     // temp2=res.data[1];
     // temp3=res.data[2];
@@ -230,6 +230,7 @@ const joinTeam = (item) => {
 }
 
 .detail {
+  height: 104px;
   text-align: left;
 }
 

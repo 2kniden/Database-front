@@ -12,7 +12,7 @@
                 </el-form-item>
                 <!-- 详情 -->
                 <el-form-item label="详情" :label-width="formLabelWidth">
-                    <el-input v-model="team.detail" :autosize="{ minRows: 3 }" maxlength="200" placeholder="请输入小队的详细信息"
+                    <el-input v-model="team.detail" :autosize="{ minRows: 3 }" maxlength="120" placeholder="请输入小队的详细信息"
                         show-word-limit type="textarea" />
                 </el-form-item>
                 <!-- 目的地 -->
