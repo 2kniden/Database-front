@@ -27,13 +27,13 @@
             <!-- 第四行：预计出发时间 -->
             <div class="card-line">
                 <div class="line-name">出发时间</div>
-                <div class="status float-left">{{ item.travelBeginTime }}</div>
+                <div class="time float-left">{{ item.travelBeginTime }}</div>
                 <div class="clearfloat"></div>
             </div>
             <!-- 第五行：预计终止时间 -->
             <div class="card-line">
                 <div class="line-name">结束时间</div>
-                <div class="status float-left">{{ item.travelEndTime }}</div>
+                <div class="time float-left">{{ item.travelEndTime }}</div>
                 <div class="clearfloat"></div>
             </div>
             <!-- 第六行：小队标签 -->
@@ -160,6 +160,16 @@ const joinTeam = (item) => {
   font-size: 14px;
   text-align: right;
   color: #808080;
+}
+
+.time {
+  padding: 4px 12px;
+  height: fit-content;
+  width: fit-content;
+  font-size: 14px;
+  color: #fff;
+  background-color: #6bc2f9;
+  border-radius: 10px;
 }
 
 </style>
