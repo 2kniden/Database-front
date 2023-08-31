@@ -7,28 +7,39 @@
   <div class="background" >
       <div class="left_choose" :style="{height:leftContentHeight+'px'}">
           <div class="left_choose_change" :style="{height:navBarHeight+'px'}">
-              <div class="choose_content" :style="chooseChangeStyle('个人中心')" @click="setActive('个人中心')">
-                  <img class="choose_content_icon" src="../assets/personal/selfhome.png">
-                  <div class="choose_content_text">
-                      个人中心
+              <div class="big_content" :style="chooseChangeStyle('个人中心')" @click="setActive('个人中心')">
+                  <div class="choose_content" :style="chooseChangeStyle('个人中心')" @click="setActive('个人中心')">
+                      <img class="choose_content_icon" src="../assets/personal/selfhome.png">
+                      <div class="choose_content_text">
+                          个人中心
+                      </div>
                   </div>
               </div>
-              <div class="choose_content" :style="chooseChangeStyle('用户信息')" @click="setActive('用户信息')">
-                  <img class="choose_content_icon" src="../assets/personal/selfinfo.png">
-                  <div class="choose_content_text">
-                      用户信息
+              <div class="big_content" :style="chooseChangeStyle('用户信息')" @click="setActive('用户信息')">
+                  <div class="choose_content" :style="chooseChangeStyle('用户信息')" @click="setActive('用户信息')">
+                      <img class="choose_content_icon" src="../assets/personal/selfinfo.png">
+                      <div class="choose_content_text">
+                          用户信息
+                      </div>
                   </div>
               </div>
-              <div class="choose_content" :style="chooseChangeStyle('收藏夹')" @click="setActive('收藏夹')">
-                  <img class="choose_content_icon" src="../assets/personal/selflike.png">
-                  <div class="choose_content_text">
-                      收藏夹
+              <div class="big_content" :style="chooseChangeStyle('收藏夹')" @click="setActive('收藏夹')">
+                  <div class="choose_content" :style="chooseChangeStyle('收藏夹')" @click="setActive('收藏夹')">
+                      <img class="choose_content_icon" src="../assets/personal/selflike.png">
+                      <div class="choose_content_text">
+                          收藏夹
+                      </div>
+                  </div>
+                  <div class="big_content_son" :style="choose_son_style('日志')" @click="setActive('日志')" v-if="activeChoose==='收藏夹'">
+                      <div class="son_cycle">日志</div>
                   </div>
               </div>
-              <div class="choose_content" :style="chooseChangeStyle('设置')" @click="setActive('设置')">
-                  <img class="choose_content_icon" src="../assets/personal/selfsetup.png">
-                  <div class="choose_content_text">
-                      设置
+              <div class="big_content" :style="chooseChangeStyle('设置')" @click="setActive('设置')">
+                  <div class="choose_content" :style="chooseChangeStyle('设置')" @click="setActive('设置')">
+                      <img class="choose_content_icon" src="../assets/personal/selfsetup.png">
+                      <div class="choose_content_text">
+                          设置
+                      </div>
                   </div>
               </div>
           </div>
@@ -213,6 +224,58 @@
                   看看你收藏的日志吧！
               </div>
           </div>
+          <div class="display-box" style="margin-top: -200px">
+              <div class="page" v-for="pageIndex in totalPages" :key="pageIndex" v-show="currentPage === pageIndex">
+                  <div class="row" v-for="rowIndex in 2" :key="rowIndex">
+                      <div class="box" v-for="boxIndex in 4" :key="boxIndex">
+                          <div class="box_title">
+                              <div class="box_name">
+                                  上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！
+                              </div>
+                              <div class="box_time">
+                                  2023/07/03
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="pagination">
+                  <button
+                      class="arrow-btn prev-btn"
+                      @click="prevPage"
+                      :disabled="currentPage === 1"
+                  >
+                      <img class="turnleft" src="../assets/personal/turnleft.png">
+                      <i class="fas fa-chevron-left"></i>
+                  </button>
+                  <div class="page-list">
+                      <button
+                          v-for="pageIndex in totalPages"
+                          :key="pageIndex"
+                          :class="['page-btn', { 'pag_active': currentPage === pageIndex }]"
+                          @click="changePage(pageIndex)"
+                      >
+                          {{ pageIndex }}
+                      </button>
+                  </div>
+                  <button
+                      class="arrow-btn next-btn"
+                      @click="nextPage"
+                      :disabled="currentPage === totalPages"
+                  >
+                      <img class="turnleft" src="../assets/personal/turnright.png">
+                      <i class="fas fa-chevron-right"></i>
+                  </button>
+              </div>
+          </div>
+      </div>
+
+      <!--设置页面-->
+      <!--收藏夹页面-->
+      <div class="rightpart-star" v-if="activeChoose==='设置'">
+          <div class="zhanghao_title">
+              你的账号与安全设置
+          </div>
       </div>
 
   </div>
@@ -271,6 +334,22 @@ export default {
       };
   },
   methods:{
+      choose_son_style(name){
+          let that=this;
+          if(that.activeChoose===name&&that.activeChoose==="日志"){
+              return{
+                  height:"106px",
+                  backgroundColor:"#D9DFFD",
+              };
+          }
+          else if(that.activeChoose===name&&that.activeChoose==="小队"){
+
+              return{
+                  height: "106px",
+                  backgroundColor:"#D9DFFD",
+              };
+          }
+      },
       chooseChangeStyle(name){
           let that=this;
           if(that.activeChoose===name&&that.activeChoose==="收藏夹"){
@@ -373,10 +452,27 @@ export default {
     width: 100%;
     height: 76px;
     border-radius: 20px;
-    margin-top: 5px;
     background-color: #F1F3FF;
     justify-content: flex-start;
     align-items: center;
+
+    color: #8097FD;
+    font-family: MiSans;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.big_content{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 76px;
+    border-radius: 20px;
+    margin-top: 5px;
+    background-color: #F1F3FF;
 
     color: #8097FD;
     font-family: MiSans;
@@ -1126,6 +1222,61 @@ export default {
 .star-icon{
     width: 45px;
     height: 45px;
+}
+
+.choose_content_son{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 106px;
+    height: 42px;
+    margin-top: 31px;
+    margin-left: 87px;
+
+    border-radius: 10px;
+    backdrop-filter: blur(2px);
+
+    color: #FFF;
+    font-family: MiSans;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.zhanghao_title{
+    position: relative;
+    display: flex;
+    width: 288px;
+    height: 43px;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 30px;
+    margin-left: 130px ;
+
+    color: #8097FD;
+    font-family: MiSans;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.son_cycle {
+    position: relative;
+    display: flex;
+    width: 106px;
+    height: 42px;
+    border-radius: 10px;
+    background: #D9DFFD;
+    backdrop-filter: blur(2px);
+
+    color: #000;
+    font-family: MiSans;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 </style>
