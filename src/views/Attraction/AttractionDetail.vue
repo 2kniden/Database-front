@@ -23,7 +23,7 @@
             </div>
             <!-- 按日期显示票价信息 -->
             <div class="tickitbtn">
-                <el-button type="primary" round size="small" plain color="#8097FD">今日</el-button>
+                <el-button type="primary" round size="small" plain color="#8097FD" :autofocus="true">今日</el-button>
                 <el-button type="primary" round size="small" plain color="#8097FD">明日</el-button>
                 <el-button type="primary" round size="small" plain color="#8097FD">{{ tomtomday }}</el-button>
                 <el-button type="primary" round size="small" plain color="#8097FD" @click="showtimepicker">
@@ -33,7 +33,7 @@
                 </el-button>
                 <el-dialog title="选择更多日期" v-model="showpicker" width="50%" destroy-on-close :show-dialog="showpicker">
                     <!-- 这里逻辑还没写不确定加不加 -->
-                    <el-date-picker v-model="morevalue1" type="date" placeholder="选择日期">
+                    <el-date-picker v-model="morevalue1" type="date" placeholder="选择日期" :picker-options="pickerOptions">
                     </el-date-picker>
                 </el-dialog>
 
@@ -51,7 +51,7 @@
                         :isRefundint="ticketlist[0].isRefundint" :price="ticketlist[0].price"
                         :buynum="ticketlist[0].buynum"></ViewTicket>
                 </div> -->
-                <div class="ticshow" @click="ticketshowmore=!ticketshowmore">{{ticketshowmore?'收起':'展示更多'}} </div>
+                <div class="ticshow" @click="ticketshowmore = !ticketshowmore">{{ ticketshowmore ? '收起' : '展示更多' }} </div>
 
             </div>
             <div class="viewdes">
@@ -110,6 +110,7 @@ import ViewTicket from '../../components/Attraction/viewticket.vue'
 import EitComment from '../Attraction/editcomment.vue'
 import axios from 'axios'
 export default {
+    
     mounted() {
         this.initializeData();
     },
@@ -121,6 +122,7 @@ export default {
             // 更多日期，可查看从进来开始往后7天、以下全是日期选择相关参数
             showpicker: false,
             pickerOptions: {
+                // 这里设置日期可选择范围，还未设置
                 disabledDate(time) {
                     return time.getTime() > Date.now();
                 },
@@ -204,7 +206,7 @@ export default {
                     console.error('Error fetching data:', error);
                 });
         },
-        
+
         ToEdit() {
             this.showDialog = true;
         },
