@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import Home from '@/views/Home.vue';
+import Home from "@/views/Home.vue";
 import Attraction from "@/views/Attraction.vue";
 import Journal from "@/views/Journal.vue";
 import Team from "@/views/Team.vue";
@@ -10,64 +10,63 @@ import MyJoinedTeam from "@/views/Team/MyJoinedTeam.vue";
 import TeamDetails from "@/views/Team/TeamDetails.vue";
 import MyTeamDetails from "@/views/Team/MyTeamDetails.vue";
 import EditTeam from "@/views/Team/EditTeam.vue";
-
 const routes = [
   {
     path: "/",
     name: "home",
-    component: Home
+    component: Home,
   },
   {
     path: "/Attraction",
     name: "attractions",
-    component: Attraction
+    component: Attraction,
   },
   {
     path: "/Journal",
     name: "journals",
-    component: Journal
+    component: Journal,
   },
   {
     path: "/Team",
     name: "teams",
-    component: Team
+    component: Team,
   },
   {
     //搜索结果的展示页面
     path: "/searchout",
     name: "SearchOut",
-    component: SearchOut
+    component: SearchOut,
   },
   {
     path: "/Personal",
     name: "personal",
-    component: Personal
+    component: Personal,
   },
   {
     path: "/Team/MyPublishedTeam",
     name: "myPublishedTeams",
-    component: MyPublishedTeam
+    component: MyPublishedTeam,
   },
   {
     path: "/Team/MyJoinedTeam",
     name: "myJoinedTeams",
-    component: MyJoinedTeam
+    component: MyJoinedTeam,
   },
   {
     path: "/Team/TeamDetails",
     name: "teamDetails",
-    component: TeamDetails
+    component: TeamDetails,
   },
   {
     path: "/Team/MyTeamDetails",
     name: "myTeamDetails",
-    component: MyTeamDetails
+    component: MyTeamDetails,
   },
   {
-    path: "/Team/MyPublishedTeam/EditTeam",
+    path: "/Team/EditTeam",
     name: "editTeam",
-    component: EditTeam
-  }
+    component: EditTeam,
+  },
 ];
 
 const router = createRouter({

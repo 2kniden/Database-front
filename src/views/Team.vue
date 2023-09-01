@@ -113,6 +113,10 @@ const joinTeam = (item) => {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
       console.log(error.response.data);
+      ElMessage({
+            message: "申请失败！您已在当前的小队关系中！",
+            type: "warning",
+          });
       console.log(error.response.status);
       console.log(error.response.headers);
     } else if (error.request) {
