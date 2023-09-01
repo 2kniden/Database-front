@@ -23,18 +23,21 @@
             </div>
             <!-- 按日期显示票价信息 -->
             <div class="tickitbtn">
-                <el-button type="primary" round size="small" plain color="#8097FD" :autofocus="true">今日</el-button>
-                <el-button type="primary" round size="small" plain color="#8097FD">明日</el-button>
-                <el-button type="primary" round size="small" plain color="#8097FD">{{ tomtomday }}</el-button>
+                <el-button type="primary" round size="small" plain color="#8097FD" :autofocus="true" >今日</el-button>
+                <el-button type="primary" round size="small" plain color="#8097FD" >明日</el-button>
+                <el-button type="primary" round size="small" plain color="#8097FD" >{{ tomtomday }}</el-button>
                 <el-button type="primary" round size="small" plain color="#8097FD" @click="showtimepicker">
-                    更多日期<el-icon class="el-icon--right">
+                    {{moreday}}<el-icon class="el-icon--right">
                         <DArrowRight />
                     </el-icon>
                 </el-button>
                 <el-dialog title="选择更多日期" v-model="showpicker" width="50%" destroy-on-close :show-dialog="showpicker">
-                    <!-- 这里逻辑还没写不确定加不加 -->
                     <el-date-picker v-model="morevalue1" type="date" placeholder="选择日期" :picker-options="pickerOptions">
                     </el-date-picker>
+                    <div class="dialog-footer">
+                        <el-button size="large" @click="pickerInvisible">取消</el-button>
+                        <el-button size="large" type="primary" @click="commitpicker">确定</el-button>
+                    </div>
                 </el-dialog>
 
             </div>
@@ -84,7 +87,7 @@
                     </div>
 
                 </div>
-                <!-- 这里是用户评论部分，这里名称改了一下 -->
+                <!-- 用户评论部分 -->
                 <div>
                     <attrComment v-for="item in commentlist" :key="item.commentid" :userlog="item.userlog"
                         :attrname="item.username" :attrstar="item.avgscore" :comword="item.detail"
@@ -109,8 +112,9 @@ import DetailView from '../../components/Attraction/viewdetail.vue'
 import ViewTicket from '../../components/Attraction/viewticket.vue'
 import EitComment from '../Attraction/editcomment.vue'
 import axios from 'axios'
+import { ElMessage } from 'element-plus';
 export default {
-    
+
     mounted() {
         this.initializeData();
     },
@@ -119,6 +123,7 @@ export default {
             // 景区日期，票价日期（今日、明日、后日，后日显示日期：
             today: '',
             tomtomday: '',
+            moreday:'更多日期',
             // 更多日期，可查看从进来开始往后7天、以下全是日期选择相关参数
             showpicker: false,
             pickerOptions: {
@@ -174,7 +179,8 @@ export default {
             time.setDate(time.getDate() + 2); // 将日期增加2天（后天）
             this.tomtomday = this.formatDateTime(time);
 
-            //获取当日票价
+            console.log(this.selectedValue);
+            //获取票价,这里日期还没选好
             axios
                 .get('/Attraction/getticket?attraction_id=' + this.attraction_id + '&date=' + this.today)
                 .then((response) => {
@@ -262,8 +268,24 @@ export default {
             second = second < 10 ? ('0' + second) : second;
             return m + '-' + d;
         },
+        // 日期选择的选择器显示与否
         showtimepicker() {
             this.showpicker = true;
+        },
+        pickerInvisible() {
+            this.showpicker = false;
+        },
+        commitpicker() {
+            if (this.morevalue1.length === 0) {
+                ElMessage({
+                    message: '选择不能为空!',
+                    type: 'error',
+                })
+            } else {
+                this.pickerInvisible();
+                this.moreday=this.formatDateTime(this.morevalue1);
+            }
+
         }
 
     },
@@ -273,7 +295,8 @@ export default {
         DetailView,
         ViewTicket,
         attrComment,
-        EitComment
+        EitComment,
+        ElMessage
     }
 }
 
@@ -412,6 +435,14 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.dialog-footer {
+    margin-top: 40px;
+}
+
+.dialog-footer button:first-child {
+    margin-right: 10px;
 }
 </style>
   
