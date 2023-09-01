@@ -12,7 +12,7 @@
         <div>
             <DetailView :title="declist.title" :score="declist.score" :commentnum="declist.commentnum"
                 :location="declist.location" :weekday="declist.weekday" :weekend="declist.weekend" :phone="declist.phone"
-                :price="declist.price" :date="today"></DetailView>
+                :price="declist.price" :date="declist.date"></DetailView>
         </div>
     </div>
 
@@ -27,7 +27,7 @@
                 <el-button type="primary" round size="small" plain color="#8097FD">明日</el-button>
                 <el-button type="primary" round size="small" plain color="#8097FD">{{ tomtomday }}</el-button>
                 <el-button type="primary" round size="small" plain color="#8097FD" @click="showtimepicker">
-                    更多信息<el-icon class="el-icon--right">
+                    更多日期<el-icon class="el-icon--right">
                         <DArrowRight />
                     </el-icon>
                 </el-button>
@@ -39,9 +39,20 @@
 
             </div>
             <!-- 显示票价信息 -->
-            <div>
-                <ViewTicket :title="ticketlist.title" :standard="ticketlist.standard" :isbuy="ticketlist.isbuy"
-                    :price="ticketlist.price" :buynum="ticketlist.buynum"></ViewTicket>
+            <div class="ticketdetail">
+                <!-- 这里先不用v-if -->
+                <div>
+                    <ViewTicket v-for="item in ticketlist" :key="item.ticketid" :titleint="item.titleint"
+                        :isCollectedint="item.isCollectedint" :isRefundint="item.isRefundint" :price="item.price"
+                        :buynum="item.buynum"></ViewTicket>
+                </div>
+                <!-- <div v-else>
+                    <ViewTicket :titleint="ticketlist[0].titleint" :isCollectedint="ticketlist[0].isCollectedint"
+                        :isRefundint="ticketlist[0].isRefundint" :price="ticketlist[0].price"
+                        :buynum="ticketlist[0].buynum"></ViewTicket>
+                </div> -->
+                <div class="ticshow" @click="ticketshowmore=!ticketshowmore">{{ticketshowmore?'收起':'展示更多'}} </div>
+
             </div>
             <div class="viewdes">
                 <span class="maintitle">景点简介:</span>
@@ -143,13 +154,8 @@ export default {
             // 景点介绍+简介栏
             declist: '',
             // 售票，这里的逻辑还没有处理的很好，先放着
-            ticketlist: {
-                title: "成人票",
-                standard: "标准:12周岁以上12周岁以上12周岁以上12周岁以上12周岁以上",
-                isbuy: "可定",
-                price: 689,
-                buynum: 4000,
-            },
+            ticketlist: '',
+            ticketshowmore: false,//显示更多（否则只显示成人票）
             showDialog: false, // 控制发布评论弹窗的显示和隐藏
             // 评论相关数据
             commentlist: [],
@@ -165,13 +171,24 @@ export default {
             this.today = this.formatDateTime(time);
             time.setDate(time.getDate() + 2); // 将日期增加2天（后天）
             this.tomtomday = this.formatDateTime(time);
-            console.log(this.tomtomday)
+
+            //获取当日票价
+            axios
+                .get('/Attraction/getticket?attraction_id=' + this.attraction_id + '&date=' + this.today)
+                .then((response) => {
+
+                    this.ticketlist = response.data.ticketlist;
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+
 
             // 获取景点相关信息：获取景点图片、介绍、景点简介信息
             axios
-                .get('/Attraction/getattrdata?attraction_id=' + this.attraction_id + '&checkattr_date=' + this.today)
+                .get('/Attraction/getattrdata?attraction_id=' + this.attraction_id)
                 .then((response) => {
-                    this.slides = response.data.slides;
+
                     this.declist = response.data.declist;
                 })
                 .catch((error) => {
@@ -179,7 +196,7 @@ export default {
                 });
             // 获取评论信息
             axios
-                .get('/Attraction/getcommentdata?user_id=' + this.user_id + '&attraction_id=' + this.attraction_id)
+                .get('/Attraction/getcommentdata?attraction_id=' + this.attraction_id)
                 .then((response) => {
                     this.commentlist = response.data.commentlist;
                 })
@@ -187,6 +204,7 @@ export default {
                     console.error('Error fetching data:', error);
                 });
         },
+        
         ToEdit() {
             this.showDialog = true;
         },
@@ -337,6 +355,17 @@ export default {
     margin: 10px;
 }
 
+.ticketdetail {
+    display: flex;
+    flex-direction: row;
+}
+
+.ticshow {
+    margin-left: 10px;
+    font-size: 10px;
+    color: #888;
+    margin-top: 100px;
+}
 
 .viewdes {
     margin-top: 20px;

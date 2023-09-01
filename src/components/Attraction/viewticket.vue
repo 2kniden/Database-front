@@ -2,15 +2,15 @@
 <template>
     <div class="tickitdetail">
         <div class="tickettitle">{{ title }}</div>
-        <div class="ticketstan">{{ standard }}</div>
+        <div class="ticketstan">购票标准：{{ standard }}</div>
         <div class="tickettag">
             <!-- 这个后期也做成组件先写死 -->
-            <div class="ttag">不可退票</div>
-            <div class="ttag">无需取票</div>
+            <div class="ttag">{{isRefund}}</div>
+            <div class="ttag">{{isCollected}}</div>
         </div>
         <div class="tbottom">
-            <span class="tpresent">所选日期{{ isbuy }}</span>
-            <span class="tpresent tpresent2">购买须知>></span>
+            <span class="tpresent">所选日期</span>
+            
         </div>
         <div class="tprice">
             <div class="tmoney">
@@ -23,13 +23,57 @@
 </template>
 
 <script>
+import { dataType } from 'element-plus/es/components/table-v2/src/common';
+import { onMounted } from 'vue';
+
 export default {
     props: {
-        title: String,
-        standard: String,
-        isbuy: String,
+        titleint: Number,//这里根据数据0-成人、1-学生、2-老人//还有分别的购票标准standard
+        isCollectedint: Number,//是否需要取票（对应可取票、不可取票标签展示）
+        isRefundint: Number,//是否可退：0-不可退、1-可退（对应了可退票、不可退票标签展示）
+        availabledays: Number,//可选票未来天数
         price: Number,
         buynum: Number,
+    },
+    data() {
+        return {
+            title: '',
+            standard: '',
+            isCollected: '',//是否需要取票（对应可取票、不可取票标签展示）
+            isRefund: '',
+
+        }
+    },
+    mounted() {
+        this.initializeData();
+    },
+    methods:{
+        initializeData(){
+            if(this.titleint===0){
+                this.title='成人票'
+                this.standard='年龄18岁以上年龄18岁以上年龄18岁以上年龄18岁以上年龄18岁以上年龄18岁以上'
+            }else if(this.titleint===1){
+                this.title='学生票'
+                this.standard='年龄12岁以上年龄12岁以上年龄12岁以上年龄12岁以上年龄12岁以上年龄12岁以上'
+        
+            }else{
+                this.title='老人票'
+                this.standard='年龄55岁以上年龄55岁以上年龄55岁以上年龄55岁以上年龄55岁以上年龄55岁以上'
+        
+            }
+
+            if(this.isCollectedint===0){
+                this.isCollected='无需取票'
+            }else{
+                this.isCollected='需要取票'
+            }
+
+            if(this.isRefundint===0){
+                this.isRefund='不可退票'
+            }else{
+                this.isRefund='可退票'
+            }
+        }
     }
 }
 </script>
@@ -45,6 +89,7 @@ export default {
     align-items: flex-start;
     position: relative;
     margin-left: 10px;
+    margin-bottom: 10px;
 }
 
 .tickettitle {

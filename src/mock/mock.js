@@ -276,7 +276,7 @@ if (useMock) {
         }],
     })
     // 景点处评论列表展示
-    Mock.mock(/Attraction\/getcommentdata\?user_id=.*&attraction_id=.*/, 'get', {
+    Mock.mock(/Attraction\/getcommentdata\?attraction_id=.*/, 'get', {
         // 这里删除评论的地方不确定
         commentlist: [{
             commentid: 1,
@@ -305,8 +305,43 @@ if (useMock) {
         },]
 
     })
-    // 获取景点信息：图片信息、景点介绍、景点简介、景点票价但是逻辑还没有处理好所以先不动
-    Mock.mock(/Attraction\/getattrdata\?attraction_id=.*&checkattr_date=.*/, 'get', {      
+    // 景点门票部分展示
+    Mock.mock(/Attraction\/getticket\?attraction_id=.*&date=.*/, 'get', {
+        // 这里删除评论的地方不确定
+        ticketlist: [{
+            ticketid:1,
+            titleint: 0,//这里根据数据0-成人、1-学生、2-老人//还有分别的购票标准standard
+            isCollectedint:1,//是否需要取票（对应可取票、不可取票标签展示）
+            isRefundint:0,//是否可退：0-不可退、1-可退（对应了可退票、不可退票标签展示）
+            availabledays:30,//可选票未来天数
+            // 下面都是三种的:票价
+            price:689,
+            // 购买数量
+            buynum:4000,
+        },{
+            ticketid:2,
+            titleint: 1,//这里根据数据0-成人、1-学生、2-老人//还有分别的购票标准standard
+            isCollectedint:0,//是否需要取票（对应可取票、不可取票标签展示）
+            isRefundint:1,//是否可退：0-不可退、1-可退（对应了可退票、不可退票标签展示）
+            availabledays:30,//可选票未来天数
+            // 下面都是三种的:票价
+            price:689,
+            // 购买数量
+            buynum:4000,
+        },{
+            ticketid:3,
+            titleint: 2,//这里根据数据0-成人、1-学生、2-老人//还有分别的购票标准standard
+            isCollectedint:1,//是否需要取票（对应可取票、不可取票标签展示）
+            isRefundint:1,//是否可退：0-不可退、1-可退（对应了可退票、不可退票标签展示）
+            // 下面都是三种的:票价
+            price:689,
+            // 购买数量
+            buynum:4000,
+        }],
+        
+    })
+    // 景点详情部分展示：图片信息、景点介绍、景点简介、景点票价但是逻辑还没有处理好所以先不动
+    Mock.mock(/Attraction\/getattrdata\?attraction_id=.*/, 'get', {      
         declist: {
             // 轮播图
             slides: [
@@ -325,8 +360,9 @@ if (useMock) {
             price: 689,
             // 景点详情
             attrdetail: '我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介',
-            // 景点天气
-            weather: ''//这里还不知道咋办
+            // 这里可以直接获取date
+            date:"08-24",
+            availabledays:20,
         },
 
     })
@@ -341,6 +377,7 @@ if (useMock) {
             status: true,
         };
     })
+
 
 }
 
