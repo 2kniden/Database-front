@@ -60,7 +60,7 @@
             <div class="clearfloat"></div>
           </div>
           <el-date-picker
-            v-model="item.time"
+            v-model="item.traveltime"
             type="daterange"
             range-separator="-"
             start-placeholder="开始时间"
@@ -169,7 +169,7 @@ const cur_user_id="843526A2B7784E73B28E73C797A2C81C"
 // 请求加入小队
 const joinTeam = (item) => {
 // 将该用户添加到小队申请者列表applicants
-axios.post('http://8.130.25.70:5555/api/Teams/Apply',{
+/*axios.post('http://8.130.25.70:5555/api/Teams/Apply',{
   UserID: cur_user_id,
   TeamID: item.teamId,
 })
@@ -201,7 +201,7 @@ axios.post('http://8.130.25.70:5555/api/Teams/Apply',{
     // Something happened in setting up the request that triggered an Error
     console.log('Error', error.message);
   }
-});
+});*/
 }
 </script>
 

@@ -52,7 +52,7 @@
                 <div class="clearfloat"></div>
             </div>
             <el-date-picker
-                v-model="item.time"
+                v-model="item.traveltime"
                 type="daterange"
                 range-separator="-"
                 start-placeholder="开始时间"

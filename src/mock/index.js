@@ -7,7 +7,7 @@ if (useMock) {
     const teams = [
         {
             // 小队标识符
-            team_id: "1",
+            teamId: "1",
             // 小队招募信息标题
             title: "八月中旬青海自驾旅行，寻找2-3个女生",
             // 小队招募信息详情
@@ -16,7 +16,7 @@ if (useMock) {
             status: "招募中",
             // 标签：提供有限标签供选择，不能自定义
             tags: ["自驾", "限女生", "休闲"],
-            // 发布者：这里直接使用了用户名称，实际传递时可以通过用户id获取用户名称和头像信息（未实现）
+            // 发布者：这里直接使用了用户名称，实际传递时可以通过用户id获取用户名称和头像信息
             // members和applicants同理需要由id获取
             // 对此进行更改后，所有涉及小队中用户名称显示的内容都需要相应修改！！！
             publisher: "青鸟",
@@ -30,7 +30,7 @@ if (useMock) {
             // 现人数通过members数组长度加一计算
         },
         {
-            team_id: "2",
+            teamId: "2",
             title: "八月中旬川西自驾旅行",
             detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
             status: "招募中",
@@ -41,7 +41,7 @@ if (useMock) {
             total: 6
         },
         {
-            team_id: "3",
+            teamId: "3",
             title: "八月中旬新疆自驾旅行，寻找2-3个女生",
             detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
             status: "招募中",
@@ -52,7 +52,7 @@ if (useMock) {
             total: 5
         },
         {
-            team_id: "4",
+            teamId: "4",
             title: "八月中旬新疆自驾旅行，寻找2-3个女生",
             detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
             status: "招募中",
@@ -63,7 +63,7 @@ if (useMock) {
             total: 5
         },
         {
-            team_id: "5",
+            teamId: "5",
             title: "八月中旬新疆自驾旅行，寻找2-3个女生",
             detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
             status: "招募中",
@@ -74,7 +74,7 @@ if (useMock) {
             total: 5
         },
         {
-            team_id: "6",
+            teamId: "6",
             title: "八月中旬新疆自驾旅行，寻找2-3个女生",
             detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
             status: "招募中",
@@ -85,7 +85,7 @@ if (useMock) {
             total: 5
         },
         {
-            team_id: "7",
+            teamId: "7",
             title: "八月中旬新疆自驾旅行，寻找2-3个女生",
             detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
             status: "招募中",
@@ -97,13 +97,11 @@ if (useMock) {
         }
       ];
 
-    Mock.mock('/Team/TeamSquare/', 'get', {
+    Mock.mock('http://8.130.25.70:5555/api/Teams', 'get', {
         team_info: [
             {
                 // 小队标识符
-                team_id: "1",
-                // 旅行目的地
-                destination: "青海",
+                teamId: "1",
                 // 旅行目的地
                 destination: "青海",
                 // 小队招募信息标题
@@ -127,12 +125,11 @@ if (useMock) {
                 total: 5,
                 // 现人数通过members数组长度加一计算
                 // 这里用一个数组表示旅行时间
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07 00:06:11",
             },
             {
-                team_id: "2",
-                destination: "青海",
+                teamId: "2",
                 destination: "青海",
                 title: "八月中旬川西自驾旅行",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -142,11 +139,11 @@ if (useMock) {
                 members: ["葡萄真好吃", "故事大王", "彼得潘"],
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
                 total: 6,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             },
             {
-                team_id: "3",
+                teamId: "3",
                 destination: "青海",
                 title: "八月中旬新疆自驾旅行，寻找2-3个女生",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -156,12 +153,11 @@ if (useMock) {
                 members: ["葡萄真好吃", "故事大王"],
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
                 total: 5,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             },
             {
-                team_id: "4",
-                destination: "青海",
+                teamId: "4",
                 destination: "青海",
                 title: "八月中旬新疆自驾旅行，寻找2-3个女生",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -171,12 +167,11 @@ if (useMock) {
                 members: ["葡萄真好吃", "故事大王"],
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
                 total: 5,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             },
             {
-                team_id: "5",
-                destination: "青海",
+                teamId: "5",
                 destination: "青海",
                 title: "八月中旬新疆自驾旅行，寻找2-3个女生",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -186,12 +181,11 @@ if (useMock) {
                 members: ["葡萄真好吃", "故事大王"],
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
                 total: 5,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             },
             {
-                team_id: "6",
-                destination: "青海",
+                teamId: "6",
                 destination: "青海",
                 title: "八月中旬新疆自驾旅行，寻找2-3个女生",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -201,12 +195,11 @@ if (useMock) {
                 members: ["葡萄真好吃", "故事大王"],
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
                 total: 5,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             },
             {
-                team_id: "7",
-                destination: "青海",
+                teamId: "7",
                 destination: "青海",
                 title: "八月中旬新疆自驾旅行，寻找2-3个女生",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -216,18 +209,17 @@ if (useMock) {
                 members: ["葡萄真好吃", "故事大王"],
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
                 total: 5,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             }
         ]
     })
 
-    Mock.mock('/Team/MyJoinedTeam/Joining', 'get', {
+    Mock.mock('http://8.130.25.70:5555/api/Users/SelectTeam?id=843526A2B7784E73B28E73C797A2C81C&status=0', 'get', {
         team_info: [
             {
                 // 小队标识符
-                team_id: "1",
-                destination: "青海",
+                teamId: "1",
                 destination: "青海",
                 // 小队招募信息标题
                 title: "八月中旬青海自驾旅行，寻找2-3个女生",
@@ -247,12 +239,11 @@ if (useMock) {
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽", "haha"],
                 // 人数上限
                 total: 5,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             },
             {
-                team_id: "2",
-                destination: "青海",
+                teamId: "2",
                 destination: "青海",
                 title: "八月中旬川西自驾旅行",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -262,12 +253,11 @@ if (useMock) {
                 members: ["葡萄真好吃", "故事大王", "彼得潘"],
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽", "haha"],
                 total: 6,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             },
             {
-                team_id: "3",
-                destination: "青海",
+                teamId: "3",
                 destination: "青海",
                 title: "八月中旬新疆自驾旅行，寻找2-3个女生",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -277,17 +267,16 @@ if (useMock) {
                 members: ["葡萄真好吃", "故事大王"],
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽", "haha"],
                 total: 5,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             }
         ]
     })
 
-    Mock.mock('/Team/MyJoinedTeam/Joined', 'get', {
+    Mock.mock('http://8.130.25.70:5555/api/Users/SelectTeam?id=843526A2B7784E73B28E73C797A2C81C&status=1', 'get', {
         team_info: [
             {
-                team_id: "4",
-                destination: "青海",
+                teamId: "4",
                 destination: "青海",
                 title: "八月中旬青海自驾旅行，寻找2-3个女生",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -297,12 +286,11 @@ if (useMock) {
                 members: ["1葡萄真好吃", "故事大王","haha"],
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
                 total: 5,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             },
             {
-                team_id: "5",
-                destination: "青海",
+                teamId: "5",
                 destination: "青海",
                 title: "八月中旬川西自驾旅行",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -312,12 +300,11 @@ if (useMock) {
                 members: ["2葡萄真好吃", "故事大王", "彼得潘","haha"],
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
                 total: 6,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             },
             {
-                team_id: "6",
-                destination: "青海",
+                teamId: "6",
                 destination: "青海",
                 title: "八月中旬新疆自驾旅行，寻找2-3个女生",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -327,18 +314,17 @@ if (useMock) {
                 members: ["3葡萄真好吃", "故事大王","haha"],
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
                 total: 5,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             }
         ]
     })
 
-    Mock.mock('/Team/MyPublishedTeam/Recruiting', 'get', {
+    Mock.mock('http://8.130.25.70:5555/api/Users/SelectTeam?id=843526A2B7784E73B28E73C797A2C81C&status=2', 'get', {
         team_info: [
             {
                 // 小队标识符
-                team_id: "1",
-                destination: "青海",
+                teamId: "1",
                 destination: "青海",
                 // 小队招募信息标题
                 title: "八月中旬青海自驾旅行，寻找2-3个女生",
@@ -358,12 +344,11 @@ if (useMock) {
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
                 // 人数上限
                 total: 5,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             },
             {
-                team_id: "2",
-                destination: "青海",
+                teamId: "2",
                 destination: "青海",
                 title: "八月中旬川西自驾旅行",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -373,12 +358,11 @@ if (useMock) {
                 members: ["葡萄真好吃", "故事大王", "彼得潘"],
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
                 total: 6,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             },
             {
-                team_id: "3",
-                destination: "青海",
+                teamId: "3",
                 destination: "青海",
                 title: "八月中旬新疆自驾旅行，寻找2-3个女生",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -388,17 +372,16 @@ if (useMock) {
                 members: ["葡萄真好吃", "故事大王"],
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
                 total: 5,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             }
         ]
     })
 
-    Mock.mock('/Team/MyPublishedTeam/Recruited', 'get', {
+    Mock.mock('http://8.130.25.70:5555/api/Users/SelectTeam?id=843526A2B7784E73B28E73C797A2C81C&status=3', 'get', {
         team_info: [
             {
-                team_id: "4",
-                destination: "青海",
+                teamId: "4",
                 destination: "青海",
                 title: "八月中旬青海自驾旅行，寻找2-3个女生",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -408,12 +391,11 @@ if (useMock) {
                 members: ["葡萄真好吃", "故事大王"],
                 applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
                 total: 5,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             },
             {
-                team_id: "5",
-                destination: "青海",
+                teamId: "5",
                 destination: "青海",
                 title: "八月中旬川西自驾旅行",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -422,12 +404,11 @@ if (useMock) {
                 publisher: "青鸟",
                 members: ["葡萄真好吃", "故事大王", "彼得潘"],
                 total: 6,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             },
             {
-                team_id: "6",
-                destination: "青海",
+                teamId: "6",
                 destination: "青海",
                 title: "八月中旬新疆自驾旅行，寻找2-3个女生",
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
@@ -436,7 +417,7 @@ if (useMock) {
                 publisher: "青鸟",
                 members: ["葡萄真好吃", "故事大王"],
                 total: 5,
-                time: ["2023-09-10", "2023-09-12"],
+                traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
             }
         ]
@@ -444,40 +425,33 @@ if (useMock) {
     
     //返回当前已登录的用户的基本信息
     // Mock.mock('/api/Users', 'get', {
-    //     user_id:"travel"
+    //     UserID:"travel"
     // })
     
     //添加小队新的申请者
-    Mock.mock('/Team/AddTeamApplicants/', 'post',(options) =>{
+    Mock.mock('http://8.130.25.70:5555/api/Teams/Apply', 'post',(options) =>{
         console.log(options.body);
         const data = JSON.parse(options.body);
 
         // 在现有的 Mock 数据中找到对应的小队
-        const team = teams.find(t => t.team_id === data.team_id);
+        const team = teams.find(t => t.teamId === data.teamId);
         if (team) {
-            // 检查是否已经在申请者列表或成员列表中，如果不在，则添加
-            if (!team.applicants.includes(data.user_id)&&!team.members.includes(data.user_id)) {
-                team.applicants.push(data.user_id);
+            // 检查是否已经在申请者列表或成员列表或队长中，如果不在，则添加
+            if (!team.applicants.includes(data.UserID)&&!team.members.includes(data.UserID)&&(data.UserID!=team.publisher)) {
+                team.applicants.push(data.UserID);
                 return {
-                    status: 1,
+                    status: 200,
                     cur_team:team,
                 };
             }
-            //如果在申请
-            else if(team.applicants.includes(data.user_id)&&!team.members.includes(data.user_id)){
+            else{
                 return {
-                    status: 2,
+                    status: 404,
                     cur_team:team,
                 };
             }
-            //如果在成员
-            else if(!team.applicants.includes(data.user_id)&&team.members.includes(data.user_id)){
-                return {
-                    status: 3,
-                    cur_team:team,
-                };
-            }
-        } else {
+        } 
+        else {
             return {
                 status: 4,
                 message: "Team not found",
@@ -493,7 +467,7 @@ if (useMock) {
     });
 
     //用户发布新的小队
-    Mock.mock('/Team/PublishTeamInfo/', 'post', (options) => {
+    Mock.mock('http://8.130.25.70:5555/api/Teams', 'post', (options) => {
         console.log(options.body);
         const data = JSON.parse(options.body);
         teams.push(data.new_team);
