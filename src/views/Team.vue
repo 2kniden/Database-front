@@ -10,7 +10,8 @@
           <!-- 第一行：题目+状态 -->
           <div class="card-line">
             <div class="card-title">{{ item.title }}</div>
-            <div class="status">{{ item.status }}</div>
+            <div v-if="item.status === '招募中'" class="status" style="background-color: #7db0fd;">{{ item.status }}</div>
+            <div v-if="item.status === '招募结束'" class="status" style="background-color: #ecb66f;">{{ item.status }}</div>
             <div class="clearfloat"></div>
           </div>
           <!-- 第二行：标签+人数 -->
@@ -33,8 +34,11 @@
           <div>
             <el-button class="card-button" type="primary" size="large" color="#8097FD" plain
               @click="goDetails(item)">查看详情</el-button>
-            <el-button class="card-button" type="primary" size="large" color="#8097FD" plain
-              @click.stop="joinTeam(item)">加入小队</el-button>
+            <el-button class="card-button" v-if="item.status === '招募中'" type="primary" size="large" color="#8097FD" plain
+            @click.stop="joinTeam(item)">加入小队</el-button>
+            <el-button class="card-button" v-if="item.status === '招募结束'" type="primary" size="large" plain disabled 
+            style="background-color: rgb(242, 245, 255); color: rgb(169, 185, 253); border-color: rgb(192, 203, 254);"
+            @click.stop="joinTeam(item)">加入小队</el-button>
           </div>
         </el-card>
       </div>
@@ -194,7 +198,7 @@ const joinTeam = (item) => {
   width: fit-content;
   font-size: 14px;
   color: #fff;
-  background-color: #80FD8A;
+  /* background-color: #80FD8A; */
   border-radius: 10px;
 }
 
