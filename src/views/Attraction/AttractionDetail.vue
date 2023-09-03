@@ -23,14 +23,19 @@
             </div>
             <!-- 按日期显示票价信息 -->
             <div class="tickitbtn">
-                <el-button type="primary" round size="small" plain color="#8097FD" :autofocus="true" >今日</el-button>
-                <el-button type="primary" round size="small" plain color="#8097FD" >明日</el-button>
-                <el-button type="primary" round size="small" plain color="#8097FD" >{{ tomtomday }}</el-button>
-                <el-button type="primary" round size="small" plain color="#8097FD" @click="showtimepicker">
-                    {{moreday}}<el-icon class="el-icon--right">
-                        <DArrowRight />
-                    </el-icon>
-                </el-button>
+                <el-radio-group v-model="radio">
+                    <el-radio :label="11" @click="btn1()" autofocus="true">今日</el-radio>
+                    <el-radio :label="12" @click="btn2()">明日</el-radio>
+                    <el-radio :label="13" @click="btn3()">{{ tomtomday }}</el-radio>
+                    <el-radio :label="14" @click="showtimepicker">
+                        {{ moreday }}<el-icon class="el-icon--right">
+                            <DArrowRight />
+                        </el-icon>
+                    </el-radio>
+                </el-radio-group>
+
+
+
                 <el-dialog title="选择更多日期" v-model="showpicker" width="50%" destroy-on-close :show-dialog="showpicker">
                     <el-date-picker v-model="morevalue1" type="date" placeholder="选择日期" :picker-options="pickerOptions">
                     </el-date-picker>
@@ -44,16 +49,17 @@
             <!-- 显示票价信息 -->
             <div class="ticketdetail">
                 <!-- 这里先不用v-if -->
-                <div>
+                <div v-if="ticketshowmore">
+                
                     <ViewTicket v-for="item in ticketlist" :key="item.ticketid" :titleint="item.titleint"
                         :isCollectedint="item.isCollectedint" :isRefundint="item.isRefundint" :price="item.price"
                         :buynum="item.buynum"></ViewTicket>
                 </div>
-                <!-- <div v-else>
-                    <ViewTicket :titleint="ticketlist[0].titleint" :isCollectedint="ticketlist[0].isCollectedint"
-                        :isRefundint="ticketlist[0].isRefundint" :price="ticketlist[0].price"
-                        :buynum="ticketlist[0].buynum"></ViewTicket>
-                </div> -->
+                <div v-else>
+                    <ViewTicket :titleint="firstticket.titleint" :isCollectedint="firstticket.isCollectedint"
+                        :isRefundint="firstticket.isRefundint" :price="firstticket.price"
+                        :buynum="firstticket.buynum"></ViewTicket>
+                </div>
                 <div class="ticshow" @click="ticketshowmore = !ticketshowmore">{{ ticketshowmore ? '收起' : '展示更多' }} </div>
 
             </div>
@@ -123,11 +129,12 @@ export default {
             // 景区日期，票价日期（今日、明日、后日，后日显示日期：
             today: '',
             tomtomday: '',
-            moreday:'更多日期',
-            // 更多日期，可查看从进来开始往后7天、以下全是日期选择相关参数
+            moreday: '更多日期',//选项卡内容
+            radio: 11,
+            // 日期选择组件：更多日期，可查看从进来开始往后7天、以下全是日期选择相关参数
             showpicker: false,
             pickerOptions: {
-                // 这里设置日期可选择范围，还未设置
+                // 这里设置日期可选择范围，还未设置（这里遇到问题）
                 disabledDate(time) {
                     return time.getTime() > Date.now();
                 },
@@ -162,7 +169,10 @@ export default {
             declist: '',
             // 售票，这里的逻辑还没有处理的很好，先放着
             ticketlist: '',
+            firstticket:'',
             ticketshowmore: false,//显示更多（否则只显示成人票）
+
+            // 评论
             showDialog: false, // 控制发布评论弹窗的显示和隐藏
             // 评论相关数据
             commentlist: [],
@@ -173,19 +183,22 @@ export default {
 
     methods: {
         initializeData() {
-            // 获取票价日期
+            // 默认是展示今日票价
+            this.currSelectDate = new Date();
+            // 获取票价后日日期展示
             const time = new Date();
             this.today = this.formatDateTime(time);
             time.setDate(time.getDate() + 2); // 将日期增加2天（后天）
             this.tomtomday = this.formatDateTime(time);
 
-            console.log(this.selectedValue);
             //获取票价,这里日期还没选好
             axios
-                .get('/Attraction/getticket?attraction_id=' + this.attraction_id + '&date=' + this.today)
+                .get('/Attraction/getticket?attraction_id=' + this.attraction_id + '&date=' + this.currSelectDate)
                 .then((response) => {
 
                     this.ticketlist = response.data.ticketlist;
+                    this.firstticket = this.ticketlist[0];
+                    // console.log(this.ticketlist[0])
                 })
                 .catch((error) => {
                     console.error('Error fetching data:', error);
@@ -212,7 +225,27 @@ export default {
                     console.error('Error fetching data:', error);
                 });
         },
-
+        // 点击日期按钮选择
+        btn1() {
+            this.currSelectDate = new Date();
+            this.moreday = '更多日期';
+            // console.log(this.currSelectDate);
+        },
+        btn2() {
+            const time = new Date();
+            time.setDate(time.getDate() + 1); // 将日期增加1天（明天）
+            this.currSelectDate = time;
+            this.moreday = '更多日期';
+            // console.log(this.currSelectDate);
+        },
+        btn3() {
+            const time = new Date();
+            time.setDate(time.getDate() + 2); // 将日期增加2天（后天）
+            this.currSelectDate = time;
+            this.moreday = '更多日期';
+            // console.log(this.currSelectDate);
+        },
+        //编辑评论页面
         ToEdit() {
             this.showDialog = true;
         },
@@ -227,32 +260,7 @@ export default {
             this.showDialog = false;
         },
         addcommentdata() {
-            // var that = this;
-            // axios.post('/Attraction/postComments/', {
-            //     poster_id: that.reader.reader_id,
-            //     article_id: that.article_id,
-            //     content: that.reader.post_comment,
-            //     post_time: formatDateTime(now_time),
-            //     post_likes: 0,
-            // })
-            //     .then(res => {
-            //         if (res.data.status) {
-            //             that.comments.push({
-            //                 comment_id: res.data.comment_id,
-            //                 poster_id: that.reader.reader_id,
-            //                 poster_avatar: that.reader.reader_avatar,
-            //                 poster_name: that.reader.reader_name,
-            //                 poster_review: that.reader.post_comment,
-            //                 post_time: formatDateTime(now_time),
-            //                 post_likes: 0,
-            //                 is_like: false,
-            //                 permission_of_delete: true,    //删除评论权限     
-            //             });
-            //         }
-            //     })
-            //     .catch(error => {
-            //         alert('操作失败！');
-            //     });
+
         },
         formatDateTime(date) {
             var y = date.getFullYear();
@@ -270,10 +278,12 @@ export default {
         },
         // 日期选择的选择器显示与否
         showtimepicker() {
+            this.currSelect = 4;
             this.showpicker = true;
         },
         pickerInvisible() {
             this.showpicker = false;
+            console.log(this.currSelectDate);
         },
         commitpicker() {
             if (this.morevalue1.length === 0) {
@@ -283,7 +293,9 @@ export default {
                 })
             } else {
                 this.pickerInvisible();
-                this.moreday=this.formatDateTime(this.morevalue1);
+                this.moreday = this.formatDateTime(this.morevalue1);//更多日期选项内容变成选择日期
+                this.currSelectDate = this.morevalue1;
+                console.log(this.currSelectDate)
             }
 
         }
@@ -386,10 +398,12 @@ export default {
 }
 
 .ticshow {
-    margin-left: 10px;
+    margin: 0px 0 0 10px;
+    padding-bottom: 10px;
     font-size: 10px;
     color: #888;
-    margin-top: 100px;
+    align-items: flex-end; /* 将文本垂直居底部 */
+    display: flex;
 }
 
 .viewdes {
@@ -410,6 +424,21 @@ export default {
     color: #888;
     line-height: 2;
     text-indent: 2em;
+}
+
+/* 票价日期选中后颜色修改 */
+/* 选中后的字体颜色 */
+.el-radio__input.is-checked+.el-radio__label {
+    color: #8097FD !important;
+}
+
+/* 选中后小圆点的颜色 */
+.el-radio__input.is-checked .el-radio__inner {
+    background: #8097FD !important;
+    border-color: #8097FD !important;
+}
+.el-icon--right{
+    transform: translate(0%, 15%);
 }
 
 /* 用户评论 */
