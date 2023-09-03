@@ -75,7 +75,7 @@
     background-color: #fff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     /* 添加阴影效果 */
-    width: 80%;
+    width: 85%;
     border-radius: 5px;
     margin-top: 20px;
 }
@@ -156,7 +156,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50px;
-    transform: translate(40%, 23%);
+    transform: translate(0, 23%);
 }
 .jbottom {
     display: flex;

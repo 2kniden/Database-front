@@ -397,7 +397,7 @@ export default {
 }
 
 .leftdetail {
-    width: 75%;
+    width: 70%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -499,7 +499,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     width: 35%;
-    margin: 5px 10px 5px 20px;
+    margin: 5px 10px 5px 5px;
 }
 
 .rightjournal {
@@ -520,7 +520,7 @@ export default {
 .journal {
     background-color: #F1F3FF;
     padding-bottom:20px ;
-    margin: 20px 15px 0 15px;
+    margin: 20px 25px 0 15px;
     flex: 1;
     border-radius: 20px;
     display: flex;
@@ -534,7 +534,7 @@ export default {
     overflow-y: scroll;
     /* 添加垂直滚动 */
     max-height: 800px;
-    /* 设置最大高度，超过该高度将出现滚动条 */
+    /* 设置最大高度，超过该高度将出现滚动条 PS：这里是我定死的，需要根据页面需要进行调整让其和右边栏等高显示 */
 }
 
 

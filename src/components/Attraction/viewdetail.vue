@@ -59,7 +59,7 @@ export default {
     align-items: flex-start;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
-    width: 400px;
+    width: 420px;
     height: 310px;
     padding: 20px 20px;
     position: relative;
