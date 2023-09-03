@@ -55,6 +55,34 @@
               <el-checkbox-button label="充实" />
             </el-checkbox-group>
           </el-form-item>
+          <!-- 自定义标签 -->
+          <el-form-item label="自定义标签" :label-width="formLabelWidth">
+            <el-tag
+              v-for="tag in team.customTags"
+              :key="tag"
+              class="mx-1"
+              size="large"
+              closable
+              :disable-transitions="false"
+              @close="handleClose(tag)"
+            >
+              {{ tag }}
+            </el-tag>
+            <el-input
+              v-if="inputVisible"
+              ref="InputRef"
+              v-model="inputValue"
+              maxlength="3"
+              show-word-limit
+              class="ml-1 w-20"
+              style="width: 110px;"
+              @keyup.enter="handleInputConfirm"
+              @blur="handleInputConfirm"
+            />
+            <el-button v-else class="button-new-tag ml-1" @click="showInput">
+              + 新标签
+            </el-button>
+          </el-form-item>
           <!-- 招募状态 -->
           <el-form-item label="招募状态" :label-width="formLabelWidth">
             <el-switch
@@ -70,7 +98,7 @@
             <div class="demo-date-picker">
               <div class="block">
                 <el-date-picker
-                  v-model="team.time"
+                  v-model="team.traveltime"
                   type="daterange"
                   range-separator="-"
                   start-placeholder="开始时间"
@@ -86,8 +114,8 @@
           <el-form-item label="小队成员" :label-width="formLabelWidth">
             <div class="float-left" style="width: 400px">
               <div>
-                <div class="float-left">{{ team.publisher }}</div>
-                <div class="publisher" style="padding: 2px 10px; font-size: 14px">
+                <div class="float-left">{{ team.publisher.name }}</div>
+                <div class="publisher" style="padding: 2px 10px; font-size: 14px; margin: 0 0 0 10px;">
                   发布者
                 </div>
                 <div class="clearfloat"></div>
@@ -97,7 +125,7 @@
                 :key="mbIndex"
                 style="margin: 10px 0"
               >
-                <div style="float: left">{{ member }}</div>
+                <div style="float: left">{{ member.name }}</div>
                 <el-button
                   type="danger"
                   :icon="Delete"
@@ -118,7 +146,7 @@
                 :key="appIndex"
                 style="margin-bottom: 10px"
               >
-                <div style="float: left">{{ applicant }}</div>
+                <div style="float: left">{{ applicant.name }}</div>
                 <el-button
                   type="danger"
                   :icon="Delete"
@@ -155,10 +183,10 @@
 <script setup>
 import Header from "@/components/Header";
 import TeamNav from "@/components/TeamNav";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Check, Delete } from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElInput } from "element-plus";
 import axios from "axios";
 
 const router = useRouter();
@@ -166,7 +194,24 @@ const router = useRouter();
 // 切换至当前页面
 const route = useRoute();
 console.log("切换至编辑小队页面");
-const item = route.query;
+// const item = route.query;
+const item = {
+  teamId: route.query.teamId,
+  destination: route.query.destination,
+  title: route.query.title,
+  detail: route.query.detail,
+  status: route.query.status,
+  tags: route.query.tags,
+  customTags: route.query.customTags,
+  publisher: JSON.parse(route.query.publisher),
+  members: JSON.parse(route.query.members),
+  applicants: JSON.parse(route.query.applicants),
+  total: route.query.total,
+  traveltime: route.query.traveltime,
+  posttime: route.query.posttime,
+  // media:route.query.media,
+}
+console.log(item)
 
 // 当前小队信息
 const team = ref({
@@ -176,17 +221,42 @@ const team = ref({
     detail: item.detail,
     status: item.status,
     tags: item.tags,
+    customTags: item.customTags,
     publisher: item.publisher,
     members: item.members,
     applicants: item.applicants,
     total: item.total,
-    time: item.traveltime,
+    traveltime: item.traveltime,
 });
 
 console.log(team.value.status);
 
 // 信息名称长度
-const formLabelWidth = "80px";
+const formLabelWidth = "90px";
+
+// 自定义标签
+const inputValue = ref('')
+  const inputVisible = ref(false)
+  const InputRef = ref(null)
+
+  const handleClose = (tag) => {
+    team.value.customTags.splice(team.value.customTags.indexOf(tag), 1)
+  }
+
+  const showInput = () => {
+    inputVisible.value = true
+    nextTick(() => {
+      InputRef.value.input.focus()
+    })
+  }
+
+  const handleInputConfirm = () => {
+    if (inputValue.value) {
+      team.value.customTags.push(inputValue.value)
+    }
+    inputVisible.value = false
+    inputValue.value = ''
+  }
 
 // 移除小队成员
 const removeMember = (mbIndex) => {
@@ -274,7 +344,7 @@ const commitEdit = () => {
         status: num_of_status.value,
         tags: team.value.tags,
         total: team.value.total,
-        traveltime: team.value.time,
+        traveltime: team.value.traveltime,
         destination: team.value.destination,
         })
         .then((res) => {

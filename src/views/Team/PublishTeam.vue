@@ -1,6 +1,7 @@
 <template>
     <div class="dialog-body">
-      <el-form :model="form">
+      <el-form :model="team">
+        <!-- 主题 -->
         <el-form-item label="主题" :label-width="formLabelWidth">
           <el-input
             v-model="team.title"
@@ -10,6 +11,7 @@
             type="text"
           />
         </el-form-item>
+        <!-- 详情 -->
         <el-form-item label="详情" :label-width="formLabelWidth">
           <el-input
             v-model="team.detail"
@@ -20,6 +22,7 @@
             type="textarea"
           />
         </el-form-item>
+        <!-- 目的地 -->
         <el-form-item label="目的地" :label-width="formLabelWidth">
           <el-input
             v-model="team.destination"
@@ -29,9 +32,11 @@
             type="text"
           />
         </el-form-item>
+        <!-- 人数上限 -->
         <el-form-item label="人数上限" :label-width="formLabelWidth">
           <el-input-number v-model="team.total" :min="2" />
         </el-form-item>
+        <!-- 标签 -->
         <el-form-item label="标签" :label-width="formLabelWidth">
           <el-checkbox-group v-model="team.tags" :max="5">
             <el-checkbox-button label="年轻人" />
@@ -45,6 +50,35 @@
             <el-checkbox-button label="充实" />
           </el-checkbox-group>
         </el-form-item>
+        <!-- 自定义标签 -->
+        <el-form-item label="自定义标签" :label-width="formLabelWidth">
+          <el-tag
+            v-for="tag in team.customTags"
+            :key="tag"
+            class="mx-1"
+            size="large"
+            closable
+            :disable-transitions="false"
+            @close="handleClose(tag)"
+          >
+            {{ tag }}
+          </el-tag>
+          <el-input
+            v-if="inputVisible"
+            ref="InputRef"
+            v-model="inputValue"
+            maxlength="3"
+            show-word-limit
+            class="ml-1 w-20"
+            style="width: 110px;"
+            @keyup.enter="handleInputConfirm"
+            @blur="handleInputConfirm"
+          />
+          <el-button v-else class="button-new-tag ml-1" @click="showInput">
+            + 新标签
+          </el-button>
+        </el-form-item>
+        <!-- 旅行时间 -->
         <el-form-item label="旅行时间" :label-width="formLabelWidth">
           <div class="demo-date-picker">
             <div class="block">
@@ -56,10 +90,29 @@
                 end-placeholder="结束时间"
                 format="YYYY/MM/DD"
                 value-format="YYYY-MM-DD"
-                :size="default"
               />
             </div>
           </div>
+        </el-form-item>
+        <!-- 自我简介 -->
+        <el-form-item label="自我简介" :label-width="formLabelWidth">
+          <el-input
+            v-model="team.publisher.info"
+            maxlength="18"
+            placeholder="请输入简短的自我介绍，让其他小队成员了解你"
+            show-word-limit
+            type="text"
+          />
+        </el-form-item>
+        <!-- 联系方式 -->
+        <el-form-item label="联系方式" :label-width="formLabelWidth">
+          <el-input
+            v-model="team.publisher.contact"
+            maxlength="18"
+            placeholder="请输入你的电话/微信号，只有加入你的小队的成员才能看到你的联系方式"
+            show-word-limit
+            type="text"
+          />
         </el-form-item>
       </el-form>
     </div>
@@ -73,13 +126,13 @@
   </template>
   
   <script setup>
-  import { ref } from "vue";
-  import { ElMessage } from "element-plus";
+  import { nextTick, ref } from "vue";
+  import { ElMessage, ElInput } from "element-plus";
   import { useRoute, useRouter } from "vue-router";
   import axios from "axios";
   const router = useRouter();
   // 信息名称长度
-  const formLabelWidth = "80px";
+  const formLabelWidth = "90px";
   
   // 向父组件传递窗口不可见信息
   const emit = defineEmits(["getData"]);
@@ -87,13 +140,16 @@
     emit("getData", false);
   };
   
+  //当前用户id
+  const cur_user_id = "843526A2B7784E73B28E73C797A2C81C";
+
   const team = ref({
-    destination: "",
     title: "",
     detail: "", //正文
     status: "招募中",
     tags: [],
-    publisher: "",
+    customTags: [],
+    publisher: {name: cur_user_id, info: "", contact: ""},
     members: [],
     applicants: [],
     total: 2, //总人数
@@ -102,8 +158,31 @@
     postTime: "",
   });
   
-  //当前用户id
-  const cur_user_id = "843526A2B7784E73B28E73C797A2C81C";
+
+  // 自定义标签
+  const inputValue = ref('')
+  const inputVisible = ref(false)
+  const InputRef = ref(null)
+
+  const handleClose = (tag) => {
+    team.value.customTags.splice(team.value.customTags.indexOf(tag), 1)
+  }
+
+  const showInput = () => {
+    inputVisible.value = true
+    nextTick(() => {
+      InputRef.value.input.focus()
+    })
+  }
+
+  const handleInputConfirm = () => {
+    if (inputValue.value) {
+      team.value.customTags.push(inputValue.value)
+    }
+    inputVisible.value = false
+    inputValue.value = ''
+  }
+
   
   // 获取当前时间
   const getCurrentTime = () => {

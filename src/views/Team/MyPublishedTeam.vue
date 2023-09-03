@@ -44,7 +44,10 @@
             <!-- 第二行：标签+人数 -->
             <div class="card-line">
             <div v-for="(tag, tagIndex) in item.tags" :key="tagIndex">
-                <div class="tag">{{ tag }}</div>
+                <div v-if="tagIndex < 5" class="tag">{{ tag }}</div>
+            </div>
+            <div v-for="(customTag, customTagIndex) in item.customTags" :key="customTagIndex">
+                <div v-if="customTagIndex + item.tags.length < 5" class="tag">{{ customTag }}</div>
             </div>
             <div class="num">
                 <div class="num-img"></div>
@@ -107,7 +110,10 @@
             <!-- 第二行：标签+人数 -->
             <div class="card-line">
             <div v-for="(tag, tagIndex) in item.tags" :key="tagIndex">
-                <div class="tag">{{ tag }}</div>
+                <div v-if="tagIndex < 5" class="tag">{{ tag }}</div>
+            </div>
+            <div v-for="(customTag, customTagIndex) in item.customTags" :key="customTagIndex">
+                <div v-if="customTagIndex + item.tags.length < 5" class="tag">{{ customTag }}</div>
             </div>
             <div class="num">
                 <div class="num-img"></div>
@@ -169,7 +175,23 @@ console.log("切换至我发布的小队页面");
 const goDetails = (item) => {
 router.push({
     path: "/Team/MyTeamDetails",
-    query: item,
+    // query: item,
+    query: {
+      teamId: item.teamId,
+      destination: item.destination,
+      title: item.title,
+      detail: item.detail,
+      status: item.status,
+      tags: item.tags,
+      customTags: item.customTags,
+      publisher: JSON.stringify(item.publisher),
+      members: JSON.stringify(item.members),
+      applicants: JSON.stringify(item.applicants),
+      total: item.total,
+      traveltime: item.traveltime,
+      posttime: item.posttime,
+      // media: item.media,
+    }
 });
 };
 
@@ -177,7 +199,23 @@ router.push({
 const editTeam = (item) => {
 router.push({
     path: "/Team/EditTeam",
-    query: item,
+    // query: item,
+    query: {
+      teamId: item.teamId,
+      destination: item.destination,
+      title: item.title,
+      detail: item.detail,
+      status: item.status,
+      tags: item.tags,
+      customTags: item.customTags,
+      publisher: JSON.stringify(item.publisher),
+      members: JSON.stringify(item.members),
+      applicants: JSON.stringify(item.applicants),
+      total: item.total,
+      traveltime: item.traveltime,
+      posttime: item.posttime,
+      // media: item.media,
+    }
 });
 };
 
@@ -204,13 +242,15 @@ myRecruitingList.value=[{
                 status: "招募中",
                 // 标签：提供有限标签供选择，不能自定义
                 tags: ["自驾", "限女生", "休闲"],
+                // 标签自定义
+                customTags: ["骑行", "美食", "音乐"],
                 // 发布者：这里直接使用了用户名称，实际传递时可以通过用户id获取用户名称和头像信息（members和applicants同）
-                publisher: "青鸟",
+                publisher: {name: "青鸟", info: "阳光开朗女大学生", contact: "19912341234"},
                 // 成员：成员中不包含发布者
-                members: ["葡萄真好吃", "故事大王"],
+                members: [{name: "葡萄真好吃", info: "铁血E人", contact: "19922223333"}, {name: "故事大王", info: "这区域的交友达人", contact: "12366666666"}],
                 // 申请者：指申请加入小队但发布者还未通过的用户
                 // 发布者通过申请后，申请者从applicants中删除，加入members
-                applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
+                applicants: [{name: "谋杀咖啡", info: "冒牌文艺青年", contact: "19988888888"}, {name: "飞翔的北极熊", info: "奇思妙想提供者", contact: "19945674567"}, {name: "滑稽的大礼帽", info: "阳光开朗大男孩", contact: "19922227777"}],
                 // 人数上限
                 total: 5,
                 traveltime: ["2023-09-10", "2023-09-12"],
@@ -223,9 +263,10 @@ myRecruitingList.value=[{
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
                 status: "招募中",
                 tags: ["限女生", "休闲"],
-                publisher: "青鸟",
-                members: ["葡萄真好吃", "故事大王", "彼得潘"],
-                applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
+                customTags: ["骑行", "美食", "音乐"],
+                publisher: {name: "青鸟", info: "阳光开朗女大学生", contact: "19912341234"},
+                members: [{name: "葡萄真好吃", info: "铁血E人", contact: "19922223333"}, {name: "故事大王", info: "这区域的交友达人", contact: "12366666666"}],
+                applicants: [{name: "谋杀咖啡", info: "冒牌文艺青年", contact: "19988888888"}, {name: "飞翔的北极熊", info: "奇思妙想提供者", contact: "19945674567"}, {name: "滑稽的大礼帽", info: "阳光开朗大男孩", contact: "19922227777"}],
                 total: 6,
                 traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
@@ -237,9 +278,10 @@ myRecruitingList.value=[{
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
                 status: "招募中",
                 tags: ["自驾", "限女生", "休闲", "穷游"],
-                publisher: "青鸟",
-                members: ["葡萄真好吃", "故事大王"],
-                applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
+                customTags: ["骑行", "美食", "音乐"],
+                publisher: {name: "青鸟", info: "阳光开朗女大学生", contact: "19912341234"},
+                members: [{name: "葡萄真好吃", info: "铁血E人", contact: "19922223333"}, {name: "故事大王", info: "这区域的交友达人", contact: "12366666666"}],
+                applicants: [{name: "谋杀咖啡", info: "冒牌文艺青年", contact: "19988888888"}, {name: "飞翔的北极熊", info: "奇思妙想提供者", contact: "19945674567"}, {name: "滑稽的大礼帽", info: "阳光开朗大男孩", contact: "19922227777"}],
                 total: 5,
                 traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
@@ -251,9 +293,10 @@ myRecruitedList.value=[{
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
                 status: "招募完成",
                 tags: ["自驾", "限女生", "休闲"],
-                publisher: "青鸟",
-                members: ["葡萄真好吃", "故事大王"],
-                applicants: ["谋杀咖啡", "飞翔的北极熊", "滑稽的大礼帽"],
+                customTags: ["骑行", "美食", "音乐"],
+                publisher: {name: "青鸟", info: "阳光开朗女大学生", contact: "19912341234"},
+                members: [{name: "葡萄真好吃", info: "铁血E人", contact: "19922223333"}, {name: "故事大王", info: "这区域的交友达人", contact: "12366666666"}],
+                applicants: [{name: "谋杀咖啡", info: "冒牌文艺青年", contact: "19988888888"}, {name: "飞翔的北极熊", info: "奇思妙想提供者", contact: "19945674567"}, {name: "滑稽的大礼帽", info: "阳光开朗大男孩", contact: "19922227777"}],
                 total: 5,
                 traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
@@ -265,8 +308,10 @@ myRecruitedList.value=[{
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
                 status: "招募完成",
                 tags: ["限女生", "休闲"],
-                publisher: "青鸟",
-                members: ["葡萄真好吃", "故事大王", "彼得潘"],
+                customTags: ["骑行", "美食", "音乐"],
+                publisher: {name: "青鸟", info: "阳光开朗女大学生", contact: "19912341234"},
+                members: [{name: "葡萄真好吃", info: "铁血E人", contact: "19922223333"}, {name: "故事大王", info: "这区域的交友达人", contact: "12366666666"}],
+                applicants: [{name: "谋杀咖啡", info: "冒牌文艺青年", contact: "19988888888"}, {name: "飞翔的北极熊", info: "奇思妙想提供者", contact: "19945674567"}, {name: "滑稽的大礼帽", info: "阳光开朗大男孩", contact: "19922227777"}],
                 total: 6,
                 traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
@@ -278,8 +323,10 @@ myRecruitedList.value=[{
                 detail: "我们现在有两个女生，想要在八月中旬自驾游玩青海。我们有一辆五座的车，想再找两三个女生一起玩。我们两个性格都很开朗，喜欢拍照。希望加入我们的朋友最好是比较年轻的人，会开车，我们可以交替开车。有意者欢迎联系我！",
                 status: "招募完成",
                 tags: ["自驾", "限女生", "休闲", "穷游"],
-                publisher: "青鸟",
-                members: ["葡萄真好吃", "故事大王"],
+                customTags: ["骑行", "美食", "音乐"],
+                publisher: {name: "青鸟", info: "阳光开朗女大学生", contact: "19912341234"},
+                members: [{name: "葡萄真好吃", info: "铁血E人", contact: "19922223333"}, {name: "故事大王", info: "这区域的交友达人", contact: "12366666666"}],
+                applicants: [{name: "谋杀咖啡", info: "冒牌文艺青年", contact: "19988888888"}, {name: "飞翔的北极熊", info: "奇思妙想提供者", contact: "19945674567"}, {name: "滑稽的大礼帽", info: "阳光开朗大男孩", contact: "19922227777"}],
                 total: 5,
                 traveltime: ["2023-09-10", "2023-09-12"],
                 posttime: "2023-08-07T00:06:11"
