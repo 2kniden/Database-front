@@ -33,9 +33,6 @@
                         </el-icon>
                     </el-radio>
                 </el-radio-group>
-
-
-
                 <el-dialog title="选择更多日期" v-model="showpicker" width="50%" destroy-on-close :show-dialog="showpicker">
                     <el-date-picker v-model="morevalue1" type="date" placeholder="选择日期" :picker-options="pickerOptions">
                     </el-date-picker>
@@ -48,17 +45,15 @@
             </div>
             <!-- 显示票价信息 -->
             <div class="ticketdetail">
-                <!-- 这里先不用v-if -->
                 <div v-if="ticketshowmore">
-                
                     <ViewTicket v-for="item in ticketlist" :key="item.ticketid" :titleint="item.titleint"
-                        :isCollectedint="item.isCollectedint" :isRefundint="item.isRefundint" :price="item.price"
-                        :buynum="item.buynum"></ViewTicket>
+                        :isCollectedint="item.isCollectedint" :isRefundint="item.isRefundint" :price="item.price">
+                    </ViewTicket>
                 </div>
+                <!-- 这里有点点问题 -->
                 <div v-else>
                     <ViewTicket :titleint="firstticket.titleint" :isCollectedint="firstticket.isCollectedint"
-                        :isRefundint="firstticket.isRefundint" :price="firstticket.price"
-                        :buynum="firstticket.buynum"></ViewTicket>
+                        :isRefundint="firstticket.isRefundint" :price="firstticket.price"></ViewTicket>
                 </div>
                 <div class="ticshow" @click="ticketshowmore = !ticketshowmore">{{ ticketshowmore ? '收起' : '展示更多' }} </div>
 
@@ -106,7 +101,15 @@
 
             </div>
         </div>
-        <div class="rightdetail"></div>
+        <div class="rightdetail">
+            <div class="rightjournal">推荐日志</div>
+            <div class="journal">
+                <JournalValue v-for="item in journallist" :key="item.journalid" :userName="item.userName"
+                    :userSrc="item.userSrc" :position="item.position" :axisnum="item.axisnum" :axispic="item.axispic"
+                    :tag="item.tag" :title="item.title" :picSrc="item.picSrc" :posterDate="item.posterDate"
+                    :like="item.like" :collect="item.collect"></JournalValue>
+            </div>
+        </div>
     </div>
 </template>
   
@@ -119,6 +122,8 @@ import ViewTicket from '../../components/Attraction/viewticket.vue'
 import EitComment from '../Attraction/editcomment.vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus';
+import JournalValue from '../../components/Attraction/attrjournal.vue'
+import Journal from '../Journal.vue'
 export default {
 
     mounted() {
@@ -167,9 +172,9 @@ export default {
 
             // 景点介绍+简介栏
             declist: '',
-            // 售票，这里的逻辑还没有处理的很好，先放着
+            // 售票
             ticketlist: '',
-            firstticket:'',
+            firstticket: '',
             ticketshowmore: false,//显示更多（否则只显示成人票）
 
             // 评论
@@ -191,14 +196,14 @@ export default {
             time.setDate(time.getDate() + 2); // 将日期增加2天（后天）
             this.tomtomday = this.formatDateTime(time);
 
-            //获取票价,这里日期还没选好
+            //获取票价
             axios
                 .get('/Attraction/getticket?attraction_id=' + this.attraction_id + '&date=' + this.currSelectDate)
                 .then((response) => {
 
                     this.ticketlist = response.data.ticketlist;
                     this.firstticket = this.ticketlist[0];
-                    // console.log(this.ticketlist[0])
+                    // console.log(this.firstticket)
                 })
                 .catch((error) => {
                     console.error('Error fetching data:', error);
@@ -220,6 +225,16 @@ export default {
                 .get('/Attraction/getcommentdata?attraction_id=' + this.attraction_id)
                 .then((response) => {
                     this.commentlist = response.data.commentlist;
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+
+            // 获取相关日志信息
+            axios
+                .get('/Attraction/getjournaldata?attraction_id=' + this.attraction_id)
+                .then((response) => {
+                    this.journallist = response.data.journallist;
                 })
                 .catch((error) => {
                     console.error('Error fetching data:', error);
@@ -308,7 +323,9 @@ export default {
         ViewTicket,
         attrComment,
         EitComment,
-        ElMessage
+        ElMessage,
+        JournalValue,
+        Journal
     }
 }
 
@@ -318,7 +335,7 @@ export default {
 /* 其他部分 */
 .bigtitle {
     display: flex;
-    padding: 5px 0 0 35px;
+    padding: 10px 0 5px 55px;
     font-size: 16px;
     font-weight: bold;
 }
@@ -332,7 +349,7 @@ export default {
 .detailhead {
     display: flex;
     flex-direction: row;
-    margin: 10px 35px 20px 0;
+    margin: 10px 45px 20px 15px;
 
 }
 
@@ -374,13 +391,13 @@ export default {
 
 /* 下面所有的左半部分 */
 .maincontainer {
-    padding: 0px 30px;
+    padding: 0px 40px;
     display: flex;
     flex-direction: row;
 }
 
 .leftdetail {
-    width: 65%;
+    width: 75%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -402,7 +419,8 @@ export default {
     padding-bottom: 10px;
     font-size: 10px;
     color: #888;
-    align-items: flex-end; /* 将文本垂直居底部 */
+    align-items: flex-end;
+    /* 将文本垂直居底部 */
     display: flex;
 }
 
@@ -437,7 +455,8 @@ export default {
     background: #8097FD !important;
     border-color: #8097FD !important;
 }
-.el-icon--right{
+
+.el-icon--right {
     transform: translate(0%, 15%);
 }
 
@@ -472,6 +491,68 @@ export default {
 
 .dialog-footer button:first-child {
     margin-right: 10px;
+}
+
+/* 推荐日志部分 */
+.rightdetail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 35%;
+    margin: 5px 10px 5px 20px;
+}
+
+.rightjournal {
+    background-color: #8097FD;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 300px;
+    padding: 5px 40px;
+    border-radius: 20px;
+    letter-spacing: 4px;
+    /* 设置字体间距 */
+    width: 35%;
+    margin: auto;
+
+
+}
+
+.journal {
+    background-color: #F1F3FF;
+    padding-bottom:20px ;
+    margin: 20px 15px 0 15px;
+    flex: 1;
+    border-radius: 20px;
+    display: flex;
+    /* 使用 flex 布局 */
+    flex-direction: column;
+    /* 确保子元素垂直排列 */
+    align-items: center;
+    /* 子元素垂直居中 */
+
+    /* 设置滚动条 */
+    overflow-y: scroll;
+    /* 添加垂直滚动 */
+    max-height: 800px;
+    /* 设置最大高度，超过该高度将出现滚动条 */
+}
+
+
+/* 设置滚动条样式 */
+/* 滚动条的整体样式 */
+.journal::-webkit-scrollbar {
+    width: 3px; /* 设置滚动条的宽度 */
+}
+
+/* 滚动条轨道的样式 */
+.journal::-webkit-scrollbar-track {
+    background: transparent; /* 背景颜色 */
+}
+
+/* 滚动条滑块的样式 */
+.journal::-webkit-scrollbar-thumb {
+    background: #cccccc; /* 滑块颜色 */
+    border-radius: 5px; /* 滑块圆角 */
 }
 </style>
   

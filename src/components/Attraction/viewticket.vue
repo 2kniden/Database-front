@@ -17,14 +17,13 @@
                 <img class="tploc" src="../../assets/attractions/highrank/rmb.svg" alt="">
                 <span class="tp">{{ price }}</span>
             </div>
-            <div class="tsale">已售{{ buynum }}+</div>
+           
         </div>
     </div>
 </template>
 
 <script>
-import { dataType } from 'element-plus/es/components/table-v2/src/common';
-import { onMounted } from 'vue';
+
 
 export default {
     props: {
