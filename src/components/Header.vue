@@ -1,7 +1,7 @@
 <template>
   <div class="header" :style="changeBackgroundColor">
     <!--首先绘制左上角的网页名称-->
-    <div class="main_logo">
+    <div class="main_logo" @click="backToHome">
       <img class="main_logo_icon" src="../assets/main_logo.svg"/>
       <div class="main_logo_text">迹忆旅游平台</div>
     </div>
@@ -80,20 +80,29 @@ export default {
       const routeName = name;
       this.$globalData.navbarActive=routeName;
       this.$router.push("/"+routeName);
+      localStorage.setItem("page",routeName);
     },
     //进入个人主页
     goToPersonal() {
       console.log("跳转到个人页面");
       this.$globalData.navbarActive="personal";
       this.$router.push({ name: "personal" });
+      localStorage.setItem("page","personal");
     },
+    backToHome(){
+      console.log("返回主页");
+      this.$globalData.navbarActive="home";
+      this.$router.push("/");
+      localStorage.setItem("page","home");
+    }
   },
   mounted() {
 
   },
   created() {
-    // 在created生命周期钩子中获取全局变量的值并赋给本地变量
-    // this.activeTab=this.$globalData.navbarActive;
+    if(localStorage.getItem("page")!=null){
+      this.$globalData.navbarActive = localStorage.getItem("page");
+    }//如果浏览器存储了这个page，那么直接用储存的变量
   }
 };
 </script>
