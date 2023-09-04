@@ -712,7 +712,7 @@ export default {
 
 /* 滚动条滑块的样式 */
 .journal::-webkit-scrollbar-thumb {
-    background: #cccccc;
+    background: #dadff3;
     /* 滑块颜色 */
     border-radius: 5px;
     /* 滑块圆角 */
@@ -724,7 +724,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 5px 20px;
+    padding: 5px 20px 0 20px;
     font-size: 14px;
 
 }

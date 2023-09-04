@@ -1,19 +1,19 @@
 <template>
     <div class="container">
         <div class="rightcontainer">
-            <el-menu :default-active="activeMenu" @select="handleMenuSelect" :collapse="isMenuCollapse"
-                :collapse-transition="false" text-color="#8097FD" active-text-color="#fff">
-                <el-submenu index="home">
-                    <template #title>
-                        <i class="el-icon-s-home"></i>
-                        <span>搜索排序</span>
-                    </template>
-                    <el-menu-item index="home-1">综合排序</el-menu-item>
-                    <el-menu-item index="home-2">好评优先</el-menu-item>
-                    <el-menu-item index="home-3">距离优先</el-menu-item>
-                </el-submenu>
-
+            <el-menu default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
+                text-color="#8097FD" active-text-color="#8097FD" @select="handleMenuSelect">
+                <el-menu-item index="1">
+                    <img class="searchicon" src="../../assets/attractions/icon/sort.svg" alt="">
+                    <span slot="title">综合排序</span>
+                </el-menu-item>
+                <el-menu-item index="2">
+                    <img class="searchicon" src="../../assets/attractions/icon/Document.svg" alt="">
+                    <span slot="title">好评优先</span>
+                </el-menu-item>
             </el-menu>
+            <img class="searchimg" src="../../assets/attractions/icon/searchimg.png" alt="">
+            <div class="imgbottom"></div>
         </div>
 
         <div class="leftcontainer">
@@ -70,7 +70,7 @@ export default {
             // 接收选择关键词
             receivedAttractions: '',
             // 导航栏
-            activeMenu: 'home-1',
+            activeMenu: '1',
             isMenuCollapse: false,
             //搜索内容匹配列表,这里如果后端写逻辑的话我这里得到的就是一个匹配列表
             searchMatchList: [],
@@ -155,7 +155,8 @@ export default {
                 });
         },
         handleMenuSelect(index) {
-            this.activeMenu = index;
+            this.activeMenu = index-1;//和后端对应
+            console.log(this.activeMenu);
             // 在这里处理菜单项点击事件，可以进行页面跳转或其他操作
         },
         // 这里是匹配，如果后端写逻辑就不要
@@ -208,6 +209,49 @@ export default {
 
 }
 
+/* 选择排序 */
+.searchicon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+.searchimg{
+    position: fixed;
+    top:200px;
+    left: 5px;
+    width: 250px;
+    height: 350px;
+    z-index: 100;
+}
+.imgbottom{
+    width: 210px;
+    height: 7px;
+    border-radius: 3px;
+    background-color: #a7b3e9;
+    position: fixed;
+    top:425px;
+    left: 10px;
+    opacity: 0.5;
+}
+.el-menu-vertical-demo {
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.el-menu .el-menu-item:hover{
+    outline: 0 !important;
+    color: #8097FD !important;
+    background: linear-gradient(270deg, #F2F7FC 0%, #FEFEFE 100%)!important;
+}
+
+.el-menu-item.is-active {
+    background-color: #eef0fe !important;
+    color: #fff;
+
+    span {
+        color: #fff !important;
+    }
+}
+
 .container {
     display: flex;
 
@@ -216,19 +260,17 @@ export default {
 .tolnum {
     display: flex;
     margin-left: 30px;
+    margin-top:10px;
     font-size: 14px;
     font-weight: bold;
 }
 
 .rightcontainer {
     width: 15%;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-    /* 选项卡高度差不多这么多 */
-    height: 165px;
-    margin-top: 10px;
+    margin-top: 50px;
     position: fixed;
     /* 将 .rightcontainer 固定在屏幕中 */
-    left: 30px;
+    left: 20px;
     /* 调整左侧间距，根据实际情况调整 */
 }
 
@@ -274,6 +316,5 @@ export default {
 
 .tolpage {
     margin-left: 10px;
-}
-</style>
+}</style>
   
