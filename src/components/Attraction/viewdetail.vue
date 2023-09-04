@@ -31,7 +31,7 @@
             <!-- 这里的图标也要随天气改变，暂时写死 -->
             <img class="dwimg" src="../../assets/attractions/weather/weather_1晴.svg" alt="">
             {{date}}
-            <div class="other">(点击查看更多)</div>
+            
         </div>
     </div>
 </template>

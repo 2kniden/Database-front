@@ -33,7 +33,6 @@
 
             </div>
             <div class="endword">
-                <!-- 这里也要改 -->
                 <div class="endright">{{ pagestartIndex }}-{{ pageendIndex }}/{{ totalItems }}条</div>
                 <div class="endleft">
                     <div class="eltabs">
@@ -89,17 +88,10 @@ export default {
     mounted() {
         this.receivedAttractions = this.$route.query.selectedAttractions;
         // 获取与关键词匹配的列表
-        axios
-        .get('/Attraction/searchmatch?keyWord=' + this.receivedAttractions)
-        .then((response) => {
-          this.searchMatchList = response.data.searchmatchlist;
-        })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
-        });
+        this.initializeData();
         //开始匹配
         // this.filterSearchResults(this.receivedAttractions);
-        
+
     },
     computed: {
         // 计算总页数
@@ -152,8 +144,15 @@ export default {
 
     },
     methods: {
-        initializeData(){
-
+        initializeData() {
+            axios
+                .get('/Attraction/searchmatch?keyWord=' + this.receivedAttractions)
+                .then((response) => {
+                    this.searchMatchList = response.data.searchmatchlist;
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
         },
         handleMenuSelect(index) {
             this.activeMenu = index;

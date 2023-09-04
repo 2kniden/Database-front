@@ -302,12 +302,96 @@ if (useMock) {
             likes: 23,
             unlikes: 23,
 
+        },{
+            commentid: 3,
+            userlog: require("../assets/attractions/highrank/1.jpg"),
+            username: "吃掉米麻薯的头",
+            avgscore: "4.9",
+            detail: "我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论",
+            commentDate: "2023-01-01 12:34",
+            likes: 23,
+            unlikes: 23,
+            picList: [
+                require("../assets/attractions/highrank/1.jpg"),
+                require("../assets/attractions/highrank/2.jpg"),
+                require("../assets/attractions/highrank/3.jpg")
+            ]
+        },{
+            commentid: 4,
+            userlog: require("../assets/attractions/highrank/1.jpg"),
+            username: "吃掉米麻薯的头",
+            avgscore: "4.9",
+            detail: "我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论",
+            commentDate: "2023-01-01 12:34",
+            likes: 23,
+            unlikes: 23,
+            picList: [
+                require("../assets/attractions/highrank/1.jpg"),
+                require("../assets/attractions/highrank/2.jpg"),
+                require("../assets/attractions/highrank/3.jpg")
+            ]
+        },{
+            commentid: 5,
+            userlog: require("../assets/attractions/highrank/1.jpg"),
+            username: "吃掉米麻薯的头",
+            avgscore: "4.9",
+            detail: "我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论",
+            commentDate: "2023-01-01 12:34",
+            likes: 23,
+            unlikes: 23,
+            picList: [
+                require("../assets/attractions/highrank/1.jpg"),
+                require("../assets/attractions/highrank/2.jpg"),
+                require("../assets/attractions/highrank/3.jpg")
+            ]
+        },{
+            commentid: 6,
+            userlog: require("../assets/attractions/highrank/1.jpg"),
+            username: "吃掉米麻薯的头",
+            avgscore: "4.9",
+            detail: "我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论",
+            commentDate: "2023-01-01 12:34",
+            likes: 23,
+            unlikes: 23,
+            picList: [
+                require("../assets/attractions/highrank/1.jpg"),
+                require("../assets/attractions/highrank/2.jpg"),
+                require("../assets/attractions/highrank/3.jpg")
+            ]
+        },{
+            commentid: 7,
+            userlog: require("../assets/attractions/highrank/1.jpg"),
+            username: "吃掉米麻薯的头",
+            avgscore: "4.9",
+            detail: "我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论",
+            commentDate: "2023-01-01 12:34",
+            likes: 23,
+            unlikes: 23,
+            picList: [
+                require("../assets/attractions/highrank/1.jpg"),
+                require("../assets/attractions/highrank/2.jpg"),
+                require("../assets/attractions/highrank/3.jpg")
+            ]
+        },{
+            commentid: 8,
+            userlog: require("../assets/attractions/highrank/1.jpg"),
+            username: "吃掉米麻薯的头",
+            avgscore: "4.9",
+            detail: "我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论",
+            commentDate: "2023-01-01 12:34",
+            likes: 23,
+            unlikes: 23,
+            picList: [
+                require("../assets/attractions/highrank/1.jpg"),
+                require("../assets/attractions/highrank/2.jpg"),
+                require("../assets/attractions/highrank/3.jpg")
+            ]
         },]
 
     })
     // 景点处评论列表展示
     Mock.mock(/Attraction\/getjournaldata\?attraction_id=.*/, 'get', {
-        // 这里删除评论的地方不确定
+        
         journallist:[{
             journalid:1,
             userName:'吃掉米麻薯的头',
@@ -336,6 +420,84 @@ if (useMock) {
             collect:1234,
         },{
             journalid:3,
+            userName:'吃掉米麻薯的头',
+            userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
+            position:'上海',
+            axisnum:3,
+            axispic:require('../assets/attractions/highrank/6.jpg'),
+            tag:['家庭','亲子','度假'],
+            title:'上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
+            picSrc:require('../assets/attractions/highrank/5.jpg'),
+            posterDate:'2022年12月04日',
+            like:1231,
+            collect:1234,
+        },{
+            journalid:4,
+            userName:'吃掉米麻薯的头',
+            userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
+            position:'上海',
+            axisnum:3,
+            axispic:require('../assets/attractions/highrank/6.jpg'),
+            tag:['家庭','亲子','度假'],
+            title:'上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
+            picSrc:require('../assets/attractions/highrank/5.jpg'),
+            posterDate:'2022年12月04日',
+            like:1231,
+            collect:1234,
+        },{
+            journalid:5,
+            userName:'吃掉米麻薯的头',
+            userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
+            position:'上海',
+            axisnum:3,
+            axispic:require('../assets/attractions/highrank/6.jpg'),
+            tag:['家庭','亲子','度假'],
+            title:'上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
+            picSrc:require('../assets/attractions/highrank/5.jpg'),
+            posterDate:'2022年12月04日',
+            like:1231,
+            collect:1234,
+        },{
+            journalid:6,
+            userName:'吃掉米麻薯的头',
+            userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
+            position:'上海',
+            axisnum:3,
+            axispic:require('../assets/attractions/highrank/6.jpg'),
+            tag:['家庭','亲子','度假'],
+            title:'上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
+            picSrc:require('../assets/attractions/highrank/5.jpg'),
+            posterDate:'2022年12月04日',
+            like:1231,
+            collect:1234,
+        },{
+            journalid:7,
+            userName:'吃掉米麻薯的头',
+            userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
+            position:'上海',
+            axisnum:3,
+            axispic:require('../assets/attractions/highrank/6.jpg'),
+            tag:['家庭','亲子','度假'],
+            title:'上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
+            picSrc:require('../assets/attractions/highrank/5.jpg'),
+            posterDate:'2022年12月04日',
+            like:1231,
+            collect:1234,
+        },{
+            journalid:8,
+            userName:'吃掉米麻薯的头',
+            userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
+            position:'上海',
+            axisnum:3,
+            axispic:require('../assets/attractions/highrank/6.jpg'),
+            tag:['家庭','亲子','度假'],
+            title:'上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
+            picSrc:require('../assets/attractions/highrank/5.jpg'),
+            posterDate:'2022年12月04日',
+            like:1231,
+            collect:1234,
+        },{
+            journalid:9,
             userName:'吃掉米麻薯的头',
             userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
             position:'上海',

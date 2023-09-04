@@ -18,11 +18,11 @@
 
     <div class="maincontainer">
         <div class="leftdetail">
-            <div class="tickit">
+            <div class="tickit" ref="t1">
                 <span class="maintitle">票价信息:</span>
             </div>
             <!-- 按日期显示票价信息 -->
-            <div class="tickitbtn">
+            <div class="tickitbtn" ref="t2">
                 <el-radio-group v-model="radio">
                     <el-radio :label="11" @click="btn1()" autofocus="true">今日</el-radio>
                     <el-radio :label="12" @click="btn2()">明日</el-radio>
@@ -44,7 +44,7 @@
 
             </div>
             <!-- 显示票价信息 -->
-            <div class="ticketdetail">
+            <div class="ticketdetail" ref="t3">
                 <div v-if="ticketshowmore">
                     <ViewTicket v-for="item in ticketlist" :key="item.ticketid" :titleint="item.titleint"
                         :isCollectedint="item.isCollectedint" :isRefundint="item.isRefundint" :price="item.price">
@@ -55,14 +55,14 @@
                     <ViewTicket :titleint="firstticket.titleint" :isCollectedint="firstticket.isCollectedint"
                         :isRefundint="firstticket.isRefundint" :price="firstticket.price"></ViewTicket>
                 </div>
-                <div class="ticshow" @click="ticketshowmore = !ticketshowmore">{{ ticketshowmore ? '收起' : '展示更多' }} </div>
+                <div class="ticshow" @click="ticshowmore">{{ ticketshowmore ? '收起' : '展示更多' }} </div>
 
             </div>
-            <div class="viewdes">
+            <div class="viewdes" ref="t4">
                 <span class="maintitle">景点简介:</span>
                 <div class="vdetail">{{ declist.attrdetail }}</div>
             </div>
-            <div class="usercomment">
+            <div class="usercomment" ref="t5">
                 <div class="chead">
                     <div class="cheadleft">
                         <div>
@@ -90,12 +90,29 @@
                 </div>
                 <!-- 用户评论部分 -->
                 <div>
-                    <attrComment v-for="item in commentlist" :key="item.commentid" :userlog="item.userlog"
+                    <attrComment v-for="item in currentPageData" :key="item.commentid" :userlog="item.userlog"
                         :attrname="item.username" :attrstar="item.avgscore" :comword="item.detail"
                         :comtime="item.commentDate" :comlikes="item.likes" :comunlikes="item.unlikes"
                         :picsrc="item.picList">
 
                     </attrComment>
+                    <div class="endword">
+                        <div class="endright">{{ pagestartIndex }}-{{ pageendIndex }}/{{ totalItems }}条</div>
+                        <div class="endleft">
+                            <div class="eltabs">
+                                <!-- 分页展示数据 -->
+                                <el-tabs v-model="activeTab" @tab-click="handleTabClick">
+                                    <el-tab-pane label="上一页" name="prev" :disabled="activeTab === '1'"></el-tab-pane>
+                                    <el-tab-pane v-for="page in displayedPages" :label="page" :name="page.toString()"
+                                        :key="page"></el-tab-pane>
+                                    <el-tab-pane label="下一页" name="next"
+                                        :disabled="activeTab === pageCount.toString()"></el-tab-pane>
+                                </el-tabs>
+                            </div>
+                            <div class="tolpage">{{ pageCount }}页</div>
+                        </div>
+
+                    </div>
                 </div>
 
 
@@ -103,7 +120,7 @@
         </div>
         <div class="rightdetail">
             <div class="rightjournal">推荐日志</div>
-            <div class="journal">
+            <div class="journal" ref="journal" :style="{ maxHeight: journalMaxHeight }">
                 <JournalValue v-for="item in journallist" :key="item.journalid" :userName="item.userName"
                     :userSrc="item.userSrc" :position="item.position" :axisnum="item.axisnum" :axispic="item.axispic"
                     :tag="item.tag" :title="item.title" :picSrc="item.picSrc" :posterDate="item.posterDate"
@@ -124,10 +141,63 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus';
 import JournalValue from '../../components/Attraction/attrjournal.vue'
 import Journal from '../Journal.vue'
+
+
 export default {
 
     mounted() {
         this.initializeData();
+        this.getelementHeight();
+
+    },
+    computed: {
+        // 计算总页数
+        pageCount() {
+            this.totalItems = this.commentlist.length;
+            this.totalPage = Math.ceil(this.totalItems / this.pageSize);
+            return this.totalPage;
+        },
+        // 计算当前页的数据
+        currentPageData() {
+            const allData = this.commentlist;
+            // 根据当前页和每页的条数计算数据的起始和结束索引
+            const startIndex = (this.currentPage - 1) * this.pageSize;
+            const endIndex = this.pageSize < this.commentlist.length - startIndex ? this.pageSize + startIndex : this.commentlist.length;
+
+            // 设置 pagestartIndex 和 pageendIndex
+            this.pagestartIndex = startIndex + 1;
+            this.pageendIndex = endIndex;
+
+
+            // 从 'allData' 中提取当前页的数据
+            return allData.slice(startIndex, endIndex);
+        },
+        displayedPages() {
+            const dcurrentPage = parseInt(this.activeTab);
+            const halfDisplay = 2; // 显示当前页前后各2页
+            const pages = [];
+            if (this.pageCount < 5) {
+                for (let i = 1; i <= this.pageCount; i++) {
+                    pages.push(i);
+                }
+            } else {
+                let startPage = Math.max(1, dcurrentPage - halfDisplay);
+                let endPage = Math.min(this.pageCount, dcurrentPage + halfDisplay);
+
+                // 调整页码范围，确保显示 5 个页码
+                while (endPage - startPage < 4) {
+                    if (startPage > 1) {
+                        startPage--;
+                    } else if (endPage < this.pageCount) {
+                        endPage++;
+                    }
+                }
+                for (let i = startPage; i <= endPage; i++) {
+                    pages.push(i);
+                }
+            }
+            return pages;
+        },
     },
     data() {
         return {
@@ -182,11 +252,21 @@ export default {
             // 评论相关数据
             commentlist: [],
             // 相关日志数据
-            journallist: []
+            journallist: [],
+            journalMaxHeight: '1800px',
+
+            //日志分页相关数据
+            currentPage: 1, // 当前页数
+            pageSize: 5,  // 每页显示的条数
+            pagestartIndex: '',//每页开始
+            pageendIndex: '',//每页结束
+            totalItems: '', // 总数据条数
+            activeTab: '1'
         };
     },
 
     methods: {
+
         initializeData() {
             // 默认是展示今日票价
             this.currSelectDate = new Date();
@@ -240,6 +320,18 @@ export default {
                     console.error('Error fetching data:', error);
                 });
         },
+        getelementHeight() {
+            // 这里元素高度获取有问题
+            this.$nextTick(() => {
+                const t1 = this.$refs.t1.clientHeight;
+                const t2 = this.$refs.t2.clientHeight;
+                const t3 = this.$refs.t3.clientHeight;
+                const t4 = this.$refs.t4.clientHeight;
+                const t5 = this.$refs.t5.clientHeight;
+                const height = t1 + t2 + t3 + t4 + t5 + 'px';
+                console.log(t1,t2,t3,t4,t5,height);
+            });
+        },
         // 点击日期按钮选择
         btn1() {
             this.currSelectDate = new Date();
@@ -259,6 +351,10 @@ export default {
             this.currSelectDate = time;
             this.moreday = '更多日期';
             // console.log(this.currSelectDate);
+        },
+        ticshowmore() {
+            this.ticketshowmore = !this.ticketshowmore;
+
         },
         //编辑评论页面
         ToEdit() {
@@ -313,7 +409,39 @@ export default {
                 console.log(this.currSelectDate)
             }
 
+        },
+
+        // 评论分页部分
+        handleTabClick(tab, event) {
+
+            //这样才能获取每个el-tab-pane的name属性
+
+            if (tab.props.name === 'prev') {
+                this.prevPage();
+            } else if (tab.props.name === 'next') {
+                this.nextPage();
+            } else {
+                this.currentPage = parseInt(tab.props.name);
+            }
+
+
+        },
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.activeTab = this.currentPage.toString();
+
+            }
+        },
+        nextPage() {
+            if (this.currentPage < this.pageCount) {
+                this.currentPage++;
+                this.activeTab = this.currentPage.toString();
+
+            }
         }
+
+
 
     },
     components: {
@@ -519,7 +647,7 @@ export default {
 
 .journal {
     background-color: #F1F3FF;
-    padding-bottom:20px ;
+    padding-bottom: 20px;
     margin: 20px 25px 0 15px;
     flex: 1;
     border-radius: 20px;
@@ -529,11 +657,8 @@ export default {
     /* 确保子元素垂直排列 */
     align-items: center;
     /* 子元素垂直居中 */
-
     /* 设置滚动条 */
     overflow-y: scroll;
-    /* 添加垂直滚动 */
-    max-height: 800px;
     /* 设置最大高度，超过该高度将出现滚动条 PS：这里是我定死的，需要根据页面需要进行调整让其和右边栏等高显示 */
 }
 
@@ -541,18 +666,48 @@ export default {
 /* 设置滚动条样式 */
 /* 滚动条的整体样式 */
 .journal::-webkit-scrollbar {
-    width: 3px; /* 设置滚动条的宽度 */
+    width: 3px;
+    /* 设置滚动条的宽度 */
 }
 
 /* 滚动条轨道的样式 */
 .journal::-webkit-scrollbar-track {
-    background: transparent; /* 背景颜色 */
+    background: transparent;
+    /* 背景颜色 */
 }
 
 /* 滚动条滑块的样式 */
 .journal::-webkit-scrollbar-thumb {
-    background: #cccccc; /* 滑块颜色 */
-    border-radius: 5px; /* 滑块圆角 */
+    background: #cccccc;
+    /* 滑块颜色 */
+    border-radius: 5px;
+    /* 滑块圆角 */
+}
+
+
+/* 下方选项栏 */
+.endword {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px 20px;
+    font-size: 14px;
+
+}
+
+.endleft {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.eltabs {
+    transform: translate(0, -20%);
+
+}
+
+.tolpage {
+    margin-left: 10px;
 }
 </style>
   
