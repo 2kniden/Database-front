@@ -119,7 +119,7 @@
             </div>
         </div>
         <div class="rightdetail">
-            <div class="rightjournal">推荐日志</div>
+            <div class="rightjournal" ref="jourtitle">推荐日志</div>
             <div class="journal" ref="journal" :style="{ maxHeight: journalMaxHeight }">
                 <JournalValue v-for="item in journallist" :key="item.journalid" :userName="item.userName"
                     :userSrc="item.userSrc" :position="item.position" :axisnum="item.axisnum" :axispic="item.axispic"
@@ -147,8 +147,25 @@ export default {
 
     mounted() {
         this.initializeData();
-        this.getelementHeight();
+        const elementsToObserve = [
+            this.$refs.t1,
+            this.$refs.t2,
+            this.$refs.t3,
+            this.$refs.t4,
+            this.$refs.t5,
+        ];
 
+        // 创建ResizeObserver实例
+        const resizeObserver = new ResizeObserver(this.handleResize);
+
+        // 监听每个元素的大小变化
+        for (const element of elementsToObserve) {
+            if (element) {
+                resizeObserver.observe(element);
+            }
+        }
+        // 计算总体高度
+        this.calculateTotalHeight();
     },
     computed: {
         // 计算总页数
@@ -253,8 +270,8 @@ export default {
             commentlist: [],
             // 相关日志数据
             journallist: [],
+            totalHeight: 0,
             journalMaxHeight: '1800px',
-
             //日志分页相关数据
             currentPage: 1, // 当前页数
             pageSize: 5,  // 每页显示的条数
@@ -320,17 +337,34 @@ export default {
                     console.error('Error fetching data:', error);
                 });
         },
-        getelementHeight() {
-            // 这里元素高度获取有问题
-            this.$nextTick(() => {
-                const t1 = this.$refs.t1.clientHeight;
-                const t2 = this.$refs.t2.clientHeight;
-                const t3 = this.$refs.t3.clientHeight;
-                const t4 = this.$refs.t4.clientHeight;
-                const t5 = this.$refs.t5.clientHeight;
-                const height = t1 + t2 + t3 + t4 + t5 + 'px';
-                console.log(t1,t2,t3,t4,t5,height);
-            });
+        handleResize(entries) {
+            for (const entry of entries) {
+                const targetElement = entry.target;
+                // 在这里处理每个元素的大小变化
+                // console.log(`Element ${targetElement.textContent} 的新高度是：${entry.contentRect.height}px`);
+            }
+
+            // 计算总体高度
+            this.calculateTotalHeight();
+        },
+        calculateTotalHeight() {
+            // 获取所有监听的元素的高度并累积
+            this.totalHeight = 0;
+            const elementsToObserve = [
+                this.$refs.t1,
+                this.$refs.t2,
+                this.$refs.t3,
+                this.$refs.t4,
+                this.$refs.t5,
+            ];
+            for (const element of elementsToObserve) {
+                if (element) {
+                    this.totalHeight += element.clientHeight;
+                }
+            }
+            // 输出总体高度
+            console.log(`总体高度是：${this.totalHeight}px`);
+            this.journalMaxHeight = this.totalHeight - 50 + 'px';//减掉推荐日志标题的高度
         },
         // 点击日期按钮选择
         btn1() {
