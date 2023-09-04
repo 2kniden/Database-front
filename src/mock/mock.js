@@ -302,7 +302,7 @@ if (useMock) {
             likes: 23,
             unlikes: 23,
 
-        },{
+        }, {
             commentid: 3,
             userlog: require("../assets/attractions/highrank/1.jpg"),
             username: "吃掉米麻薯的头",
@@ -316,7 +316,7 @@ if (useMock) {
                 require("../assets/attractions/highrank/2.jpg"),
                 require("../assets/attractions/highrank/3.jpg")
             ]
-        },{
+        }, {
             commentid: 4,
             userlog: require("../assets/attractions/highrank/1.jpg"),
             username: "吃掉米麻薯的头",
@@ -330,7 +330,7 @@ if (useMock) {
                 require("../assets/attractions/highrank/2.jpg"),
                 require("../assets/attractions/highrank/3.jpg")
             ]
-        },{
+        }, {
             commentid: 5,
             userlog: require("../assets/attractions/highrank/1.jpg"),
             username: "吃掉米麻薯的头",
@@ -344,7 +344,7 @@ if (useMock) {
                 require("../assets/attractions/highrank/2.jpg"),
                 require("../assets/attractions/highrank/3.jpg")
             ]
-        },{
+        }, {
             commentid: 6,
             userlog: require("../assets/attractions/highrank/1.jpg"),
             username: "吃掉米麻薯的头",
@@ -358,7 +358,7 @@ if (useMock) {
                 require("../assets/attractions/highrank/2.jpg"),
                 require("../assets/attractions/highrank/3.jpg")
             ]
-        },{
+        }, {
             commentid: 7,
             userlog: require("../assets/attractions/highrank/1.jpg"),
             username: "吃掉米麻薯的头",
@@ -372,7 +372,7 @@ if (useMock) {
                 require("../assets/attractions/highrank/2.jpg"),
                 require("../assets/attractions/highrank/3.jpg")
             ]
-        },{
+        }, {
             commentid: 8,
             userlog: require("../assets/attractions/highrank/1.jpg"),
             username: "吃掉米麻薯的头",
@@ -390,125 +390,135 @@ if (useMock) {
 
     })
     // 景点处评论列表展示
+    Mock.mock(/Attraction\/getweatherdata\?attraction_id=.*/, 'get', {
+        weatherlist: {
+            weather: '晴',
+            temNow: 18,
+            temHigh: 23,
+            temLow: 15,
+        }
+
+    })
+    // 景点处评论列表展示
     Mock.mock(/Attraction\/getjournaldata\?attraction_id=.*/, 'get', {
-        
-        journallist:[{
-            journalid:1,
-            userName:'吃掉米麻薯的头',
-            userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
-            position:'上海',
-            axisnum:3,
-            axispic:require('../assets/attractions/highrank/6.jpg'),
-            tag:['家庭','亲子','度假'],
-            title:'上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
-            picSrc:require('../assets/attractions/highrank/5.jpg'),
-            posterDate:'2022年12月04日',
-            like:1231,
-            collect:1234,
-        },{
-            journalid:2,
-            userName:'吃掉米麻薯的头',
-            userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
-            position:'上海',
-            axisnum:3,
-            axispic:require('../assets/attractions/highrank/6.jpg'),
-            tag:['家庭','亲子','度假'],
-            title:'上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
-            picSrc:require('../assets/attractions/highrank/5.jpg'),
-            posterDate:'2022年12月04日',
-            like:1231,
-            collect:1234,
-        },{
-            journalid:3,
-            userName:'吃掉米麻薯的头',
-            userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
-            position:'上海',
-            axisnum:3,
-            axispic:require('../assets/attractions/highrank/6.jpg'),
-            tag:['家庭','亲子','度假'],
-            title:'上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
-            picSrc:require('../assets/attractions/highrank/5.jpg'),
-            posterDate:'2022年12月04日',
-            like:1231,
-            collect:1234,
-        },{
-            journalid:4,
-            userName:'吃掉米麻薯的头',
-            userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
-            position:'上海',
-            axisnum:3,
-            axispic:require('../assets/attractions/highrank/6.jpg'),
-            tag:['家庭','亲子','度假'],
-            title:'上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
-            picSrc:require('../assets/attractions/highrank/5.jpg'),
-            posterDate:'2022年12月04日',
-            like:1231,
-            collect:1234,
-        },{
-            journalid:5,
-            userName:'吃掉米麻薯的头',
-            userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
-            position:'上海',
-            axisnum:3,
-            axispic:require('../assets/attractions/highrank/6.jpg'),
-            tag:['家庭','亲子','度假'],
-            title:'上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
-            picSrc:require('../assets/attractions/highrank/5.jpg'),
-            posterDate:'2022年12月04日',
-            like:1231,
-            collect:1234,
-        },{
-            journalid:6,
-            userName:'吃掉米麻薯的头',
-            userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
-            position:'上海',
-            axisnum:3,
-            axispic:require('../assets/attractions/highrank/6.jpg'),
-            tag:['家庭','亲子','度假'],
-            title:'上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
-            picSrc:require('../assets/attractions/highrank/5.jpg'),
-            posterDate:'2022年12月04日',
-            like:1231,
-            collect:1234,
-        },{
-            journalid:7,
-            userName:'吃掉米麻薯的头',
-            userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
-            position:'上海',
-            axisnum:3,
-            axispic:require('../assets/attractions/highrank/6.jpg'),
-            tag:['家庭','亲子','度假'],
-            title:'上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
-            picSrc:require('../assets/attractions/highrank/5.jpg'),
-            posterDate:'2022年12月04日',
-            like:1231,
-            collect:1234,
-        },{
-            journalid:8,
-            userName:'吃掉米麻薯的头',
-            userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
-            position:'上海',
-            axisnum:3,
-            axispic:require('../assets/attractions/highrank/6.jpg'),
-            tag:['家庭','亲子','度假'],
-            title:'上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
-            picSrc:require('../assets/attractions/highrank/5.jpg'),
-            posterDate:'2022年12月04日',
-            like:1231,
-            collect:1234,
-        },{
-            journalid:9,
-            userName:'吃掉米麻薯的头',
-            userSrc:require('../assets/attractions/recommendpic/hengsha.png'),
-            position:'上海',
-            axisnum:3,
-            axispic:require('../assets/attractions/highrank/6.jpg'),
-            tag:['家庭','亲子','度假'],
-            title:'上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
-            picSrc:require('../assets/attractions/highrank/5.jpg'),
-            posterDate:'2022年12月04日',
-            like:1231,
-            collect:1234,
+
+        journallist: [{
+            journalid: 1,
+            userName: '吃掉米麻薯的头',
+            userSrc: require('../assets/attractions/recommendpic/hengsha.png'),
+            position: '上海',
+            axisnum: 3,
+            axispic: require('../assets/attractions/highrank/6.jpg'),
+            tag: ['家庭', '亲子', '度假'],
+            title: '上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
+            picSrc: require('../assets/attractions/highrank/5.jpg'),
+            posterDate: '2022年12月04日',
+            like: 1231,
+            collect: 1234,
+        }, {
+            journalid: 2,
+            userName: '吃掉米麻薯的头',
+            userSrc: require('../assets/attractions/recommendpic/hengsha.png'),
+            position: '上海',
+            axisnum: 3,
+            axispic: require('../assets/attractions/highrank/6.jpg'),
+            tag: ['家庭', '亲子', '度假'],
+            title: '上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
+            picSrc: require('../assets/attractions/highrank/5.jpg'),
+            posterDate: '2022年12月04日',
+            like: 1231,
+            collect: 1234,
+        }, {
+            journalid: 3,
+            userName: '吃掉米麻薯的头',
+            userSrc: require('../assets/attractions/recommendpic/hengsha.png'),
+            position: '上海',
+            axisnum: 3,
+            axispic: require('../assets/attractions/highrank/6.jpg'),
+            tag: ['家庭', '亲子', '度假'],
+            title: '上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
+            picSrc: require('../assets/attractions/highrank/5.jpg'),
+            posterDate: '2022年12月04日',
+            like: 1231,
+            collect: 1234,
+        }, {
+            journalid: 4,
+            userName: '吃掉米麻薯的头',
+            userSrc: require('../assets/attractions/recommendpic/hengsha.png'),
+            position: '上海',
+            axisnum: 3,
+            axispic: require('../assets/attractions/highrank/6.jpg'),
+            tag: ['家庭', '亲子', '度假'],
+            title: '上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
+            picSrc: require('../assets/attractions/highrank/5.jpg'),
+            posterDate: '2022年12月04日',
+            like: 1231,
+            collect: 1234,
+        }, {
+            journalid: 5,
+            userName: '吃掉米麻薯的头',
+            userSrc: require('../assets/attractions/recommendpic/hengsha.png'),
+            position: '上海',
+            axisnum: 3,
+            axispic: require('../assets/attractions/highrank/6.jpg'),
+            tag: ['家庭', '亲子', '度假'],
+            title: '上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
+            picSrc: require('../assets/attractions/highrank/5.jpg'),
+            posterDate: '2022年12月04日',
+            like: 1231,
+            collect: 1234,
+        }, {
+            journalid: 6,
+            userName: '吃掉米麻薯的头',
+            userSrc: require('../assets/attractions/recommendpic/hengsha.png'),
+            position: '上海',
+            axisnum: 3,
+            axispic: require('../assets/attractions/highrank/6.jpg'),
+            tag: ['家庭', '亲子', '度假'],
+            title: '上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
+            picSrc: require('../assets/attractions/highrank/5.jpg'),
+            posterDate: '2022年12月04日',
+            like: 1231,
+            collect: 1234,
+        }, {
+            journalid: 7,
+            userName: '吃掉米麻薯的头',
+            userSrc: require('../assets/attractions/recommendpic/hengsha.png'),
+            position: '上海',
+            axisnum: 3,
+            axispic: require('../assets/attractions/highrank/6.jpg'),
+            tag: ['家庭', '亲子', '度假'],
+            title: '上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
+            picSrc: require('../assets/attractions/highrank/5.jpg'),
+            posterDate: '2022年12月04日',
+            like: 1231,
+            collect: 1234,
+        }, {
+            journalid: 8,
+            userName: '吃掉米麻薯的头',
+            userSrc: require('../assets/attractions/recommendpic/hengsha.png'),
+            position: '上海',
+            axisnum: 3,
+            axispic: require('../assets/attractions/highrank/6.jpg'),
+            tag: ['家庭', '亲子', '度假'],
+            title: '上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
+            picSrc: require('../assets/attractions/highrank/5.jpg'),
+            posterDate: '2022年12月04日',
+            like: 1231,
+            collect: 1234,
+        }, {
+            journalid: 9,
+            userName: '吃掉米麻薯的头',
+            userSrc: require('../assets/attractions/recommendpic/hengsha.png'),
+            position: '上海',
+            axisnum: 3,
+            axispic: require('../assets/attractions/highrank/6.jpg'),
+            tag: ['家庭', '亲子', '度假'],
+            title: '上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！',
+            picSrc: require('../assets/attractions/highrank/5.jpg'),
+            posterDate: '2022年12月04日',
+            like: 1231,
+            collect: 1234,
         }]
 
     })
@@ -516,39 +526,39 @@ if (useMock) {
     Mock.mock(/Attraction\/getticket\?attraction_id=.*&date=.*/, 'get', {
         // 这里删除评论的地方不确定
         ticketlist: [{
-            ticketid:1,
+            ticketid: 1,
             titleint: 0,//这里根据数据0-成人、1-学生、2-老人//还有分别的购票标准standard
-            isCollectedint:1,//是否需要取票（对应可取票、不可取票标签展示）
-            isRefundint:0,//是否可退：0-不可退、1-可退（对应了可退票、不可退票标签展示）
-            availabledays:30,//可选票未来天数
+            isCollectedint: 1,//是否需要取票（对应可取票、不可取票标签展示）
+            isRefundint: 0,//是否可退：0-不可退、1-可退（对应了可退票、不可退票标签展示）
+            availabledays: 30,//可选票未来天数
             // 下面都是三种的:票价
-            price:689,
+            price: 689,
             // 购买数量
-            buynum:4000,
-        },{
-            ticketid:2,
+            buynum: 4000,
+        }, {
+            ticketid: 2,
             titleint: 1,//这里根据数据0-成人、1-学生、2-老人//还有分别的购票标准standard
-            isCollectedint:0,//是否需要取票（对应可取票、不可取票标签展示）
-            isRefundint:1,//是否可退：0-不可退、1-可退（对应了可退票、不可退票标签展示）
-            availabledays:30,//可选票未来天数
+            isCollectedint: 0,//是否需要取票（对应可取票、不可取票标签展示）
+            isRefundint: 1,//是否可退：0-不可退、1-可退（对应了可退票、不可退票标签展示）
+            availabledays: 30,//可选票未来天数
             // 下面都是三种的:票价
-            price:689,
+            price: 689,
             // 购买数量
-            buynum:4000,
-        },{
-            ticketid:3,
+            buynum: 4000,
+        }, {
+            ticketid: 3,
             titleint: 2,//这里根据数据0-成人、1-学生、2-老人//还有分别的购票标准standard
-            isCollectedint:1,//是否需要取票（对应可取票、不可取票标签展示）
-            isRefundint:1,//是否可退：0-不可退、1-可退（对应了可退票、不可退票标签展示）
+            isCollectedint: 1,//是否需要取票（对应可取票、不可取票标签展示）
+            isRefundint: 1,//是否可退：0-不可退、1-可退（对应了可退票、不可退票标签展示）
             // 下面都是三种的:票价
-            price:689,
+            price: 689,
             // 购买数量
-            buynum:4000,
+            buynum: 4000,
         }],
-        
+
     })
     // 景点详情部分展示：图片信息、景点介绍、景点简介、景点票价但是逻辑还没有处理好所以先不动
-    Mock.mock(/Attraction\/getattrdata\?attraction_id=.*/, 'get', {      
+    Mock.mock(/Attraction\/getattrdata\?attraction_id=.*/, 'get', {
         declist: {
             // 轮播图
             slides: [
@@ -568,8 +578,8 @@ if (useMock) {
             // 景点详情
             attrdetail: '我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介我是简介',
             // 这里可以直接获取date
-            date:"08-24",
-            availabledays:20,
+            date: "08-24",
+            availabledays: 20,
         },
 
     })

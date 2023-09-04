@@ -26,11 +26,11 @@
             <span class="dp">{{ price }}</span>
             起
         </div>
-        <div class="dweather">
-            <!-- 这里要导入当天日期，并导入天气查看插件 -->
-            <!-- 这里的图标也要随天气改变，暂时写死 -->
-            <img class="dwimg" src="../../assets/attractions/weather/weather_1晴.svg" alt="">
-            {{date}}
+        <div class="dweather" title="更多信息：{{更多信息}}">
+            <div>
+                {{ date }}&nbsp;&nbsp;&nbsp;{{ weather }}
+            </div>
+            <!-- 这里还差展示气泡框 -->
             
         </div>
     </div>
@@ -46,7 +46,17 @@ export default {
         weekend: String,
         phone: String,
         price: Number,
-        date:String
+        date: String,
+        // 这里是天气相关的
+        weather: String,
+        temNow: Number,
+        temHigh: Number,
+        temLow: Number,
+    },
+    data() {
+        return {
+            visible: false
+        }
     }
 }
 </script>

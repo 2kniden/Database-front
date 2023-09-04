@@ -12,7 +12,8 @@
         <div>
             <DetailView :title="declist.title" :score="declist.score" :commentnum="declist.commentnum"
                 :location="declist.location" :weekday="declist.weekday" :weekend="declist.weekend" :phone="declist.phone"
-                :price="declist.price" :date="declist.date"></DetailView>
+                :price="declist.price" :date="declist.date" :weather="weatherlist.weather" :temNow="weatherlist.temNow"
+                :temHigh="weatherlist.temHigh" :temLow="weatherlist.temLow"></DetailView>
         </div>
     </div>
 
@@ -72,8 +73,8 @@
 
                     </div>
                     <div>
-                        <!-- 这里会移动一下最后实在不行就固定位置吧 -->
-                        <el-button type="primary" plain color="#8097FD" @click="ToEdit">
+                        <!-- 这里会移动一下 -->
+                        <el-button class="cheadbtn" type="primary" plain color="#8097FD" @click="ToEdit">
                             <el-icon>
                                 <EditPen />
                             </el-icon>
@@ -90,6 +91,13 @@
                 </div>
                 <!-- 用户评论部分 -->
                 <div>
+                    <div class="commenttag">
+                        <el-radio-group v-model="commenttagradio" size="small" fill='#8097FD' @change="handlecomtagChange">
+                            <el-radio-button label="全部"></el-radio-button>
+                            <el-radio-button label="好评"></el-radio-button>
+                            <el-radio-button label="中差评"></el-radio-button>
+                        </el-radio-group>
+                    </div>
                     <attrComment v-for="item in currentPageData" :key="item.commentid" :userlog="item.userlog"
                         :attrname="item.username" :attrstar="item.avgscore" :comword="item.detail"
                         :comtime="item.commentDate" :comlikes="item.likes" :comunlikes="item.unlikes"
@@ -252,20 +260,23 @@ export default {
                 }]
             },
             morevalue1: '',
-
             // 景点id和userid先写死
             user_id: '123',
             attraction_id: '123455',
 
             // 景点介绍+简介栏
             declist: '',
+            // 景点天气
+            weatherlist: '',
             // 售票
             ticketlist: '',
             firstticket: '',
             ticketshowmore: false,//显示更多（否则只显示成人票）
-
-            // 评论
+            currSelectDate: '',//展示哪日门票，传给后端
+            // 评论显示有关
             showDialog: false, // 控制发布评论弹窗的显示和隐藏
+            commenttagradio: '全部',//评论标签过滤选择
+            commenttagint: 0,//选择哪个评论标签，传给后端
             // 评论相关数据
             commentlist: [],
             // 相关日志数据
@@ -313,6 +324,17 @@ export default {
                 .then((response) => {
 
                     this.declist = response.data.declist;
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+            // 获取景区天气
+            axios
+                .get('/Attraction/getweatherdata?attraction_id=' + this.attraction_id)
+                .then((response) => {
+
+                    this.weatherlist = response.data.weatherlist;
+                    // console.log(this.weatherlist)
                 })
                 .catch((error) => {
                     console.error('Error fetching data:', error);
@@ -437,10 +459,10 @@ export default {
                     type: 'error',
                 })
             } else {
-                this.pickerInvisible();
+
                 this.moreday = this.formatDateTime(this.morevalue1);//更多日期选项内容变成选择日期
                 this.currSelectDate = this.morevalue1;
-                console.log(this.currSelectDate)
+                this.pickerInvisible();
             }
 
         },
@@ -473,6 +495,17 @@ export default {
                 this.activeTab = this.currentPage.toString();
 
             }
+        },
+        // 获取评论标签
+        handlecomtagChange(value) {
+            if (value === '全部') {
+                this.commenttagint = 0;
+            } else if (value === '好评') {
+                this.commenttagint = 1;
+            } else {
+                this.commenttagint = 2;
+            }
+            console.log(this.commenttagint)
         }
 
 
@@ -653,6 +686,13 @@ export default {
 
 .dialog-footer button:first-child {
     margin-right: 10px;
+}
+
+/* 评论标签部分 */
+.commenttag {
+    display: flex;
+    align-items: flex-start;
+    margin: 10px 0 0 10px;
 }
 
 /* 推荐日志部分 */

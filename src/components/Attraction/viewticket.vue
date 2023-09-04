@@ -4,7 +4,6 @@
         <div class="tickettitle">{{ title }}</div>
         <div class="ticketstan">购票标准：{{ standard }}</div>
         <div class="tickettag">
-            <!-- 这个后期也做成组件先写死 -->
             <div class="ttag">{{isRefund}}</div>
             <div class="ttag">{{isCollected}}</div>
         </div>
@@ -55,9 +54,13 @@ export default {
                 this.title='学生票'
                 this.standard='年龄12岁以上年龄12岁以上年龄12岁以上年龄12岁以上年龄12岁以上年龄12岁以上'
         
-            }else{
-                this.title='老人票'
+            }else if(this.titleint===2){
+                this.title='老年票'
                 this.standard='年龄55岁以上年龄55岁以上年龄55岁以上年龄55岁以上年龄55岁以上年龄55岁以上'
+        
+            }else{
+                this.title='儿童票'
+                this.standard='年龄12岁以上年龄55岁以上年龄55岁以上年龄55岁以上年龄55岁以上年龄55岁以上'
         
             }
 
