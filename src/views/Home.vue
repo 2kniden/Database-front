@@ -24,7 +24,7 @@
       </Transition>
     </div>
 
-    <!--加载整个展示页面背景图-->
+    <!--加载整个上部页面展示页面背景图-->
     <div class="up-background">
       <Header></Header>
 
@@ -71,7 +71,29 @@
       </div>
 
     </div>
+
+    <div class="detail-page">
+      <!-- 底下的曲线部分 -->
+      <canvas id="part1" class="part"></canvas>
+      <div class="part">
+
+      </div>
+      <div class="part">
+
+      </div>
+      <div class="part">
+
+      </div>
+      <div class="part">
+
+      </div>
+      <div class="part">
+
+      </div>
+    </div>
+
   </div>
+
 </template>
 
 <script>
@@ -128,7 +150,17 @@ export default {
     onCanplay(ev){
       console.log(ev, '可以播放')
     },
+    initCanvasPartOne(){
+      console.log("初始化part1的canvas");
+      let canvas = document.getElementById("part1")
+      let ctx = canvas.getContext('2d');
+
+      //绘制第一部分的图形
+    }
   },
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll);
+  }
 }
 </script>
 
@@ -145,13 +177,16 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
+  overflow-y: scroll;
+  margin-right: calc(100% - 100vw);
+  padding-right: 17px;
 }
 .up-background{
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
 
   background-image: url("../assets/home/up-background.png");
   background-size: cover;
@@ -299,7 +334,7 @@ export default {
 .video-form {
   z-index: 1;
   position: fixed;
-  top: 40%;
+  top: 45%;
   width: 100%;
   margin-top: 100px;
   display: flex;
@@ -377,5 +412,23 @@ export default {
 .fadeInOut-downUp-leave-active,
 .fadeInOut-downUp-enter-active {
   transition: all 0.2s;
+}
+
+/* 下半部分包含曲线的部分 */
+.detail-page{
+  width:100%;
+  height: 6480px;
+  position: absolute;
+  margin-top: 100vh;
+
+  background: linear-gradient(180deg, #2B4FC4 0%, rgba(239, 240, 246, 0.45) 100%);
+  /*margin-right: calc(100% - 100vw);*/
+  /*padding-right: 17px;*/
+}
+.part{
+  position: relative;
+  display: flex;
+  width:100vw;
+  height: 1080px;
 }
 </style>
