@@ -51,7 +51,6 @@
                         :isCollectedint="item.isCollectedint" :isRefundint="item.isRefundint" :price="item.price">
                     </ViewTicket>
                 </div>
-                <!-- 这里有点点问题 -->
                 <div v-else>
                     <ViewTicket :titleint="firstticket.titleint" :isCollectedint="firstticket.isCollectedint"
                         :isRefundint="firstticket.isRefundint" :price="firstticket.price"></ViewTicket>
@@ -236,28 +235,10 @@ export default {
             pickerOptions: {
                 // 这里设置日期可选择范围，还未设置（这里遇到问题）
                 disabledDate(time) {
-                    return time.getTime() > Date.now();
+                    // 禁用当日日期之前的的日期选择，但是这里没有效果
+                    return time.getTime() < new Date().getTime() - 24 * 60 * 60 * 1000;
                 },
-                shortcuts: [{
-                    text: '今天',
-                    onClick(picker) {
-                        picker.$emit('pick', new Date());
-                    }
-                }, {
-                    text: '昨天',
-                    onClick(picker) {
-                        const date = new Date();
-                        date.setTime(date.getTime() - 3600 * 1000 * 24);
-                        picker.$emit('pick', date);
-                    }
-                }, {
-                    text: '一周前',
-                    onClick(picker) {
-                        const date = new Date();
-                        date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                        picker.$emit('pick', date);
-                    }
-                }]
+                
             },
             morevalue1: '',
             // 景点id和userid先写死
