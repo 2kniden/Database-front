@@ -1,7 +1,7 @@
 <template>
 <div>    
-    <!-- 点赞与收藏固钉 -->
-    <div class="header">
+    <header>
+        <!-- 点赞与收藏固钉 -->
         <el-affix :offset="400">
             <div class="fixed-interaction">
                 <br>
@@ -24,83 +24,90 @@
                 </button>
             </div>
         </el-affix>
-    </div>
-    
+    </header>
     <!-- 日志展示 -->
     <main> 
         <!-- 背景图片 -->
-        <!-- 更换背景图片为固定图片，不然不同分辨率的图像显示出来实在太丑了orz -->
-        <div class="details-cover-wrapper">
-            <el-image style="height: 250px;width:100%;" :src="cover_url" :fit="fill">
+        <!-- 更换背景图片为固定图片，不然不同分辨率的图像显示出来实在太丑了orz :fit="fill"-->
+        <div class="details-wrapper">
+            <div class="cover-img-wrapper">
+                <el-image style="height: 350px;width:100%;" :src="cover_url">
                 <template #error>
                     <div class="image-failed"> <el-icon><icon-picture /></el-icon> </div>
                 </template>
-            </el-image>
-        </div>
-
-        <!-- 文章标题 -->
-        <div class="details-title-wrapper">
-            {{title}}
-        </div>
-
-        <!-- 文章作者介绍及文章点赞评概况 -->
-        <div class="poster-wrapper">
-            <!-- 作者头像 -->
-            <div class="poster-avatar">
-                <el-avatar :size="100" :src="p_avatar_url" />
+                </el-image>
             </div>
-            <!-- 作者名称 -->
-            <div class="poster-name">
-                <p>{{poster_name}}</p>
-                <p>
-                    <!-- 关注按钮 -->
-                    <el-button v-if="is_followed_display" type="primary" :dark="isDark" @click="changeFollowStatus" round>
-                        <p v-if="reader.is_followed">
-                            取消关注
-                        </p>
-                        <p v-else> 
-                            <el-icon size='13px'><Plus/></el-icon> &nbsp;关注&nbsp;
-                        </p>
-                    </el-button>
-                </p>
+            <!-- 文章标题 -->
+            <div class="details-title-wrapper">
+                {{title}}
             </div>
 
-            <!-- 本文点赞评论数量 -->
-            <div class="interaction">
-                <p>
-                    <img src="../../assets/journal/details_read.png" style="height:20px">
-                    浏览 {{read_num}} &nbsp;
-                    <img src="../../assets/journal/details_like.png" style="height:20px">
-                    点赞  {{kudos_num}} &nbsp;
-                    <img src="../../assets/journal/details_collect.png" style="height:20px">
-                    收藏  {{collect_num}}
-                </p>
-                <p class="post-time">
-                    发布于：{{post_date}}
-                </p>
+            <!-- 文章作者介绍及文章点赞评概况 -->
+            <div class="poster-wrapper">
+                <!-- 作者头像 -->
+                <div class="poster-avatar">
+                    <el-avatar :size="100" :src="p_avatar_url" />
+                </div>
+                <!-- 作者名称 -->
+                <div class="poster-name">
+                    <p>{{poster_name}}</p>
+                    <p>
+                        <!-- 关注按钮 -->
+                        <el-button v-if="is_followed_display" type="primary" :dark="isDark" @click="changeFollowStatus" round>
+                            <p v-if="reader.is_followed">
+                                取消关注
+                            </p>
+                            <p v-else> 
+                                <el-icon size='13px'><Plus/></el-icon> &nbsp;关注&nbsp;
+                            </p>
+                        </el-button>
+                    </p>
+                </div>
+
+                <!-- 本文点赞评论数量 -->
+                <div class="interaction">
+                    <p>
+                        <img src="../../assets/journal/details_read.png" style="height:20px">
+                        浏览 {{read_num}} &nbsp;
+                        <img src="../../assets/journal/details_like.png" style="height:20px">
+                        点赞  {{kudos_num}} &nbsp;
+                        <img src="../../assets/journal/details_collect.png" style="height:20px">
+                        收藏  {{collect_num}}
+                    </p>
+                    <p class="post-time">
+                        发布于：{{post_date}}
+                    </p>
+                    <div class="edit-option"
+                     v-if="reader.permissionOfEdit === true">
+                     <el-button class="edit-journal" @click="handleDeleteOrEdit($event)">删除日志</el-button>
+                     &nbsp;&nbsp;
+                     <el-button class="edit-journal" @click="handleDeleteOrEdit($event)">编辑日志</el-button>
+                    </div>
+                </div>
             </div>
-        </div>
 
         <!-- 本文实际内容 -->
-        <div class="details-tabs-wrapper">
-            <!-- 标签 -->
-            <el-tag
-            v-for="tab in details_tabs"
-            :key="tab"
-            class="mx-1"
-            effect="dark"
-            color="#7990F9"
-            round
-            >
-            {{tab}}
-            </el-tag>
-        </div>
+            <div class="details-tabs-wrapper">
+                <!-- 标签 -->
+                <el-tag
+                v-for="tab in details_tabs"
+                :key="tab"
+                class="mx-1"
+                effect="dark"
+                color="#7990F9"
+                style="border-color:#8097FD"
+                round
+                >
+                {{tab}}
+                </el-tag>
+            </div>
 
         <!-- 实际内容展示 -->
-        <div class="body-wrapper">
-            <!--暂时在此选择文件查看-->
-            <!--<input type="file" @change="handleFileChange">-->
-            <div v-html="details_body"></div>
+            <div class="body-wrapper">
+                <!--暂时在此选择文件查看-->
+                <!--<input type="file" @change="handleFileChange">-->
+                <div v-html="details_body"></div>
+            </div>
         </div>
 
         <!-- 发布评论区 -->
@@ -111,7 +118,7 @@
                     <img src="../../assets/journal/details_comment.png" style="height:40px">
                 </div>
                 <div class="comment-input">
-                    <el-input v-model="reader.post_comment" size="large" placeholder="我也有话说……" />
+                    <el-input v-model="reader.post_comment"  size="large" placeholder="我也有话说……" />
                 </div>
                 <div class="comment-post">
                     <el-button 
@@ -141,16 +148,16 @@
                     <!-- 一级评论内容 -->
                     <p class="com-comment">{{comment.poster_review}}</p>
                     <!-- 一级评论点赞\评数据 -->
-                    <p class="com-time-kudos-reply">
+                    <p class="com-time-kudos-reply" >
                         {{comment.post_time}}&nbsp;&nbsp;
                         <a @click.stop="change_com_LikeStatus(index1)">
                             <img v-if="comment.is_like === false" src="../../assets/journal/details_com_like.png"  style="height:10px">
-                            <img v-if="comment.is_like === false" src="../../assets/journal/details_com_givelike.png" style="height:10px">
+                            <img v-if="comment.is_like === true" src="../../assets/journal/details_com_givelike.png" style="height:10px">
                             {{comment.post_likes}}
                         </a>
                         &nbsp;&nbsp;
                         <a @click.stop="input_com_reply(index1, -1)">回复</a>
-                        <a v-if="comment.permission_of_delete" class="delete_com_button" @click.stop="delete_com_reply(index1, -1)">删除</a>
+                        <a v-if="comment.permission_of_delete === true" class="delete_com_button" @click.stop="delete_com_reply(index1, -1)">删除</a>
                     </p>
 
                     <!-- 可能的回复框 -->
@@ -176,7 +183,7 @@
                     </div>
                     
                     <!-- 评论的评论展示 -->
-                    <div v-for="(reply, index2) in comments_of_comments[index1]" :key="index2" class="one-reply">
+                    <div v-for="(reply, index2) in comments_of_comments[index1].ReplyList" :key="index2" class="one-reply">
                         <div class="rep-avatar">
                             <el-avatar :size="25" :src="reply.poster_avatar" />
                         </div>
@@ -191,12 +198,12 @@
                                 {{reply.post_time}}&nbsp;&nbsp;
                                 <a @click="change_rep_LikeStatus(index1, index2)">
                                     <img v-if="reply.is_like === false" src="../../assets/journal/details_com_like.png"  style="height:10px">
-                                    <img v-if="reply.is_like === false" src="../../assets/journal/details_com_givelike.png" style="height:10px">
+                                    <img v-if="reply.is_like === true" src="../../assets/journal/details_com_givelike.png" style="height:10px">
                                     {{reply.post_likes}}
                                 </a>
                                 &nbsp;&nbsp;
                                 <a @click="input_com_reply(index1, index2)">回复</a>
-                                <a v-if="reply.permission_of_delete" class="delete_com_button" @click.stop="delete_com_reply(index1, index2)">删除</a>
+                                <a v-if="reply.permission_of_delete === true" class="delete_com_button" @click.stop="delete_com_reply(index1, index2)">删除</a>
                             </p>
 
                             <!-- 可能的回复框 -->
@@ -235,28 +242,47 @@
 import { Picture as IconPicture } from '@element-plus/icons-vue'
 import { Plus } from '@element-plus/icons-vue'
 import axios from 'axios'
-import { useRoute } from 'vue-router'
+import { useRoute,useRouter } from 'vue-router'
+import { ElMessage,ElMessageBox } from 'element-plus'
 
+function formatDateTime(d) {
+    const date = new Date(d);      //发布日期
+    const date_year = date.getFullYear();
+    const date_month = date.getMonth() + 1;
+    const date_day = date.getDate(); 
 
-const date = new Date('2023/1/1');      //发布日期
-const date_year = date.getFullYear();
-const date_month = date.getMonth() + 1;
-const date_day = date.getDate();
+    var y = date.getFullYear();  
+    var m = date.getMonth() + 1;  
+    m = m < 10 ? ('0' + m) : m;  
+    var d = date.getDate();  
+    d = d < 10 ? ('0' + d) : d;  
+    var h = date.getHours();  
+    h = h < 10 ? ('0' + h) : h;  
+    var minute = date.getMinutes();  
+    minute = minute < 10 ? ('0' + minute) : minute;  
+    var second=date.getSeconds();  
+    second=second < 10 ? ('0' + second) : second;  
+    return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;  
+};
 
-function formatDateTime(date) {  
-            var y = date.getFullYear();  
-            var m = date.getMonth() + 1;  
-            m = m < 10 ? ('0' + m) : m;  
-            var d = date.getDate();  
-            d = d < 10 ? ('0' + d) : d;  
-            var h = date.getHours();  
-            h = h < 10 ? ('0' + h) : h;  
-            var minute = date.getMinutes();  
-            minute = minute < 10 ? ('0' + minute) : minute;  
-            var second=date.getSeconds();  
-            second=second < 10 ? ('0' + second) : second;  
-            return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;  
-        };
+function backToLast() {
+    const router = useRouter();
+    router.go(-1);
+    console.log("backtolast()");
+};
+
+function toEdit(journal_id) {
+    const toPost = useRouter();
+    const postJournal = () => {
+        toPost.push({
+            name:"PostJournal",
+            param:{
+                mode:'edit',
+                journal:journal_id,
+            }
+        })
+    }
+}
 
 export default {
     name: "JournalDetails",
@@ -273,6 +299,7 @@ export default {
             is_like: false,
             is_collect: false,
             is_followed: false,
+            permissionOfEdit:false,
 
             post_comment: "",       //评论日志
             post_response: "",      //评论评论
@@ -308,8 +335,9 @@ export default {
     methods:{
         initializeData(){
             const route = useRoute();
+            const router = useRouter();
             const articleInfo = route.query;
-
+            console.log("articleInfo=",articleInfo);
             let that = this;
             // 首先获得当前阅读者的信息
             that.reader.reader_id = '843526A2B7784E73B28E73C797A2C81C';
@@ -326,16 +354,34 @@ export default {
             // 此处先强制规定一下
             that.reader.reader_avatar = 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg';
             that.reader.reader_name = "小美";//测试数据里这么说的
-
+            
             // 获取当前阅读者和本文的交互状态，以及本文的相关的内容
             axios.get('/api/Journals/'+ that.article_id + '/' + that.reader.reader_id)
             .then(res=>{
+                // 首先增加浏览量
+                axios.post('/api/Journals/like_favo_view',{
+                    userId:that.reader.reader_id,
+                    contentId:that.article_id,
+                    clickType:'3',
+                })
+                .then(res=>{
+                    if(res.data.status) {
+                        that.read_num = res.data.read_num;
+                    }
+                    else {
+                        ElMessage("浏览量status错误")
+
+                    }
+                })
+                .catch(err=>{
+                    ElMessage.error("浏览量更新失败🫢");
+                })
+
                 // 当前用户与本文的交互状态
-                // that.reader.is_like = res.data.is_like;//是否点赞
-                // that.reader.is_collect = res.data.is_collect;///是否收藏
-                // that.reader.is_followed = res.data.is_followed;//是否关注了本文作者
-                that.reader.is_like = false;
-                that.reader.is_collect = false;
+                that.reader.is_like = res.data.Journal.is_like;
+                that.reader.is_collect = res.data.Journal.is_collect;
+                //是否关注了本文作者：这个需要调用user相关的接口
+                // that.reader.is_followed = res.data.is_followed;
                 that.reader.is_followed = false;
 
                 // 本篇日志的作者信息
@@ -344,14 +390,19 @@ export default {
                 // that.p_avatar_url = res.data.Author.poster_avatar;
                 that.poster_name = res.data.Author.poster_name;
                 that.poster_id = res.data.Author.poster_id;
+                // 如果阅读者就是本文作者，那么就可以编辑本文
+                if(that.poster_id === that.reader.reader_id) {
+                    that.reader.permissionOfEdit = true;
+                }
 
                 // 本篇日志的信息
                 that.title = res.data.Journal.title;
                 that.cover_url = res.data.Journal.cover_url;
-                that.read_num = res.data.Journal.read_num + 1;       //浏览数最好用个双向绑定啊！！！
+                that.read_num = res.data.Journal.read_num;
                 that.kudos_num = res.data.Journal.kudos_num;
                 that.collect_num = res.data.Journal.collect_num;
-                that.post_date = res.data.Journal.post_date;
+                that.post_date = formatDateTime(res.data.Journal.post_date);
+
                 that.details_tabs = res.data.Journal.tabs;
                 that.details_body = res.data.Journal.body; 
 
@@ -360,7 +411,19 @@ export default {
 
                 // 当前日志的评论信息
                 that.comments = res.data.Comment.comments;
+                that.comments.forEach((c)=>{
+                    let tmp_c = c;
+                    c.post_time = formatDateTime(tmp_c.post_time);
+                })
                 that.comments_of_comments = res.data.Comment.comments_of_comments;
+                that.comments_of_comments.forEach((c_of_c)=>{
+                    // c_of_c是ReplyList+ReplyNum的集合
+                    // 其中ReplyList也是数组
+                    c_of_c.ReplyList.forEach((c) => {
+                        let tmp_c = c;
+                        c.post_time = formatDateTime(tmp_c.post_time);
+                    })
+                })
                 // that.commentNum = res.data.Comment.CommentNum; 
             });
         },
@@ -368,35 +431,40 @@ export default {
         // 更改获赞状态
         changeLikeStatus(){
             let that = this;
-            that.reader.is_like = !that.reader.is_like;
-
+           
             // 点赞
-            if(that.reader.is_like) {
+            if( !that.reader.is_like) {
                 axios.post('/api/Journals/like_favo_view',{
-                    user_id: that.reader.reader_id,
+                    userId: that.reader.reader_id,
                     contentId: that.article_id,
                     // 1表示点赞
                     clickType:'1',
                 })
                 .then(res => {
                     if(res.data.status){
-                        that.kudos_num = res.data.total_views;
+                        that.reader.is_like = !that.reader.is_like;
+                        that.kudos_num = res.data.kudos_num;
+                        ElMessage.success("点赞成功🥰");
+                        console.log("res.data.kudos_num",res.data.kudos_num);
                     }
                 })
                 .catch(error => {
-                    that.reader.is_like = !that.reader.is_like;
-                    alert('操作失败！');
+                    console.log(error);
+                    ElMessage.error("点赞失败")
                 });
             }
             else {// 取消点赞
                 axios.delete('/api/Journals/like/' + that.article_id + '/' + that.reader.reader_id)
                 .then(res=>{
-                    alert("取消点赞成功~");
-                    that.reader.is_like = that.reader.is_like;
-                    that.kudos_num = rea.data.kudos_num;
+                    if(res.data.status) {
+                        ElMessage.warning("取消点赞成功");
+                        that.reader.is_like = !that.reader.is_like;
+                        that.kudos_num = res.data.kudos_num;
+                        console.log("cancel|res.data.kudos_num",res.data.kudos_num);
+                    }
                 })
                 .catch(err => {
-                    alert(err.data.cancel);
+                    ElMessage.error("取消点赞失败");
                 })
             }
         },
@@ -404,37 +472,37 @@ export default {
         // 更改收藏数
         changeCollectStatus(){
             let that = this;
-            that.reader.is_collect = !that.reader.is_collect;
-
+        
             // 更新收藏
-            if(that.reader.is_collect) {
+            if(!that.reader.is_collect) {
                 axios.post('/api/Journals/like_favo_view',{
-                    user_id: that.reader.reader_id,
+                    userId: that.reader.reader_id,
                     contentId: that.article_id,
                     // 2表示收藏
                     clickType:'2',
                 })
                 .then(res => {
                     if(res.data.status){
-                        // that.reader.is_collect = that.reader.is_collect;
-                        that.collect_num = res.data.total_views;
+                        ElMessage.success("收藏成功🥰");
+                        that.reader.is_collect = !that.reader.is_collect;
+                        that.collect_num = res.data.collect_num;
+                        console.log("res.data.collect_num=",res.data.collect_num);
                     }
                 })
                 .catch(error => {
-                    that.reader.is_collect = !that.reader.is_collect;
-                    alert('操作失败！');
+                    ElMessage.error("收藏失败")
                 });
             }
             else {// 取消收藏
                 axios.delete('/api/Journals/favorite/' + that.article_id + '/' + that.reader.reader_id)
                 .then(res=>{
-                    alert("取消收藏成功~");
-                    that.reader.is_collect = that.reader.is_collect;
+                    ElMessage.warning("取消收藏成功");
+                    that.reader.is_collect = !that.reader.is_collect;
                     that.collect_num = res.data.collect_num;
+                    console.log("cancel|res.data.collect_num=",res.data.collect_num);
                 })
                 .catch(err => {
-                    that.reader.is_collect = !that.reader.is_collect;
-                    alert(err.data.cancel);
+                    ElMessage.error("取消收藏失败");
                 })
             }
         },
@@ -472,14 +540,7 @@ export default {
         // index代表的应该是自上而下一级评论的序号
         change_com_LikeStatus(index){
             var that = this;
-            /*
-            this.comments[index].is_like = !this.comments[index].is_like;
-            if(this.comments[index].is_like)
-                this.comments[index].post_likes++;
-            else
-                this.comments[index].post_likes--;
-            */
-            if(this.comments[index].is_like){ //点赞
+            if(!this.comments[index].is_like){ //点赞
                 axios.post('/api/Comments/like',{
                     userId: that.reader.reader_id,
                     contentId: that.comments[index].comment_id,
@@ -487,7 +548,7 @@ export default {
                 .then(res => {
                     if(res.data.status){
                         that.comments[index].is_like= !that.comments[index].is_like;
-                        that.comments[index].post_likes = res.data.kudos.num;
+                        that.comments[index].post_likes = res.data.kudos_num;
                     }
                 })
                 .catch(error => {
@@ -499,35 +560,45 @@ export default {
                 .then(res=>{
                     if(res.data.status) {
                         that.comments[index].is_like= !that.comments[index].is_like;
-                        that.comments[index].post_likes = res.data.kudos.num
+                        that.comments[index].post_likes = res.data.kudos_num
                     }
+                })
+                .catch(err=>{
+
                 })
             }
             
         },
+        // 给评论的评论点赞或取消点赞
         change_rep_LikeStatus(index1, index2){
             var that = this;
-            if(!that.comments_of_comments[index1][index2].is_like){//点赞
+            console.log(this.comments_of_comments[index1].ReplyList[index2].post_likes);
+            if(!that.comments_of_comments[index1].ReplyList[index2].is_like){//点赞
                 axios.post('/api/Comments/like/',{
                     userId: that.reader.reader_id,
-                    contentId: that.comments_of_comments[index1][index2].comment_id,
+                    contentId: that.comments_of_comments[index1].ReplyList[index2].comment_id,
                 })
                 .then(res => {
                     if(res.data.status){
-                        that.comments_of_comments[index1][index2].is_like= !that.comments_of_comments[index1][index2].is_like;
-                        that.comments_of_comments[index1][index2].post_likes = res.data.kudos_num;
+                        that.comments_of_comments[index1].ReplyList[index2].is_like = !that.comments_of_comments[index1].ReplyList[index2].is_like;
+                        that.comments_of_comments[index1].ReplyList[index2].post_likes = res.data.kudos_num;
                     }
                 })
                 .catch(error => {
-                    alert('操作失败！');
+                    ElMessage({
+                        message:"操作失败",
+                        type:"error"
+                    })
                 });
             }
             else {//取消点赞
-                axios.delete('/api/Comments/'+that.comments_of_comments[index1][index2].comment_id+'/'+that.reader.reader_id)
+                axios.delete('/api/Comments/'+that.comments_of_comments[index1].ReplyList[index2].comment_id+'/'+that.reader.reader_id)
                 .then(res=>{
-                    that.comments_of_comments[index1][index2].post_likes = res.data.kudos_num;
+                    that.comments_of_comments[index1].ReplyList[index2].is_like = !that.comments_of_comments[index1].ReplyList[index2].is_like;
+                    that.comments_of_comments[index1].ReplyList[index2].post_likes = res.data.kudos_num;
                 })
             }
+            console.log(this.comments_of_comments[index1].ReplyList[index2].post_likes);
         },
         // 实现给评论评论
         input_com_reply(index1, index2){        
@@ -540,124 +611,184 @@ export default {
         // 发布评论
         post_comment_response(index1, index2){
             var that = this;
-            console.log(index1);
-            console.log(index2);
 
-            //发布时间
-            const now_time = new Date();
-            
             //评论日志
             if(index1 == -1){           
                 axios.post('/api/Comments',{
-                    parentId:NULL,
-                    rootParent:NULL,
-                    user_id: that.reader.reader_id,
-                    journal_id: that.article_id,
-                    commentCotent: that.reader.post_comment,
-                    // post_time: formatDateTime(now_time),
-                    // post_likes: 0,
+                    parentId:'',
+                    rootParent:'',
+                    userId: that.reader.reader_id,
+                    journalId: that.article_id,
+                    commentContent: that.reader.post_comment,
                 })
                 .then(res => {
                     if(res.data.status){
                         // 如果成功评论，直接修改评论相关的参数
+                        // 向本日志中的comments数组中加入新的一项
                         that.comments.push({
                             comment_id: res.data.comment_id, 
                             poster_id: that.reader.reader_id,
-                            poster_avatar: that.reader.reader_avatar,
                             poster_name: that.reader.reader_name,
+                            poster_avatar: that.reader.reader_avatar,
                             poster_review: that.reader.post_comment,
-                            post_time: formatDateTime(now_time),
                             post_likes: 0,
+                            post_time: formatDateTime(res.data.comment_time),
                             is_like: false,
                             permission_of_delete: true,         //删除评论权限（日志作者/评论发布者）
                         });
-                        this.comments_of_comments.push([]); 
-                        this.reader.post_comment = "";      //发布后清空输入框
+                        that.comments_of_comments.push({
+                            ReplyNum:0,
+                            ReplyList:[],
+                        });
+                        that.reader.post_comment = "";      //发布后清空输入框
                     }
                 })
                 .catch(error => {
-                    alert('操作失败！');
+                    ElMessage.error("操作失败");
                 });
             }
             else{           //评论评论
                 // 评论评论时一定会有父评论
                 let parent_id = this.comments[index1].poster_id;
-                let root_id = NULL;
+                let parentcom_id = this.comments[index1].comment_id;
+                let parent_name = this.comments[index1].poster_name;
+
+                let root_id = this.comments[index1].poster_id
+                let root_name = this.comments[index1].poster_name;
+                let rootcom_id = this.comments[index1].comment_id;
 
                 // 若该评论是二级评论
                 if(index2 >= 0){
-                    // 说明刚才的夫评论实际上是根评论
-                    root_id= parent_id;
-                    parent_id = this.comments_of_comments[index1][index2].poster_id;
+                    // 说明刚才的评论实际上是根评论
+                    parent_id = this.comments_of_comments[index1].ReplyList[index2].poster_id;
+                    parent_name = this.comments_of_comments[index1].ReplyList[index2].poster_name;
+                    parentcom_id = this.comments_of_comments[index1].ReplyList[index2].comment_id;
                 }
-                axios.post('/api/Comments/',{
+                
+                axios.post('/api/Comments',{
+                    parentId:parentcom_id,
+                    rootParent:rootcom_id,
                     userId: that.reader.reader_id,
-                    journalId:that.article_id,
-                    parentId:parent_id,
-                    rootParent:root_id,
+                    journalId: that.article_id,
                     commentContent: that.reader.post_response,
                 })
                 .then(res => {
                     if(res.data.status){
-                        that.comments_of_comments[index1].push({
+                        that.comments_of_comments[index1].ReplyList.push({
                             comment_id: res.data.comment_id,
                             poster_id: that.reader.reader_id,
-                            poster_avatar: that.reader.reader_avatar,
-                            poster_name: that.reader.reader_name,
                             poster_review: that.reader.post_response,
-                            post_time: formatDateTime(now_time),
+                            poster_name: that.reader.reader_name,
+                            poster_avatar: that.reader.reader_avatar,
                             post_likes: 0,
+                            post_time: formatDateTime(res.data.comment_time),
+                            replied_id:parent_id,
+                            replied_name:parent_name,
                             is_like: false,
                             permission_of_delete: true,
                         });
                         that.reader.post_response = "";     //发布后清空输入框
-                        that.reader.respose_index1 = -1;    //为什么这个地方是这样??
+                        that.reader.respose_index1 = -1;    //收起评论发布框
                         that.reader.respose_index2 = -1; 
                     }
                 })
                 .catch(error => {
-                    alert('操作失败！');
+                    ElMessage.error("操作失败");
+                });
+            }
+        },
+
+        // 删除给评论的回复
+        delete_com_reply(index1, index2){
+            // 能够进入本函数的一定有该评论的删除权限
+            var that = this;
+            
+            //c中
+            if(index2 == -1){    
+                axios.delete('/api/Comments/'+that.comments[index1].comment_id)
+                .then(res => {
+                    if(res.data.status){
+                        that.comments.splice(index1, 1);
+                        that.comments_of_comments.splice(index1, 1);
+                    }
+                })
+                .catch(error => {
+                    ElMessage.error("操作失败！");
+                });
+            }
+             //c_of_c中
+            else{                  
+                axios.delete('/api/Comments/'+that.comments_of_comments[index1].ReplyList[index2].comment_id)
+                .then(res => {
+                    if(res.data){
+                        that.comments_of_comments[index1].ReplyList.splice(index2, 1);
+                    }
+                })
+                .catch(error => {
+                     ElMessage.error("操作失败!");
                 });
             }
 
         },
 
-        // 删除给评论的回复
-        delete_com_reply(index1, index2){
-            alert("接口还没写完")
-            // var that = this;
-            // //c中
-            // if(index2 == -1){    
-            //     axios.delete('/api/Comments/'+that.reader.reader_id,{
-            //         comment_id: that.comments[index1].comment_id,
-            //     })
-            //     .then(res => {
-            //         if(res.data){
-            //             that.comments.splice(index1, 1);
-            //             that.comments_of_comments.splice(index1, 1);
-            //         }
-            //     })
-            //     .catch(error => {
-            //         alert('操作失败！');
-            //     });
-
-            // }
-            //  //c_of_c中
-            // else{                  
-            //     axios.post('/api/Comments/'+that.reader.reader_id,{
-            //         comment_id: that.comments_of_comments[index1][index2].comment_id,
-            //     })
-            //     .then(res => {
-            //         if(res.data){
-            //             that.comments_of_comments[index1].splice(index2, 1);
-            //         }
-            //     })
-            //     .catch(error => {
-            //         alert('操作失败！');
-            //     });
-            // }
-
+        handleDeleteOrEdit(event) {
+            // 强制失去焦点
+            let target = event.target;
+            let isDeleted = false;
+            if(target.nodeName === "SPAN") {
+                target = target.parentNode;
+            }
+            target.blur();
+            
+            if(target.innerText === "删除日志") {
+                ElMessageBox.confirm(
+                    "您确定要删除这篇日志吗？",
+                    "请确认操作",
+                    {
+                        confirmButtonText:"确定",
+                        cancelButtonText:'取消',
+                        type:"warning",
+                    }
+                )
+                .then(()=>{
+                    // 确认删除
+                    let that = this;
+                    axios.delete("/api/Journals/" + this.article_id)
+                    .then(res=>{
+                        console.log("hi");
+                        if(res.data.status) {
+                            ElMessage.success("删除成功!");
+                            setTimeout(this.$router.go(-1),1000);
+                        }
+                        else {
+                            console.log(res.data.delete);
+                        }
+                    })
+                    .catch(err=>{
+                        ElMessage.error("删除失败!");
+                        console.log(err);
+                        return;
+                    })
+                })
+                .catch(()=>{
+                    ElMessage({
+                        type:"info",
+                        message:"操作取消"
+                    })
+                })
+            } else {
+                let that=this;
+                this.$router.push({
+                    path:"/Journal/PostJournal",
+                    query:{
+                        mode:"edit",
+                        journal:that.article_id,
+                    }
+                })
+                
+            } //handle delete and edit
         },
+       
     }
 }
 </script>
@@ -670,12 +801,19 @@ nav {
     background-color: #FFFFFF;
     z-index: 0;
 }
+
 main{
-    width: 1200px;
+    width: 1000px;
     margin:auto;
     margin-bottom: 20px;
 }
 /* 固件————点赞收藏 */
+.el-affix {
+    z-index: 200;
+    position: relative;
+    display: inline;
+}
+
 .fixed-interaction{
     height: 100px;
     width: 50px;
@@ -686,19 +824,23 @@ main{
     filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.30));
     border-radius: 25px;
 }
+
 .fixed-interaction.interaction-button{
   background-color: transparent;
   border: none;
   padding: 0;
 }
+
 /* 封面 */
-.details-cover-wrapper{
-    background-color: rgb(172, 177, 194);
-    height: 250px;
-    display: flex;
+.details-wrapper{
+    background-color: rgba(255,255,255,0.7);
+    width:1050px;
+    border-radius: 20px;
+    padding-bottom: 50px;
     justify-content: center;
     align-items: center;
 }
+
 .image-failed {
   display: flex;
   justify-content: center;
@@ -709,12 +851,13 @@ main{
   color: var(--el-text-color-secondary);
   font-size: 30px;
 }
+
 /* 标题 */
 .details-title-wrapper{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
     color: #000;
     font-family: MiSans;
     font-size: 40px;
@@ -722,16 +865,17 @@ main{
     font-weight: 700;
     line-height: normal;
 }
+
 /* 作者 */
 .poster-wrapper{
     margin-top: 10px;
     display: flex;
     align-items: flex-start;
     height: 130px;
-    background-color: white;
 }
 .poster-avatar{
     margin-top: 10px;
+    margin-left:20px;
 }
 .poster-name{
     margin-left: 20px;
@@ -745,7 +889,8 @@ main{
 }
 .interaction{
     margin-top: 30px;
-    margin-left:auto;
+    margin-left: auto;
+    margin-right: 20px;
     color: rgba(91, 85, 85, 0.90);
     font-size: 20px;
     font-style: normal;
@@ -753,18 +898,34 @@ main{
     height: 20px;
     line-height: 20px;
 }
+
+button.el-button.edit-journal {
+    border-radius: 20px;
+}
+
+button.el-button.edit-journal:hover,button.el-button.edit-journal:focus {
+    border-style: none;
+    background-color: #607aee;
+    color: #FFFFFF;
+}
+
 .post-time{
-    line-height: 35px;
+    line-height: 3;
 }
 /* 标签 */
 .details-tabs-wrapper{
-    margin-left: 10px;
+    margin-left: 25px;
     margin-top: 5px;
     height: 30px;
     display: flex;
     flex-wrap: wrap;
     gap: 5px;  
 }
+.body-wrapper {
+    padding: 30px;
+    text-align: left;
+}
+
 /* 评论区 */
 .reviews-div{
     width: 80%;
@@ -828,8 +989,8 @@ main{
     line-height: normal;
 }
 .delete_com_button{
-    margin-left: 650px;
-    color: red;
+    margin-left: 15px;
+    color: #cf1717b3;
 }
 
 .one-reply{

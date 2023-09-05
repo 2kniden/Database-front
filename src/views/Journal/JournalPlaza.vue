@@ -21,25 +21,37 @@
       </div>
   
       <!-- 热门 -->
-      <div class="hotspot clearfix">
-        <el-button class="hot-tag" ref="defaultbtn"
-        @click="isChosen($event)"
-        >全部</el-button>
+      <div>
+        <div class="hotspot clearfix">
+          <el-button class="hot-tag" 
+          v-for="(spot,index) in spots" 
+          :key="index"
+          v-model="nowChosen"
+          :class="chosenSpotStyle(spot)"
+          @click="isChosen($event)"
+          >{{ spot }}</el-button>
+        </div>
+        <!-- 展示类型 -->
+        <el-select v-model="value" value-key="id" placeholder="列表展示方式"
+        @change="changeDisplayType(value)">
+          <el-option
+            v-for="item in displayOptions"
+            :key="item.id"
+            :label="item.label"
+            :value="item"
+          />
+        </el-select>
+      </div> 
 
-        <el-button class="hot-tag" 
-        v-for="(spot,index) in spots" 
-        :key="index"
-        @click="isChosen($event)"
-        >{{ spot }}</el-button>
-      </div>
-      
       <!-- 日志展示 -->
       <div class="card-display">
         <JournalCardsList 
         :pageSize="jppagesize" 
         v-model:keyword="jpcurKeyword" 
         :ifInation="jptoInation" 
-        :urlHeader="jpurl"></JournalCardsList>
+        :readerID="jpreaderId"
+        :authorID="jpauthorId"
+        :displayType="jpdisplayType"></JournalCardsList>
       </div>      
       <!-- 翻页 -->
     </div>
@@ -53,48 +65,123 @@ import JournalCardsList from "@/components/JournalCardsList.vue"
 // 定义需要传递给JournalCardsList组建的值
 const jptoInation = ref(true);
 const jppagesize = ref(10);//journalPlaza中一页可以显示10个组件
-const jpurl = ref("/api/Journals/page");
-let jpcurKeyword = ref("");
+const jpreaderId = ref("");
+const jpauthorId = ref("")
+const jpcurKeyword = ref("");
+const jpdisplayType = ref("1");
+let nowChosen =ref("全部");
+
+//热点搜索
+const spots = ref([
+  "全部","上海","武汉","广州","北京","成都","西藏"
+]);
+
+// 列表展示方式
+// 这里如果使用reactive就会出错……
+const value = ref({
+  id:"1",
+  label:"正常显示"
+})
+const displayOptions = ref([
+  {
+    id:"1",
+    label:"正常显示",
+  },
+  {
+    id:"2",
+    label:"最近发布",
+  },
+  {
+    id:"3",
+    label:"最多点赞",
+  },
+  {
+    id:"4",
+    label:"最多收藏",
+  },
+  {
+    id:"5",
+    label:"最多浏览",
+  },
+  {
+    id:"6",
+    label:"只查看公开日志",
+  }
+]);
 
 //获得搜索节点
-const defaultbtn = ref(null);
+// const defaultbtn = ref(null);
 // name:"JournalPlaza",
 //search
 const input = ref('');
 function submitSearchText() {
   // 同样是通过url把input.value中的值传到后端去，要注意错误处理
   if (input.value != ''){
+    // jpdisplayType.value = 1;
+    // 重置选择器
+    value.value = {
+      id:"1",
+      label:"正常显示"
+    }
     jpcurKeyword.value = input.value;
-    console.log("curKeyword=",jpcurKeyword.value);
+
+    let flag = ref(true);
+    spots.value.forEach((e)=>{
+      if(e === input.value && flag.value === true) {
+        nowChosen.value=e;
+        flag.value=false;
+      }
+      else
+        ;
+    })
+    if(flag.value === true) {
+      nowChosen.value = "";
+    }
+
+    // console.log("curKeyword=",jpcurKeyword.value);
     // 清空input框
-    input.value ="";
+    // input.value ="";
   }
   else{
     console.log("请在搜索框中输入一个值！");
   }
 }
 
-//热点搜索
-const spots = ref([
-  "上海","武汉","广州","北京","成都","西藏"
-]);
+
 function isChosen(e) {
   // 可以直接输出e看看其中的内容！
   // console.log(e);
   // console.log(e.target);
   // console.log(e.target.innerText);
   const chosenTag = ref(e.target.innerText);
+  nowChosen.value = chosenTag.value;
   jpcurKeyword.value = chosenTag.value;
+  // 重置选择器
+  value.value = {
+      id:"1",
+      label:"正常显示"
+  }
+  jpdisplayType.value = "1";
+  // 清空输入框样式
+  input.value='';
   console.log(`你选择了查看${chosenTag.value}的日志!!!!`);
 }
 
-// 无关键词时应默认加载全部日志,此处是自动获取焦点以获得相应的样式
-onMounted(()=>{
-  // 拿到"全部"这个DOM元素
-  console.log(defaultbtn.value.ref);
-  // 设置选定样式
-  defaultbtn.value.ref.focus();
-})
+// 更改选中框的样式
+// 这个地方不能仅仅用获得焦点！！不然在点击分页或其他之后样式就会消失！
+// 这样做可以实现样式动态绑定……是因为跟这个dom相关的数据发生了改变，要进行新的渲染，因此实现更新的吗？
+function chosenSpotStyle(spot) {
+  // console.log(spot);
+  if(nowChosen.value === spot) {
+    return "spot-is-chosen";
+  }
+}
+
+function changeDisplayType(value) {
+  console.log("value.id=",value.id);
+  // 当值发生改变后，就需要把它传递给子组件，以获取相应的结果
+  jpdisplayType.value = value.id;
+}
   
 </script>
   
@@ -140,7 +227,7 @@ position: relative;
   width:500px;
 }
 
-::v-deep .el-input__wrapper {
+:deep(.el-input__wrapper) {
   border-radius: 20px;
   box-shadow: 1px 3px 5px #8097FD;
 }
@@ -190,20 +277,42 @@ button.el-button.hot-tag:hover {
 }
 
 /* 按钮选中后的样式;不懂啊,这个咋实现的orz */
-button.el-button.hot-tag:focus {
-  /* display:block; */
+button.el-button.hot-tag.spot-is-chosen {
   background-color: #6d88fe;
   color: white;
   border-radius: 20px;
   outline-style: none;
-  /* height:32px;
-  width:px; */
 }
+/* button.el-button.hot-tag:focus {
+  display:block;
+  background-color: #6d88fe;
+  color: white;
+  border-radius: 20px;
+  outline-style: none;
+  height:32px;
+  width:px;
+} */
 
 button.el-button.hot-tag.defaultChosen {
   background-color: #6d88fe;
   color: white;
   border-radius: 20px;
+}
+
+.display-type {
+    float: right;
+    /* padding-bottom: 10px; */
+    bottom: 16px;
+    position: relative;
+}
+
+.el-select {
+  left:415px;
+  bottom: 13px;
+}
+
+.el-select.el-input__wrapper.is-focused {
+  border-color: #8097FD;
 }
 
 
@@ -214,11 +323,11 @@ button.el-button.hot-tag.defaultChosen {
   height:405px;
   position:relative;
   left:30px;
-  top: 27px;
+  top: 10px;
   border-radius: 20px;
 }
 
-::v-deep .cards-list {
+:deep(.cards-list) {
   height: 400px;
 }
 
@@ -234,7 +343,7 @@ p.test {
   border-radius: 20px;
 }
 
-::v-deep .pgination-area {
+:deep(.pgination-area) {
   /* 这个width就不咋太好 */
   width: 1000px;
 }

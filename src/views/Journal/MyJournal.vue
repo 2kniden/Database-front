@@ -21,20 +21,30 @@
                 round native-type="submit" 
                 @click="submitSearchText">搜索</el-button>
             </div>
+
+            <el-select v-model="value" value-key="id" placeholder="列表展示方式"
+            @change="changeDisplayType(value)">
+                <el-option
+                    v-for="item in displayOptions"
+                    :key="item.id"
+                    :label="item.label"
+                    :value="item"
+                />
+            </el-select>
         </div>
         <div class="journal-display">
-            <JournalCardsList :pageSize="mjpagesize" v-model:keyword="mjcurKeyword" :ifInation="mjtoInation" :urlHeader="mjurl"></JournalCardsList>
+            <JournalCardsList :pageSize="mjpagesize" v-model:keyword="mjcurKeyword" :ifInation="mjtoInation" :readerID="mjreaderId" :authorID="mjauthorId" :displayType="mjdisplayType"></JournalCardsList>
         </div>
     </div>
 
-    <div class="map-display-BG">
+    <!-- <div class="map-display-BG">
         <div class="map-display">
             <p>这里尝试插入地图</p>
         </div>
         <div class="map-img-display">
             <img class="map-bgimg" src="@/assets/journal/myJournal_map.png">
         </div>
-    </div>
+    </div> -->
 </template>
 
 <script setup>
@@ -44,34 +54,95 @@ import { useRouter } from "vue-router"
 
 //需要传递给卡片展示子组件的信息
 const mjtoInation = ref(true);
-const mjpagesize = ref(6);
+const mjpagesize = ref(8);
 let mjcurKeyword = ref("");
+const mjdisplayType = ref("1");
 // 这里应该请求当前用户的ID，先暂时写死
-const userID = ref("843526A2B7784E73B28E73C797A2C81C");
-const mjurl = ref("/api/Journals/user/page/"+ userID.value);
+// reader和全部日志的author应该是同一个人
+const mjreaderId = ref("843526A2B7784E73B28E73C797A2C81C");
+const mjauthorId = ref("843526A2B7784E73B28E73C797A2C81C");
 const input = ref("");
 // 这些数据都是以v-bind的形式单向绑定的；即父组件检测到这些组件变化后，会相应修改子组件中的对应参数
+
+const value = ref({
+  id:"0",
+  label:"全部日志"
+})
+const displayOptions = ref([
+    {
+        id:"0",
+        label:"全部日志"
+    },
+    {
+        id:"1",
+        label:"正常显示",
+    },
+    {
+        id:"2",
+        label:"最近发布",
+    },
+    {
+        id:"3",
+        label:"最多点赞",
+    },
+    {
+        id:"4",
+        label:"最多收藏",
+    },
+    {
+        id:"5",
+        label:"最多浏览",
+    },
+    {
+        id:"6",
+        label:"只查看公开日志",
+    },
+    {
+        id:"7",
+        label:"只查看私密日志",
+    }
+]);
 
 //search
 // 当检测到用户查询时，需要重新渲染子组件中的卡片列表，即调用子组件函数
 function submitSearchText() {
   if (input.value != ''){
+    // 用户想通过关键词查询
+    // 则改变关键词，默认按照正常显示展示
     mjcurKeyword.value = input.value;
-    console.log("curKeyword=",mjcurKeyword.value);
-    // 清空input框
-    input.value ='';
-    // getCardLists();
+    value.value = {
+      id:"1",
+      label:"正常显示"
+    }
+    mjdisplayType.value = "1";
   }
   else{
     console.log("请在搜索框中输入一个值！");
   }
 }
 
+// 改变查询类型
+function changeDisplayType(value) {
+    if(value.id === "0") {
+        // 说明用户此时想查询全部日志,那么改变请求参数，并清空关键词
+        mjdisplayType.value = "1";
+        mjcurKeyword.value = "";
+        // 清空输入框
+        input.value ='';
+    }
+    else {
+        mjdisplayType.value = value.id;
+    }
+}
+
 //post
 const toPost=useRouter()
 const postJournal = () => {
     toPost.push({
-        path:"/Journal/PostJournal"
+        path:"/Journal/PostJournal",
+        qeury:{
+            mode:"post"
+        }
     })
 }
 </script>
@@ -96,7 +167,7 @@ const postJournal = () => {
     float:left;
     border-radius: 20px;
     background-color: rgba(255,255,255,0.5);
-    width:730px;
+    width:1050px;
     height:540px;
 }
 
@@ -166,7 +237,7 @@ const postJournal = () => {
     }
 
     ::v-deep .pgination-area {
-        width: 650px;
+        width: 870px;
         align-items: center;
         display: flex;
         justify-content: center;

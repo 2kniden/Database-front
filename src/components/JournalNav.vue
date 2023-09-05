@@ -24,7 +24,7 @@
         </router-link>
       </li>
       <!-- 仅仅是为了测试一些功能弄的新界面 -->
-      <li class="choice clearfix">
+      <!-- <li class="choice clearfix">
         <router-link to="/Journal/JournalTest">
           <div class="nav-icon">
             <img src="../assets/journal/my-journal-icon.png"/>
@@ -33,7 +33,7 @@
             <p>测试</p>
            </div>
         </router-link>
-      </li>
+      </li> -->
 
       <!-- 图片展示 -->
       <li class="clearfix">
@@ -55,12 +55,12 @@
       let imgname = ref();
       const route = useRoute();
       watch(route,(to)=>{
-      console.log(route.path);
         if(route.path === "/Journal/JournalPlaza") {
           imgname.value = 'journal-plaza-bgPNG.png';
-        }
-        if(route.path === "/Journal/MyJournal") {
+        } else if(route.path === "/Journal/MyJournal") {
           imgname.value = 'my-journal-bgPNG.png';
+        } else {
+          imgname.value = 'other-page-bgPNG.png';
         }
       },{immediate:true})
 
