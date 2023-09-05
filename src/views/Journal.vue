@@ -1,6 +1,8 @@
 <template lang="en">
   <div class="JournalPage">
     <!-- 导航栏 -->
+    <!-- 外部容器指定位置 -->
+    <!-- 样式直接在目标上设定 -->
     <nav calss="navBar clearfix">
         <Header></Header>
     </nav>
@@ -21,15 +23,25 @@
 </template>
 
 <script>
+import { component } from "vue";
 import Header from "@/components/Header";
 import JournalNav from "@/components/JournalNav";
 
 export default {
-  name:"Journal",
-  components:{
-    Header,
-    JournalNav
-  }
+    name:"Journal",
+    components: {
+            Header,
+            JournalNav
+    },
+    beforeCreate () {
+        this.$nextTick(()=>{
+        document.body.setAttribute('style', 'background:#F1F3FF')
+        });
+    },
+    //实例销毁之前钩子--移除body 标签的属性style
+    beforeDestroy () {
+        document.body.removeAttribute('style');
+    }
 }
 </script>
 
@@ -69,6 +81,12 @@ nav {
     width:100%;
     /* margin-bottom: 10px; <-- 写在这里是为了提醒自己，这个地方会出现嵌套块元素塌陷的问题*/
     background-color: #FFFFFF;
+    position:relative;
+    z-index: 10000;/*为了让navbar浮在所有元素的上方 */
+}
+
+.header {
+    background-color: #FFFFFF;
 }
 
 main {
@@ -79,7 +97,7 @@ main {
 
 .sub-nav{
     float:left;
-    background-color: grey;
+    /* background-color: grey; */
     height:100%;
     width:150px;
     margin:20px 5px 10px;
@@ -87,8 +105,6 @@ main {
 
 .content-display {
     float:left;
-    background: #F1F3FF;
-    opacity: 0.5;
     width:1000px;
     margin:20px 20px;
 }

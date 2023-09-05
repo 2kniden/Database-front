@@ -1,7 +1,8 @@
 import Mock from 'mockjs'
 
 // 是否使用mock.js模拟数据
-let useMock = true
+// let useMock = true
+let useMock = false;
 if (useMock) {
     Mock.mock('/Team/TeamSquare/', 'get', {
         team_info:[
@@ -486,6 +487,79 @@ if (useMock) {
         console.log(options.body);
         return true;
     })
+
+    // 尝试模拟分页功能
+    // 定义数据模板
+    const journaldata = Mock.mock({
+        "cardsList|25":[
+            {
+                "journal_id|+1":1,
+                "photoUrl":"https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
+                "title":"【魔都暴走记】你是我脑海中鲜明的记忆，做一场与上海有关的白日梦。",
+                "publishTime":"@date",
+                "journalTag":"@county(true)",
+                "authorization|1-3":1
+            }
+        ]
+    })
+
+    // 获取参数
+    const getQuery = (url,name)=>{
+        const index = url.indexOf('?');
+        if(index>-1){
+            const searchStr = url.substr(index+1);
+            const searchArr = searchStr.split('&');
+            for(var i=0;i<searchArr.length;i++){
+                const itemArr = searchArr[i].split('=');
+                // console.log(name,itemArr[0]);
+                if(name === itemArr[0]){
+                    return itemArr[1];
+                }
+            }
+        }
+    }
+    // mockjs必须要对url进行不断地判断才能够取参数，所以这里暂时这样写get请求
+    // /api\/Journals\/page\?pageNum=.*&pageSize=.*&keyword=.*/
+    // 死活404的原因竟然是‘get’错写成了“GET”了…………啊啊啊啊啊我好恨；注意url字符串是不需要再用引号的
+    Mock.mock(/Journal\/page\?pageNum=.*&pageSize=.*&keyword=.*/,'get',(option)=>{
+        const pageNum = getQuery(option.url,'pageNum');
+        const pageSize = getQuery(option.url,'pageSize');
+        const keyWord = getQuery(option.url,'keyword');//但是这个地方的截取是有问题的
+        console.log("pageNum",pageNum,"pageSize",pageSize,"keyWord",keyWord,"@");
+        // 数据总条数
+        const total = journaldata.cardsList.length;
+        // 数据总页数
+        const totalPage = Math.ceil(total/pageSize);
+        console.log("totalpage=",totalPage);
+        if(pageNum<=totalPage) {
+            //数据截取
+            // 截取的开始位置
+            const start = (pageNum - 1)*pageSize;
+            // 截取的结束位置
+            const end = pageNum*pageSize;
+            // 数据截取
+            const list = journaldata.cardsList.slice(start,end);
+            // alert("keyword=",keyWord);
+            return {
+                totalNum:total,
+                journalList:list,
+                keyword:keyWord
+            }
+        }
+        else {
+            return {
+                totalNum:-1,
+                journalList:[],
+                keyword:keyWord
+            }
+        }
+    })
+
+    // Mock.mock(/Journal\/JournalTest\?pageNum=.*&pageSize=.*&keyword=.*/,'get',(options)=>{
+    //     console.log(options);
+    //    return ["1","2","3"];
+    // })
+   
 }
 
 export default Mock

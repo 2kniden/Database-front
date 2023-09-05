@@ -95,7 +95,7 @@ export default {
   /*background-color: #ffffff;*/
   /*padding: 20px;*/
   width: 100vw;
-  height: 80px;
+  height: 65px;
   position: fixed;
   display: flex;
   top: 0;
@@ -114,8 +114,8 @@ export default {
 .main_logo_icon{
   position: relative;
   display: flex;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   margin-top: 12px;
   margin-left: 19px;
 }
@@ -130,7 +130,7 @@ export default {
 
   color: #8097FD;
   font-family: Microsoft YaHei;
-  font-size: 26px;
+  font-size: 22px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
