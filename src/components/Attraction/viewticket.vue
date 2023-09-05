@@ -52,42 +52,7 @@ export default {
         buynum: Number,
     },
     
-    mounted() {
-        this.initializeData();
-    },
-    methods:{
-        initializeData(){
-            console.log(this.titleint,this.isCollectedint,this.isRefundint)
-            if(this.titleint===0){
-                this.title='成人票'
-                this.standard='年龄18岁以上年龄18岁以上年龄18岁以上年龄18岁以上年龄18岁以上年龄18岁以上'
-            }else if(this.titleint===1){
-                this.title='学生票'
-                this.standard='年龄12岁以上年龄12岁以上年龄12岁以上年龄12岁以上年龄12岁以上年龄12岁以上'
-        
-            }else if(this.titleint===2){
-                this.title='老年票'
-                this.standard='年龄55岁以上年龄55岁以上年龄55岁以上年龄55岁以上年龄55岁以上年龄55岁以上'
-        
-            }else{
-                this.title='儿童票'
-                this.standard='年龄12岁以上年龄55岁以上年龄55岁以上年龄55岁以上年龄55岁以上年龄55岁以上'
-        
-            }
-
-            if(this.isCollectedint===0){
-                this.isCollected='无需取票'
-            }else{
-                this.isCollected='需要取票'
-            }
-
-            if(this.isRefundint===0){
-                this.isRefund='不可退票'
-            }else{
-                this.isRefund='可退票'
-            }
-        }
-    }
+   
 }
 </script>
 

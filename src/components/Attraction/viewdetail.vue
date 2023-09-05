@@ -2,9 +2,9 @@
     <div class="detaildec">
         <div class="dtitle">{{ title }}</div>
         <div class="dscore">{{ score }}分</div>
-        <div class="dcom">
+        <div class="dcom" >
             ({{ commentnum }})条评论
-            <img class="dcomimg" src="../../assets/attractions/highrank/right-double-arrow.svg" alt="">
+            <!-- <img class="dcomimg" src="../../assets/attractions/highrank/right-double-arrow.svg" alt=""> -->
         </div>
         <div class="dlocation">
             <img class="dloc" src="../../assets/location.svg" alt="">
@@ -75,7 +75,8 @@ export default {
     methods:{
         changeValue(onHover){
             this.visible=onHover;
-        }
+        },
+        
     }
 }
 </script>

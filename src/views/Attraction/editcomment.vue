@@ -41,7 +41,8 @@
                     placeholder="请输入评论详情" show-word-limit type="textarea" />
             </el-form-item>
             <el-form-item label="上传图片" :label-width="formLabelWidth">
-                <!-- 这里有问题 -->
+                <!-- 这里有问题不能上传图片 -->
+                
                 <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
                     :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3"
                     :on-exceed="handleExceed" :file-list="fileList" :on-success="uploadFileSuccess"
@@ -68,6 +69,8 @@ export default {
             iconvalue1: 0,
             iconvalue2: 0,
             iconvalue3: 0,
+            fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
+  
             texts: ['极差', '失望', '一般', '满意', '惊喜'],
             comment: {
                 // 确定是哪条评论
