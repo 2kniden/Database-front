@@ -15,8 +15,19 @@
       <div class="imgtitle">TRAVEL</div>
       <div class="location">
         选择你所在的城市
-        <img src="../assets/location.svg" alt="location icon" class="imgicon" @click="choosemap">
-        上海
+        <img src="../assets/location.svg" alt="location icon" class="imgicon" @click="showCascader">
+        {{chosencity}}
+        <!-- 遮罩层 -->
+        <div class="mask" v-show="showMask">
+          <!-- 内容区域，包含 el-cascader -->
+          <div class="content">
+            <el-cascader size="small" :options="options" v-model="selectedOptions" @change="handleChange"></el-cascader>
+            <el-button class="mapbtn" size="mini" round @click="hideCascader">确定</el-button>
+          </div>
+
+        </div>
+
+
         <!-- 这里需要设立自己来选择定位的逻辑，这里可以用谷歌的逻辑去写 -->
       </div>
     </div>
@@ -60,28 +71,171 @@ import Search from '@/components/Attraction/search.vue'
 import StartTitle from '@/components/Attraction/smallfunc/startline.vue'
 import Header from '@/components/Header.vue'
 import axios from 'axios'
+// 城市选择器
+import { pcTextArr } from "element-china-area-data";
+
 export default {
   mounted() {
     this.initializeData();//默认位置是上海
   },
   data() {
     return {
+
       // 热门景点缩略图列表
       recommendpiclist: [],
-      chosencity: '上海',
       // 高分推荐列表
       highranklist: [],
+      // 城市选择器
+      optionsbefore: pcTextArr,
+      showMask: false, // 控制遮罩层显示/隐藏
+      options: [
+        {
+          value: '北京市',
+          label: '北京市'
+        },
+        {
+          value: '天津市',
+          label: '天津市'
+        },
+        {
+          value: '河北省',
+          label: '河北省'
+        },
+        {
+          value: '山西省',
+          label: '山西省'
+        },
+        {
+          value: '内蒙古自治区',
+          label: '内蒙古自治区'
+        },
+        {
+          value: '辽宁省',
+          label: '辽宁省'
+        },
+        {
+          value: '吉林省',
+          label: '吉林省'
+        },
+        {
+          value: '黑龙江省',
+          label: '黑龙江省'
+        },
+        {
+          value: '上海市',
+          label: '上海市'
+        },
+        {
+          value: '江苏省',
+          label: '江苏省'
+        },
+        {
+          value: '浙江省',
+          label: '浙江省'
+        },
+        {
+          value: '安徽省',
+          label: '安徽省'
+        },
+        {
+          value: '福建省',
+          label: '福建省'
+        },
+        {
+          value: '江西省',
+          label: '江西省'
+        },
+        {
+          value: '山东省',
+          label: '山东省'
+        },
+        {
+          value: '河南省',
+          label: '河南省'
+        },
+        {
+          value: '湖北省',
+          label: '湖北省'
+        },
+        {
+          value: '湖南省',
+          label: '湖南省'
+        },
+        {
+          value: '广东省',
+          label: '广东省'
+        },
+        {
+          value: '广西壮族自治区',
+          label: '广西壮族自治区'
+        },
+        {
+          value: '海南省',
+          label: '海南省'
+        },
+        {
+          value: '重庆市',
+          label: '重庆市'
+        },
+        {
+          value: '四川省',
+          label: '四川省'
+        },
+        {
+          value: '贵州省',
+          label: '贵州省'
+        },
+        {
+          value: '云南省',
+          label: '云南省'
+        },
+        {
+          value: '西藏自治区',
+          label: '西藏自治区'
+        },
+        {
+          value: '陕西省',
+          label: '陕西省'
+        },
+        {
+          value: '甘肃省',
+          label: '甘肃省'
+        },
+        {
+          value: '青海省',
+          label: '青海省'
+        },
+        {
+          value: '宁夏回族自治区',
+          label: '宁夏回族自治区'
+        },
+        {
+          value: '新疆维吾尔自治区',
+          label: '新疆维吾尔自治区'
+        }
+      ],
+      selectedOptions: [],
+      chosencity:'上海市',
     }
   },
 
   methods: {
-
+    handleChange(value) {
+      //value代表每个地方的区域码
+      console.log(value);
+    },
     ToDetail() {
       this.goToTop();
       this.$router.push('/attraction-detail');
     },
-    choosemap() {
-
+    showCascader() {
+      // 显示遮罩层
+      this.showMask = true;
+    },
+    hideCascader() {
+      // 隐藏遮罩层
+      this.showMask = false;
+      this.chosencity=this.selectedOptions[0];
     },
     goToTop() {
       window.scrollTo(0, 0);
@@ -96,7 +250,7 @@ export default {
         .catch((error) => {
           console.error('Error fetching data:', error);
         });
-        // 获取高分推荐
+      // 获取高分推荐
       axios
         .get('/Attraction/highrank?attr_position=' + this.chosencity)
         .then((response) => {
@@ -118,7 +272,8 @@ export default {
     StartTitle,
     Search,
     Header,
-    axios
+    axios,
+    pcTextArr
   }
 }
 
@@ -221,4 +376,31 @@ export default {
   font-size: 14px;
   color: #999999;
 }
+
+/* 遮罩层样式 */
+.mask {
+  position: fixed;
+  top: -70px;
+  left: 75px;
+  width: 200px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 内容区域样式 */
+.content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+}
+.mapbtn{
+  margin-top: 10px;
+
+}
+
+
 </style>

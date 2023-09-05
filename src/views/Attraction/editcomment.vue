@@ -41,6 +41,7 @@
                     placeholder="请输入评论详情" show-word-limit type="textarea" />
             </el-form-item>
             <el-form-item label="上传图片" :label-width="formLabelWidth">
+                <!-- 这里有问题 -->
                 <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
                     :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3"
                     :on-exceed="handleExceed" :file-list="fileList" :on-success="uploadFileSuccess"
