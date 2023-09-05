@@ -1,13 +1,31 @@
 <!-- 这里一整个页面都要做成一个组件表示详情部分 -->
 <template>
     <div class="tickitdetail">
-        <div class="tickettitle">{{ title }}</div>
-        <div class="ticketstan">购票标准：{{ standard }}</div>
+        <div class="tickettitle">
+            <div v-if="titleint===0">成人票</div>
+            <div v-else-if="titleint===1">学生票</div>
+            <div v-else-if="titleint===2">老年票</div>
+            <div v-else>儿童票</div>
+        </div>
+        <div class="ticketstan">
+            <div v-if="titleint===0">购票标准：18周岁以上，60周岁以下的成年人全票</div>
+            <div v-else-if="titleint===1">购票标准：大、中、小学生(含港、澳、台学生,不含成人教育、研究生)，凭学生证或学校介绍信，可购学生票</div>
+            <div v-else-if="titleint===2">购票标准：60岁以上(含60岁)老年人凭身份证原件可享老年优惠</div>
+            <div v-else>购票标准：6周岁(含6周岁)以下或身高1.2米(含1.2米)以下儿童免票参观</div>
+            
+        </div>
         <div class="tickettag">
-            <div class="ttag">{{isRefund}}</div>
-            <div class="ttag">{{isCollected}}</div>
+            <div class="ttag">
+                <div v-if="isCollectedint">需要取票</div>
+                <div v-else>无需取票</div>
+            </div>
+            <div class="ttag">
+                <div v-if="isRefundint">可退票</div>
+                <div v-else>不可退票</div>
+            </div>
         </div>
         <div class="tbottom">
+            <!-- 这里还没想好 -->
             <span class="tpresent">所选日期</span>
             
         </div>
@@ -33,20 +51,13 @@ export default {
         price: Number,
         buynum: Number,
     },
-    data() {
-        return {
-            title: '',
-            standard: '',
-            isCollected: '',//是否需要取票（对应可取票、不可取票标签展示）
-            isRefund: '',
-
-        }
-    },
+    
     mounted() {
         this.initializeData();
     },
     methods:{
         initializeData(){
+            console.log(this.titleint,this.isCollectedint,this.isRefundint)
             if(this.titleint===0){
                 this.title='成人票'
                 this.standard='年龄18岁以上年龄18岁以上年龄18岁以上年龄18岁以上年龄18岁以上年龄18岁以上'

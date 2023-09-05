@@ -41,7 +41,7 @@
         <div class="rank">
           <div class="container">
             <RankView v-for="item in highranklist" :key="item.id" :picsrc="item.picsrc" :title="item.title"
-              :score="item.score" :dec="item.dec"></RankView>
+              :score="item.score" :dec="item.dec" @click="ToDetail()"></RankView>
           </div>
           <div class="endline">
             -- 搜索查看更多精彩 --

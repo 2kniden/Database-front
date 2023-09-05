@@ -26,12 +26,26 @@
             <span class="dp">{{ price }}</span>
             起
         </div>
-        <div class="dweather" title="更多信息：{{更多信息}}">
-            <div>
+        <div class="dweather" >
+            <div class="dwpop" @mouseenter="changeValue(true)" @mouseleave="changeValue(false)">
                 {{ date }}&nbsp;&nbsp;&nbsp;{{ weather }}
+
             </div>
+            <div v-if="visible">
+                <div class='pop' id='pop'>
+                    <div id='triangle' class='triangle-bottom'></div>
+                </div>
+                <div class="dwword">
+                    当前温度：{{ temNow }}°C<br>
+                    今日最高温：{{ temHigh }}°C<br>
+                    今日最低温：{{ temLow }}°C
+                </div>
+
+            </div>
+
             <!-- 这里还差展示气泡框 -->
-            
+
+
         </div>
     </div>
 </template>
@@ -55,7 +69,12 @@ export default {
     },
     data() {
         return {
-            visible: false
+            visible: false,
+        }
+    },
+    methods:{
+        changeValue(onHover){
+            this.visible=onHover;
         }
     }
 }
@@ -168,5 +187,43 @@ export default {
     margin-top: 5px;
     font-size: 10px;
     color: #888;
+}
+
+/* 气泡框 */
+.dwpop {
+    position: relative;
+}
+.dwword{
+    position: absolute;
+    width: 200px;
+    top: 40px;
+    transform: translate(-32%, 0%);
+
+}
+.pop {
+    width: 180px;
+    height: 75px;
+    border: 2px solid #dadfff;
+    border-radius: 4px;
+    box-shadow: 2px 2px 2px #dadfff;
+    position: absolute;
+    top: 30px;
+    transform: translate(-30%, 0%);
+    background-color: white;
+}
+
+.triangle-bottom {
+    width: 0;
+    height: 0;
+    border-bottom: 10px solid #dadfff;
+    /* 使用border-bottom来创建倒三角 */
+    border-left: 10px dashed transparent;
+    border-right: 10px dashed transparent;
+    position: absolute;
+    top: -10px;
+    /* 调整top值来放在.pop的顶部 */
+    left: 80px;
+    z-index: 2;
+    /* 设置.triangle-top的z-index值高于.pop */
 }
 </style>

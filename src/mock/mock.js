@@ -530,7 +530,6 @@ if (useMock) {
             titleint: 0,//这里根据数据0-成人、1-学生、2-老人//还有分别的购票标准standard
             isCollectedint: 1,//是否需要取票（对应可取票、不可取票标签展示）
             isRefundint: 0,//是否可退：0-不可退、1-可退（对应了可退票、不可退票标签展示）
-            availabledays: 30,//可选票未来天数
             // 下面都是三种的:票价
             price: 689,
             // 购买数量
@@ -540,7 +539,6 @@ if (useMock) {
             titleint: 1,//这里根据数据0-成人、1-学生、2-老人//还有分别的购票标准standard
             isCollectedint: 0,//是否需要取票（对应可取票、不可取票标签展示）
             isRefundint: 1,//是否可退：0-不可退、1-可退（对应了可退票、不可退票标签展示）
-            availabledays: 30,//可选票未来天数
             // 下面都是三种的:票价
             price: 689,
             // 购买数量

@@ -7,12 +7,12 @@
             </div>
             <div class="attrright">
                 <div class="attrhead">
-                    <div class="attrname">{{attrname}}</div>
-                    <div class="attrstar">{{attrstar}}分</div>
+                    <div class="attrname">{{ attrname }}</div>
+                    <div class="attrstar">{{ attrstar }}分</div>
                 </div>
                 <div class="comdetail">
                     <div class="comword">
-                        {{comword}}
+                        {{ comword }}
                     </div>
                     <div class="comdetailimg">
 
@@ -25,14 +25,26 @@
                 </div>
                 <div class="attrcommeg">
                     <!-- 这里需要date组件 -->
-                    <div class="commeg comtime">{{comtime}}</div>
+                    <div class="commeg comtime">{{ comtime }}</div>
                     <div class="commeg comlikes">
-                        <img class="licon" src="../../../assets/iconfont/like.svg" alt="">
-                        {{comlikes}}
+
+                        <img class="licon" src="../../../assets/attractions/icon/like.svg" alt="" v-if="!is_liked"
+                            @click="changelikestatus">
+                        <img class="licon" src="../../../assets/attractions/icon/like-fill.svg" alt="" v-else @click="changelikestatus">
+
+                        {{ comlikes }}
                     </div>
                     <div class="commeg comunlikes">
-                        <img class="licon" src="../../../assets/iconfont/unlike.svg" alt="">
-                        {{comunlikes}}
+
+                        <img class="licon" src="../../../assets/attractions/icon/unlike.svg" alt="" v-if="!is_unliked"
+                            @click="changeunlikestatus">
+                        <img class="licon" src="../../../assets/attractions/icon/unlike-fill.svg" alt="" v-else
+                            @click="changeunlikestatus">
+
+                        {{ comunlikes }}
+                    </div>
+                    <div class="commeg comdel">
+                        <img class="licon" src="../../../assets/attractions/icon/delete.svg" alt="" v-if="is_del">
                     </div>
                 </div>
 
@@ -43,16 +55,34 @@
 </template>
 
 <script>
-export default{
-    props:{
-        userlog:String,
-        attrname:String,
-        attrstar:String,
-        comword:String,
-        comtime:String,
-        comlikes:Number,
-        comunlikes:Number,
-        picsrc:Array,
+export default {
+    props: {
+        userlog: String,
+        attrname: String,
+        attrstar: String,
+        comword: String,
+        comtime: String,
+        comlikes: Number,
+        comunlikes: Number,
+        picsrc: Array,
+
+    },
+    data() {
+        return {
+            // 获取到的点赞、拉踩状态码以及删除权限，这里接口还没搞好
+            is_liked: false,
+            is_unliked: false,
+            is_del:false,
+        }
+
+    },
+    methods: {
+        changelikestatus() {
+            this.is_liked = !this.is_liked;
+        },
+        changeunlikestatus(){
+            this.is_unliked=!this.is_unliked;
+        }
 
     }
 }
@@ -147,5 +177,4 @@ export default{
     width: 12px;
     height: 12px;
     transform: translate(0, 15%);
-}
-</style>
+}</style>

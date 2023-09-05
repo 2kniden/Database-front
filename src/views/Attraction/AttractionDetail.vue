@@ -68,7 +68,7 @@
                     <div class="cheadleft">
                         <div>
                             <div class="maintitle">用户点评:</div>
-                            <div class="comnum"> (1234条)</div>
+                            <div class="comnum"> ({{totalItems}}条)</div>
                         </div>
 
                     </div>
