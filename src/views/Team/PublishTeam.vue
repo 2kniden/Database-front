@@ -114,6 +114,20 @@
             type="text"
           />
         </el-form-item>
+        <!-- 小队二维码 -->
+        <el-form-item label="小队二维码" :label-width="formLabelWidth">
+          <div>
+            <div style="float: left; margin-bottom: 10px;">
+              <el-button type="primary" dark @click="handleClick_cover">选择图片</el-button>
+              <input type="file" ref="fileInput" style="display: none" accept="image/*" @change="handleCoverUpload">
+            </div>
+            <div class="clearfloat"></div>
+            <!-- 展示图片 -->
+            <div v-if="teamContactImg">
+              <el-image class="team-image" :src="teamContactImg" :fit="fit" />
+            </div> 
+          </div>
+        </el-form-item>
       </el-form>
     </div>
   
@@ -129,6 +143,7 @@
   import { nextTick, ref } from "vue";
   import { ElMessage, ElInput } from "element-plus";
   import { useRoute, useRouter } from "vue-router";
+  import OSS from 'ali-oss';
   import axios from "axios";
   const router = useRouter();
   // 信息名称长度
@@ -156,6 +171,7 @@
     destination: "",
     time: [],
     posttime: "",
+    teamContact: ""
   });
   
 
@@ -262,6 +278,66 @@
     // 强制刷新当前路由
 
   };
+
+  // 上传小队二维码
+  const OSSOptions = {
+    endpoint:'oss-cn-shanghai.aliyuncs.com',
+    accessKeyId:'LTAI5tMoioGDkZfV6raRtiFi',
+    accessKeySecret:'jp9tXLlFAIcf9PNOnRJVB5jDiAL4OV',
+    bucket:'jiyidatabase',
+  }
+  const ossClient = new OSS(OSSOptions)
+  console.log(ossClient)
+
+  const fileInput = ref(null)
+  const teamContactImg = ref('')
+
+  const handleClick_cover = () => {
+    fileInput.value.click()
+  }
+
+  const handleCoverUpload = (event) => {
+    const files = event.target.files
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i
+
+    if (!allowedExtensions.exec(files[0].name)) {
+      alert('只允许上传图片文件')
+      return
+    }
+
+    const formData = new FormData()
+    formData.append('file', files[0])
+    const coverObj = formData.get('file')
+
+    // 配置oss相关
+    const storeAs = 'contact/'
+
+    // 并不,这个只是对象
+    console.log(coverObj)
+    // 增加时间戳、防止名称重复
+    const imgCreatedTime = getCurrentTime()
+
+    // 重命名:
+    const ext = coverObj.name.split('.').pop() // 后缀名只能为最后一个
+    const coverRename = coverObj.name.split(ext)[0] + imgCreatedTime + cur_user_id + '.' + ext
+    console.log(coverRename)
+
+    // 上传给oss
+    // const promiseList = Promise(that.ossClient.put(storeAs+coverRename,coverObj));
+
+    ossClient.put(coverRename, coverObj)
+      .then(res => {
+        console.log('yes')
+        teamContactImg.value = res.url
+        team.value.teamContact = teamContactImg.value
+        console.log(team.value.teamContact)
+      })
+      .catch(err => {
+        console.log('no')
+      });
+  }
+
+
   </script>
   
   <style>
@@ -289,5 +365,11 @@
   .demo-date-picker .block:last-child {
     border-right: none;
   }
+
+  .team-image{
+  width: 150px; 
+  /* height: 150px;  */
+  border-radius: 15px;
+}
   </style>
   
