@@ -12,13 +12,25 @@ import JournalDetails from "@/views/Journal/JournalDetails.vue";
 import MyJournal from "@/views/Journal/MyJournal.vue";
 import JournalPlaza from "@/views/Journal/JournalPlaza.vue"
 import PostJournal from "@/views/Journal/PostJournal.vue";
-import JournalTest from "@/views/Journal/JournalTest.vue"
+import JournalTest from "@/views/Journal/JournalTest.vue";
+import Login from "@/views/Login/login";
+import MissPass from "@/views/Login/missPass";
 
 const routes = [
   {
     path: "/",
     name: "home",
     component: Home
+  },
+  {
+    path: "/Login",
+    name:"login",
+    component: Login
+  },
+  {
+    path:"/MissPass",
+    name:"missPass",
+    component: MissPass
   },
   {
     path: "/Attraction",

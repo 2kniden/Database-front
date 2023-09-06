@@ -74,22 +74,7 @@
 
     <div class="detail-page">
       <!-- 底下的曲线部分 -->
-      <canvas id="part1" class="part"></canvas>
-      <div class="part">
-
-      </div>
-      <div class="part">
-
-      </div>
-      <div class="part">
-
-      </div>
-      <div class="part">
-
-      </div>
-      <div class="part">
-
-      </div>
+      <img class="curve-line" src="../assets/home/curveLine.png"/>
     </div>
 
   </div>
@@ -425,10 +410,10 @@ export default {
   /*margin-right: calc(100% - 100vw);*/
   /*padding-right: 17px;*/
 }
-.part{
-  position: relative;
-  display: flex;
-  width:100vw;
-  height: 1080px;
+.curve-line{
+  position: absolute;
+  height: 5400px;
+  width: 1200px;
+  margin-left: -600px;
 }
 </style>
