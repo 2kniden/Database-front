@@ -15,6 +15,9 @@ import PostJournal from "@/views/Journal/PostJournal.vue";
 import JournalTest from "@/views/Journal/JournalTest.vue";
 import Login from "@/views/Login/login";
 import MissPass from "@/views/Login/missPass";
+import AttractionSearch from '@/views/Attraction/AttractionSearch';
+import AttractionDetail from '@/views/Attraction/AttractionDetail';
+import CommentEdit from '@/views/Attraction/editcomment'
 
 const routes = [
   {
@@ -101,6 +104,9 @@ const routes = [
     name: "teamDetails",
     component: TeamDetails
   }
+  { path: "/attraction-search", name: "attractionsearchs", component: AttractionSearch },
+  { path: "/attraction-detail", name: "attractiondetails", component: AttractionDetail },
+  { path: "/comment-edit", name: "commentedit", component: CommentEdit }
 ];
 
 const router = createRouter({
