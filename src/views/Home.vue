@@ -65,9 +65,14 @@
       </div>
 
       <!--首页下部内容-->
-      <div class="change-photo">
-        <img class="left-change-photo" src="../assets/home/left-change.png" @click="moveCircleLeft"/>
-        <img class="right-change-photo" src="../assets/home/right-change.png" @click="moveCircleRight"/>
+      <div class="down-content">
+        <!--变换图片-->
+        <div class="change-photo">
+          <img class="left-change-photo" src="../assets/home/left-change.png" @click="moveCircleLeft"/>
+          <img class="right-change-photo" src="../assets/home/right-change.png" @click="moveCircleRight"/>
+        </div>
+        <!--登陆注册按钮-->
+        <div class="login-register" @click="changeToLogin">登录/注册</div>
       </div>
 
     </div>
@@ -135,12 +140,8 @@ export default {
     onCanplay(ev){
       console.log(ev, '可以播放')
     },
-    initCanvasPartOne(){
-      console.log("初始化part1的canvas");
-      let canvas = document.getElementById("part1")
-      let ctx = canvas.getContext('2d');
-
-      //绘制第一部分的图形
+    changeToLogin(){
+      this.$router.push("/login");
     }
   },
   mounted() {
@@ -284,6 +285,12 @@ export default {
   line-height: normal;
 }
 /* 下部的内容 */
+.down-content{
+  position: relative;
+  display: flex;
+  width: 1580px;
+  height: 180px;
+}
 .change-photo{
   position: relative;
   display: flex;
@@ -304,6 +311,25 @@ export default {
   width: 50px;
   height: 50px;
   margin-left: 50px;
+}
+.login-register{
+  position: relative;
+  display: flex;
+  width: 350px;
+  height: 100px;
+  margin-top: 80px;
+  margin-left: 930px;
+  border-radius: 40px;
+  justify-content: center;
+  align-items: center;
+  background: #D0BAFF;
+
+  color: #FFF;
+  font-family: MiSans;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 /* 视频播放 */
 .post-background {

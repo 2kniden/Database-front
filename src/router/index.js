@@ -103,7 +103,7 @@ const routes = [
     path: "/Team/TeamDetails",
     name: "teamDetails",
     component: TeamDetails
-  }
+  },
   { path: "/attraction-search", name: "attractionsearchs", component: AttractionSearch },
   { path: "/attraction-detail", name: "attractiondetails", component: AttractionDetail },
   { path: "/comment-edit", name: "commentedit", component: CommentEdit }
