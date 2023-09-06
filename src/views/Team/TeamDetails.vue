@@ -111,11 +111,15 @@
                   </div>
                 </div>
                 <div class="clearfloat"></div> -->
-                <el-table :data="item.members" style="width: 100%">
-                  <el-table-column prop="name" label="姓名" width="180" />
-                  <el-table-column prop="info" label="自我简介" />
-                  <!-- <el-table-column prop="contact" label="联系方式" /> -->
-                </el-table>
+                <div v-if="item.members && item.members.length > 0">
+                  <el-table :data="item.members" style="width: 100%">
+                    <el-table-column prop="name" label="姓名" width="180" />
+                    <el-table-column prop="info" label="自我简介" />
+                  </el-table>
+                </div>
+                <div v-else>
+                  该小队暂无成员加入~
+                </div>
               </div>
             </el-dialog>
             <div class="clearfloat"></div>
@@ -123,7 +127,8 @@
           <div>
             <!-- 发布者 -->
             <div>
-              <el-avatar style="float: left;" :icon="UserFilled" />
+              <img class="headImage" :src="item.publisher.headimage" alt="">
+              <!-- <el-avatar style="float: left;" :icon="UserFilled" /> -->
               <div class="mem-name">{{ item.publisher.name }}</div>
               <div class="publisher">发布者</div>
               <div class="clearfloat"></div>
@@ -131,7 +136,8 @@
             <!-- 小队成员 -->
             <div v-for="(member, mbIndex) in item.members" :key="mbIndex">
               <div v-if="mbIndex < 3" style="margin-top: 10px;">
-                <el-avatar style="float: left;" :icon="UserFilled" />
+                <img class="headImage" :src="member.headimage" alt="">
+                <!-- <el-avatar style="float: left;" :icon="UserFilled" /> -->
                 <div class="mem-name">{{ member.name }}</div>
                 <div class="clearfloat"></div>
               </div>
@@ -236,7 +242,7 @@
 import Header from "@/components/Header";
 import TeamNav from "@/components/TeamNav";
 import { ref } from 'vue';
-import { useRoute } from "vue-router";
+import { useRoute,useRouter } from "vue-router";
 import { UserFilled } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import axios from "axios";
@@ -255,6 +261,9 @@ const customTagImg = [
   "team/custom-tag-5.png",
 ]
 
+const IMGSRC="https://jiyidatabase.oss-cn-shanghai.aliyuncs.com/contatct/headimage-04887.jpg"
+
+const router = useRouter()
 const route = useRoute()
 console.log("切换至小队详情页")
 // const item = route.query
@@ -268,7 +277,6 @@ const item = {
   customTags: route.query.customTags,
   publisher: JSON.parse(route.query.publisher),
   members: JSON.parse(route.query.members),
-  applicants: JSON.parse(route.query.applicants),
   total: route.query.total,
   traveltime: route.query.traveltime,
   posttime: route.query.posttime,
@@ -283,8 +291,6 @@ const go_Back = () => {
   window.history.back();
 }
 
-const cur_user_id="843526A2B7784E73B28E73C797A2C81C"
-
 // 加入小队填写信息页面
 const joinTeamDialogVisible = ref(false)
 // 申请者信息
@@ -297,45 +303,47 @@ const applicant = ref({
 // 信息名称长度
 const formLabelWidth = "80px";
 
+const cur_user_id="小美"
 // 请求加入小队
 const joinTeam = (item) => {
 // 将该用户添加到小队申请者列表applicants
-/*axios.post('http://8.130.25.70:5555/api/Teams/Apply',{
-  UserID: cur_user_id,
-  TeamID: item.teamId,
-})
-.then(res => {
-  console.log(res.data);
-  console.log(res.status);
-  ElMessage({
-    message: '成功发送加入小队请求！',
-    type: 'success',
+axios.post('http://8.130.25.70:5555/api/Teams/Apply',{
+    teamid: item.teamId,
+    name:cur_user_id,
+    info:applicant.value.info,
+    contact:applicant.value.contact
   })
-})
-.catch(function (error) {
-  if (error.response) {
-    // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
-    console.log(error.response.data);
-    ElMessage({
-          message: "申请失败！您已在当前的小队关系中！",
-          type: "warning",
+  .then(res => {
+    console.log(res.data);
+    console.log(res.status);
+    setTimeout(() => {
+        router.replace({
+        path: "/Team/MyJoinedTeam",
         });
-    console.log(error.response.status);
-    console.log(error.response.headers);
-  } else if (error.request) {
-    // The request was made but no response was received
-    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-    // http.ClientRequest in node.js
-    console.log(error.request);
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    console.log('Error', error.message);
-  }
-});*/
+    }, 100); // 100毫秒（0.1秒）延迟
+    ElMessage({
+      message:'成功发送加入小队请求！',
+      type: "success",
+    });
+  })
+  .catch(function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      ElMessage({
+            message: "申请失败！请填写完整的自我介绍与联系方式！",
+            type: "error",
+          });
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else if (error.request) {
+      console.log(error.request);
+    } else {
+      console.log('Error', error.message);
+    }
+  });
 
-// 关闭填写加入小队信息页面
-joinTeamDialogVisible.value = false
+  // 关闭填写加入小队信息页面
+  //joinTeamDialogVisible.value = false
 }
 </script>
 
@@ -553,5 +561,13 @@ joinTeamDialogVisible.value = false
 
 .member-card .el-button:hover {
   color: #8097FD;
+}
+
+.headImage{
+  float: left;
+  border-radius: 50%;
+  width: 35px; /* 根据需要调整宽度和高度 */
+  height: 35px;
+  object-fit: cover; /* 保持图片比例并填充整个圆形区域 */
 }
 </style>

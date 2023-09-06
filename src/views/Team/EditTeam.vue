@@ -5,7 +5,10 @@
       <TeamNav />
       <div class="detail-content">
         <div class="form-title">编辑我的旅行小队</div>
+        <button class="team-delete-button" @click="deleteTeam(team.teamId)">删除小队</button>
+        <div class="clearfloat"></div>
         <el-form :model="form">
+          <el-divider class="divider">小队信息管理</el-divider>
           <!-- 主题 -->
           <el-form-item label="主题" :label-width="formLabelWidth">
             <el-input
@@ -110,41 +113,115 @@
               </div>
             </div>
           </el-form-item>
+          <!-- 自我简介 -->
+          <el-form-item label="自我简介" :label-width="formLabelWidth">
+            <el-input
+              v-model="team.publisher.info"
+              maxlength="18"
+              placeholder="请输入简短的自我介绍，让其他小队成员了解你"
+              show-word-limit
+              type="text"
+            />
+          </el-form-item>
+          <!-- 联系方式 -->
+          <el-form-item label="联系方式" :label-width="formLabelWidth">
+            <el-input
+              v-model="team.publisher.contact"
+              maxlength="18"
+              placeholder="请输入你的电话/微信号，只有加入你的小队的成员才能看到你的联系方式"
+              show-word-limit
+              type="text"
+            />
+          </el-form-item>
+          <el-divider class="divider">成员信息管理</el-divider>
           <!-- 小队成员 -->
           <el-form-item label="小队成员" :label-width="formLabelWidth">
             <div class="float-left" style="width: 400px">
               <div>
+                <img class="edit_headImage" :src="IMGSRC" alt="">
                 <div class="float-left">{{ team.publisher.name }}</div>
-                <div class="publisher" style="padding: 2px 10px; font-size: 14px; margin: 0 0 0 10px;">
+                <div class="publisher" style="padding: 2px 10px; font-size: 14px; margin: 0 0 10px 10px;">
                   发布者
                 </div>
                 <div class="clearfloat"></div>
               </div>
-              <div
-                v-for="(member, mbIndex) in team.members"
-                :key="mbIndex"
-                style="margin: 10px 0"
-              >
-                <div style="float: left">{{ member.name }}</div>
-                <el-button
-                  type="danger"
-                  :icon="Delete"
-                  circle
-                  style="float: right"
-                  @click="removeMember(mbIndex)"
-                />
+              <div v-if="team.members.length === 0">
                 <div class="clearfloat"></div>
+              </div>
+              <div v-else>
+                <el-collapse v-model="memberCollapse" style="min-width: 450px;">
+                  <el-collapse-item v-for="(member, mbIndex) in team.members" :key="mbIndex" :title="member.name">
+                    <div style="width: 400px; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                      <!-- 这里放头像会对不齐，所以要不可以不放？ -->
+                            <!-- <img class="edit_headImage" :src="IMGSRC" alt=""> -->
+                            <div style="float: left ">{{ member.name }}</div>
+                            <el-button
+                              type="danger"
+                              :icon="Delete"
+                              circle
+                              style="float: right"
+                              @click="removeMember(mbIndex)"
+                            />
+                            <div class="clearfloat"></div>
+                            <div class="clearfloat"></div>
+                              <div style="float: left">申请信息：</div>
+                              <!-- 申请信息过长的话会换行显示，提供的数据太长了，后端修改就好 -->
+                              <div style="float: left">{{ member.info }}</div>
+                              <div class="clearfloat"></div>
+                              <div style="float: left">联系方式：</div>
+                              <div style="float: left">{{ member.contact }}</div>
+                              <div class="clearfloat"></div>
+                        </div>
+                  </el-collapse-item>
+                </el-collapse>
               </div>
             </div>
             <div class="clearfloat"></div>
           </el-form-item>
           <!-- 小队申请 -->
           <el-form-item label="小队申请" :label-width="formLabelWidth">
+            <!-- Check if there are applicants, if not, display a message -->
+            <div v-if="team.applicants.length === 0"  style="padding-left: 10px; color: #999;">
+                当前暂无申请者！
+            </div>
+            <div v-else>
+              <el-collapse v-model="applicantCollapse" style="min-width: 450px;">
+                <el-collapse-item v-for="(applicant, appIndex) in team.applicants" :key="appIndex" :title="applicant.name" :name="'applicant' + appIndex">
+                  <div class="float-left" style="width: 400px; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                    <!-- <img class="edit_headImage" :src="IMGSRC" alt=""> -->
+                    <div style="float: left">{{ applicant.name }}</div>
+                    <el-button
+                      type="danger"
+                      :icon="Delete"
+                      circle
+                      style="float: right"
+                      @click="removeApplicant(appIndex)"
+                    />
+                    <el-button
+                      type="success"
+                      :icon="Check"
+                      circle
+                      style="float: right; margin-right: 16px"
+                      @click="approveApplicant(appIndex)"
+                    />
+                    <div class="clearfloat"></div>
+                    <div style="float: left">申请信息：</div>
+                    <div style="float: left">{{ applicant.info }}</div>
+                    <div class="clearfloat"></div>
+                    <div style="float: left">联系方式：</div>
+                    <div style="float: left">{{ applicant.contact }}</div>
+                    <div class="clearfloat"></div>
+                  </div>
+                </el-collapse-item>
+              </el-collapse>
+            </div>
+          </el-form-item>
+          <!-- <el-form-item label="小队申请" :label-width="formLabelWidth">
             <div class="float-left" style="width: 400px">
               <div
                 v-for="(applicant, appIndex) in team.applicants"
                 :key="appIndex"
-                style="margin-bottom: 10px"
+                style="margin-bottom: 10px; border: 1px solid #ccc; padding: 10px; padding: 5px;"
               >
                 <div style="float: left">{{ applicant.name }}</div>
                 <el-button
@@ -162,10 +239,16 @@
                   @click="approveApplicant(appIndex)"
                 />
                 <div class="clearfloat"></div>
+                <div style="float: left">申请信息：</div>
+                <div style="float: left">{{ applicant.info }}</div>
+                <div class="clearfloat"></div>
+                <div style="float: left">联系方式：</div>
+                <div style="float: left">{{ applicant.contact }}</div>
+                <div class="clearfloat"></div>
               </div>
             </div>
             <div class="clearfloat"></div>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
         <!-- 放弃和确认按钮 -->
         <div style="margin-top: 40px">
@@ -227,12 +310,15 @@ const team = ref({
     applicants: item.applicants,
     total: item.total,
     traveltime: item.traveltime,
+    posttime:item.posttime
 });
 
 console.log(team.value.status);
 
 // 信息名称长度
 const formLabelWidth = "90px";
+
+const IMGSRC="https://jiyidatabase.oss-cn-shanghai.aliyuncs.com/contatct/headimage-04887.jpg"
 
 // 自定义标签
 const inputValue = ref('')
@@ -258,9 +344,14 @@ const inputValue = ref('')
     inputValue.value = ''
   }
 
+const memberCollapse=ref();
+const applicantCollapse=ref();
+
 // 移除小队成员
 const removeMember = (mbIndex) => {
     console.log("移除小队成员：" + team.value.members[mbIndex]);
+    // 重新设置折叠状态
+    memberCollapse.value = team.value.members.map(() => false);
     ElMessage({
         message: "成功移除小队成员！",
         type: "success",
@@ -273,6 +364,8 @@ const removeMember = (mbIndex) => {
 const approveApplicant = (appIndex) => {
     if (team.value.members.length + 1 < team.value.total) {
         console.log("通过小队申请者：" + team.value.applicants[appIndex]);
+        // 重新设置折叠状态
+        applicantCollapse.value = team.value.applicants.map(() => false);
         ElMessage({
         message: "成功通过小队申请！",
         type: "success",
@@ -290,6 +383,8 @@ const approveApplicant = (appIndex) => {
 // 移除小队申请者
 const removeApplicant = (appIndex) => {
     console.log("移除小队申请者：" + team.value.applicants[appIndex]);
+    // 重新设置折叠状态
+    applicantCollapse.value = team.value.applicants.map(() => false);
     ElMessage({
         message: "成功移除小队申请者！",
         type: "success",
@@ -318,6 +413,34 @@ const cancelEdit = () => {
     });
 };
 
+const deleteTeam=(team_id)=>{
+  console.log(team_id);
+  axios
+      .delete(
+      "http://8.130.25.70:5555/api/Teams/" + String(team_id),{}
+      )
+      .then((res) => {
+        console.log(res.data);
+        console.log(res.status);
+        ElMessage({
+            message: "成功删除当前小队！",
+            type: "success",
+        });
+        goMyPublishedTeam();
+      })
+      .catch(function (error) {
+      if (error.response) {
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+      } else if (error.request) {
+          console.log(error.request);
+      } else {
+          console.log("Error", error.message);
+      }
+      });
+}
+
 //小队状态码转换
 const num_of_status=ref(0);
 const changeTeamStatus=()=>{
@@ -329,29 +452,47 @@ const changeTeamStatus=()=>{
     }
 }
 
-const cur_user_id = "843526A2B7784E73B28E73C797A2C81C";
+const cur_user_id = "小美";
 // 确认修改
 const commitEdit = () => {
-    changeTeamStatus();//获取对应的小队状态码
+    //获取对应的小队状态码
+    changeTeamStatus();
     // 这里在控制台打印小队主题进行测试验证修改成功
+    console.log(team.value.teamId);
+    console.log(team.value.posttime);
+    console.log(team.value.destination);
     console.log(team.value.title);
+    console.log(team.value.detail);
+    console.log(team.value.traveltime);
+    console.log(team.value.members);
+    console.log(num_of_status.value);
+    console.log(team.value.applicants);
+    console.log(team.value.publisher.info);
+    console.log(team.value.publisher.contact);
+    console.log(team.value.customTags),
     // 根据team_id从数据库中查找到该小队信息，进行更新
     axios
-        .put("http://8.130.25.70:5555/api/Teams/" + { cur_user_id }, {
+        .put("http://8.130.25.70:5555/api/Teams", {
         teamId: team.value.teamId,
+        pubContact: team.value.publisher.contact,
+        pubInfo: team.value.publisher.info,
+        destination: team.value.destination,
         title: team.value.title,
         detail: team.value.detail,
         status: num_of_status.value,
         tags: team.value.tags,
+        customTags:team.value.customTags,
+      members: team.value.members,
+        applicants: team.value.applicants,
         total: team.value.total,
         traveltime: team.value.traveltime,
-        destination: team.value.destination,
+        media: "aaaa"
         })
         .then((res) => {
         console.log(res.data);
         console.log(res.status);
         ElMessage({
-            message: cur_user_id + "成功修改小队！"+num_of_status.value,
+            message: "成功修改小队！",
             type: "success",
         });
         goMyPublishedTeam();
@@ -365,7 +506,7 @@ const commitEdit = () => {
             console.log(error.request);
             ElMessage({
                 message: "提交失败！请保证修改后的相关信息的完整性！",
-                type: "warning",
+                type: "error",
             });
         } else {
             console.log("Error", error.message);
@@ -377,7 +518,31 @@ const commitEdit = () => {
 
 <style>
 .form-title {
-margin-bottom: 30px;
-font-size: 18px;
+  margin-bottom: 10px;
+  font-size: 18px;
 }
+
+.team-delete-button {
+    display: inline-block;
+    background-color: #ff6666; /* 使用浅红色背景 */
+    color: white;
+    font-size: 12px; /* 减小字体大小 */
+    padding: 3px 6px; /* 减小按钮的内边距以使按钮变小 */
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    float: right; /* 将按钮靠页面右边 */
+    /* margin-bottom: 5px; 添加按钮底部的外边距，根据需要调整距离 */
+    border-radius: 5px; /* 添加圆角边框 */
+  }
+
+.edit_headImage{
+  float: left;
+  border-radius: 50%;
+  width: 30px; /* 根据需要调整宽度和高度 */
+  height: 30px;
+  object-fit: cover; /* 保持图片比例并填充整个圆形区域 */
+  margin-right: 10px; /* 根据需要调整距离 */
+}
+
 </style>

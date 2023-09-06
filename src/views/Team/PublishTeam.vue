@@ -141,7 +141,7 @@
   };
   
   //当前用户id
-  const cur_user_id = "843526A2B7784E73B28E73C797A2C81C";
+  const cur_user_id = "小美";
 
   const team = ref({
     title: "",
@@ -155,7 +155,7 @@
     total: 2, //总人数
     destination: "",
     time: [],
-    postTime: "",
+    posttime: "",
   });
   
 
@@ -207,23 +207,29 @@
   // 提交小队信息
   const commitTeamMessage = () => {
     // 获取发布时间
-    team.value.postTime = getCurrentTime();
+    team.value.posttime = getCurrentTime();
     //这里在控制台打印小队主题进行测试
     console.log(team.value.title);
     console.log(team.value.time);
-    console.log(team.value.postTime);
+    console.log(team.value.posttime);
     console.log(team.value.destination);
+    console.log(team.value.publisher.name);
+    console.log(team.value.publisher.info);
+    console.log(team.value.publisher.contact);
     axios
       .post("http://8.130.25.70:5555/api/Teams", {
-        managerid: cur_user_id,
-        title: team.value.title,
+        managerName: team.value.publisher.name,
+        managerInfo: team.value.publisher.info,
+        contactway:team.value.publisher.contact,
+        title:team.value.title,
         status: 0, //刚发布默认招募中
         total: team.value.total,
-        postTime: team.value.postTime,
         traveltime: team.value.time,
         destination: team.value.destination,
         detail: team.value.detail,
-        tagList: team.value.tags,
+        tags: team.value.tags,
+        customTags:team.value.customTags,
+        media:"asd"
       })
       .then((res) => {
         console.log(res.data);
@@ -243,7 +249,7 @@
           console.log(error.response.headers);
           ElMessage({
             message: "提交失败！请完整地填写相关信息后再次提交！",
-            type: "warning",
+            type: "error",
           });
         } else if (error.request) {
           console.log(error.request);

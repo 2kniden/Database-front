@@ -90,11 +90,36 @@
                             </el-table>
                             <!-- 小队成员 -->
                             <div style="margin: 20px 0 10px 10px; text-align: left; font-weight: bold; color: #808080; font-size: 16px;">小队成员</div>
-                            <el-table :data="item.members" style="width: 100%">
-                                <el-table-column prop="name" label="姓名" width="180" />
-                                <el-table-column prop="info" label="自我简介" width="320" />
-                                <el-table-column prop="contact" label="联系方式" />
-                            </el-table>
+                            <div v-if="item.members && item.members.length > 0">
+                                <el-table :data="item.members" style="width: 100%">
+                                    <el-table-column prop="name" label="姓名" width="180" />
+                                    <el-table-column prop="info" label="自我简介" width="320" />
+                                    <el-table-column prop="contact" label="联系方式" />
+                                </el-table>
+                            </div>
+                            <div v-else>
+                                该小队暂无成员加入~
+                            </div>
+                            <!-- 小队申请者（通过flag只有我发布的小队会显示） -->
+                            <!-- 小队申请者 -->
+                            <div v-if="flag == 1">
+                                <!-- 添加距离 -->
+                                <div style="margin-top: 25px;"></div>
+                                <div class="mem-img"></div>
+                                <div class="detail-title">小队申请者</div>
+                                <div class="clearfloat"></div>
+                                <div style="margin: 20px 0 10px 10px; text-align: left; font-weight: bold; color: #808080; font-size: 16px;">小队申请者（请在编辑小队中通过成员申请）</div>
+                                <div v-if="item.applicants && item.applicants.length > 0">
+                                    <el-table :data="item.applicants" style="width: 100%">
+                                        <el-table-column prop="name" label="姓名" width="180" />
+                                        <el-table-column prop="info" label="自我简介" width="320" />
+                                        <el-table-column prop="contact" label="联系方式" />
+                                    </el-table>
+                                </div>
+                                <div v-else>
+                                    该小队暂无申请者~
+                                </div>
+                           </div>
                         </div>
                     </el-dialog>
                     <div class="clearfloat"></div>
@@ -102,7 +127,8 @@
                 <div>
                     <!-- 发布者 -->
                     <div>
-                        <el-avatar style="float: left;" :icon="UserFilled" />
+                        <img class="headImage" :src=" item.publisher.headimage" alt="">
+                        <!-- <el-avatar style="float: left;" :icon="UserFilled" /> -->
                         <div class="mem-name">{{ item.publisher.name }}</div>
                         <div class="publisher">发布者</div>
                         <div class="clearfloat"></div>
@@ -110,10 +136,32 @@
                     <!-- 小队成员 -->
                     <div v-for="(member, mbIndex) in item.members" :key="mbIndex">
                         <div v-if="mbIndex < 3" style="margin-top: 10px;">
-                        <el-avatar style="float: left;" :icon="UserFilled" />
-                        <div class="mem-name">{{ member.name }}</div>
-                        <div class="clearfloat"></div>
+                            <img class="headImage" :src="member.headimage" alt="">
+                            <!-- <el-avatar style="float: left;" :icon="UserFilled" /> -->
+                            <div class="mem-name">{{ member.name }}</div>
+                            <div class="clearfloat"></div>
                         </div>
+                    </div>
+                    <!-- 小队申请者（通过flag只有我发布的小队会显示） -->
+                    <div v-if="flag == 1">
+                        <!-- 添加距离 -->
+                        <div style="margin-top: 25px;"></div>
+                        <div class="mem-img"></div>
+                        <div class="detail-title">小队申请者</div>
+                        <div class="clearfloat"></div>
+                        <div  v-if="item.applicants.length > 0">
+                            <div v-for="(applicant, appIndex) in item.applicants" :key="appIndex">
+                                <div v-if="appIndex < 2" style="margin-top: 10px;">
+                                    <img class="headImage" :src="applicant.headimage" alt="">
+                                    <!-- <el-avatar style="float: left;" :icon="UserFilled" /> -->
+                                    <div class="mem-name">{{ applicant.name }}</div>
+                                    <div class="clearfloat"></div>
+                                </div>
+                            </div>
+                       </div>
+                       <div v-else>
+                        <div class="none_applicant">该小队暂无申请者~</div>
+                       </div>
                     </div>
                     <div class="clearfloat"></div>
                 </div>
@@ -223,11 +271,19 @@ const item = {
   posttime: route.query.posttime,
   // media:route.query.media,
 }
+const flag=route.query.flag;
 console.log(item)
+console.log(flag)
 
 const publisherList = []
 publisherList[0] = item.publisher
 
 </script>
 
-<style></style>
+<style>
+.none_applicant{
+    color: #808080; 
+    text-align: left;
+    margin-top: 10px; 
+}
+</style>
