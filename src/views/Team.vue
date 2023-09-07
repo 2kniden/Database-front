@@ -4,6 +4,26 @@
     <Header></Header>
     <TeamNav />
     <div class="team-content">
+      <div class="search clearfix">
+        <div class="search-img"></div>
+        <div class="search-input">
+          <el-input
+          style="width: 300px;"
+          v-model="input"
+          class="w-10 m-2"
+          type="text"
+          placeholder="快来找找感兴趣的旅行小队吧"
+          @keyup.enter="submitSearchText"
+          />
+        </div>
+      
+        <div > 
+          <el-button class="search-button" color="#8097FD" plain
+           native-type="submit" 
+          @click="submitSearchText">搜索</el-button>
+        </div>
+
+      </div>
       <div v-for="(item, index) in teamList" :key="index" class="card-list">
         <!-- 卡片 -->
         <el-card class="card">
@@ -130,8 +150,30 @@ const formLabelWidth = "80px";
 
 // 获取小队的信息
 const teamList = ref([])
+
+//搜索
+const input = ref('');
+function submitSearchText() {
+    if (input.value != ''){
+      // jpdisplayType.value = 1;
+      // 重置选择器
+      router.push({
+        path: '/Team/SearchTeam',
+        query: {
+          searchkey:input.value,
+        }        
+      })
+    }
+    else{
+      console.log("请在搜索框中输入一个值！");
+      ElMessage({
+      message:'请在搜索框中输入一个值！',
+      type: "warning",
+    });
+    }
+}
     
-axios.get('http://8.130.25.70:5555/api/Teams/'+String(cur_user_id))
+axios.get('/api/Teams/'+String(cur_user_id))
   .then(res => {
     console.log(res.data);
     teamList.value=res.data;
@@ -147,7 +189,7 @@ const joinTeam = (applicantTeam) => {
   console.log(cur_user_id)
   console.log(applicant.value.info)
   console.log(applicant.value.contact)
-  axios.post('http://8.130.25.70:5555/api/Teams/Apply',{
+  axios.post('/api/Teams/Apply',{
     teamid: applicantTeam.teamId,
     name:cur_user_id,
     info:applicant.value.info,
@@ -302,4 +344,37 @@ const joinTeam = (applicantTeam) => {
 .card-button {
   margin: 10px 20px 0;
 }
+
+/* 设置搜索栏样式 */
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 10px;
+  margin-top: 20px; /* 通过调整这个值来增加搜索框离下方的距离 */
+  margin-bottom: 20px; /* 通过调整这个值来增加搜索框离下方的距离 */
+}
+
+/* 搜索输入框 */
+.search-input {
+/* width: 100%; */
+  right: -28px;
+  position: relative;
+}
+
+/* 搜索按钮 */
+.search-button {
+  position: relative;
+  left: 0px;
+}
+
+.search-img{
+    float: left;
+    margin-right: -20px;
+    height: 30px;
+    width: 30px;
+    background-image: url(../../src/assets/team/search-img.png);
+}
+
 </style>

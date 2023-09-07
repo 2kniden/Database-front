@@ -29,7 +29,8 @@ app.config.globalProperties.$http = axios;
 // 全局配置axios请求根路径(axios.默认配置.请求根路径)
 
 //连接服务器用这个
-// axios.defaults.baseURL = "";
+axios.defaults.baseURL = "http://8.130.25.70:5000";
+
 //连接本地服务器用这个
 // axios.defaults.baseURL = "http://localhost:5000";
 
@@ -41,3 +42,24 @@ app.use(router);
 app.use(ElementPlus);
 app.use(vue3videoPlay);
 app.mount("#app");
+
+const debounce = (fn, delay) => {
+    let timer = null;
+    return function () {
+      let context = this;
+      let args = arguments;
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        fn.apply(context, args);
+      }, delay);
+    }
+  }
+  
+  const _ResizeObserver = window.ResizeObserver;
+  window.ResizeObserver = class ResizeObserver extends _ResizeObserver {
+    constructor(callback) {
+      callback = debounce(callback, 16);
+      super(callback);
+    }
+  }
+ 

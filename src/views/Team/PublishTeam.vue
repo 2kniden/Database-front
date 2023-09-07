@@ -140,11 +140,12 @@
   </template>
   
   <script setup>
-  import { nextTick, ref } from "vue";
+  import { nextTick, ref,onMounted } from "vue";
   import { ElMessage, ElInput } from "element-plus";
   import { useRoute, useRouter } from "vue-router";
   import OSS from 'ali-oss';
   import axios from "axios";
+
   const router = useRouter();
   // 信息名称长度
   const formLabelWidth = "90px";
@@ -233,7 +234,7 @@
     console.log(team.value.publisher.info);
     console.log(team.value.publisher.contact);
     axios
-      .post("http://8.130.25.70:5555/api/Teams", {
+      .post("/api/Teams", {
         managerName: team.value.publisher.name,
         managerInfo: team.value.publisher.info,
         contactway:team.value.publisher.contact,
@@ -245,7 +246,7 @@
         detail: team.value.detail,
         tags: team.value.tags,
         customTags:team.value.customTags,
-        media:"asd"
+        media:team.value.teamContact
       })
       .then((res) => {
         console.log(res.data);
@@ -279,16 +280,114 @@
 
   };
 
-  // 上传小队二维码
-  const OSSOptions = {
-    endpoint:'oss-cn-shanghai.aliyuncs.com',
-    accessKeyId:'LTAI5tMoioGDkZfV6raRtiFi',
-    accessKeySecret:'jp9tXLlFAIcf9PNOnRJVB5jDiAL4OV',
-    bucket:'jiyidatabase',
-  }
-  const ossClient = new OSS(OSSOptions)
-  console.log(ossClient)
+  // onMounted(() =>{
+  //   nextTick(() => {
+  //       // 上传小队二维码
+  //       const OSSOptions = {
+  //       // endpoint:'oss-cn-shanghai.aliyuncs.com',
+  //       // accessKeyId:'LTAI5tMoioGDkZfV6raRtiFi',
+  //       // accessKeySecret:'jp9tXLlFAIcf9PNOnRJVB5jDiAL4OV',
+  //       // bucket:'jiyidatabase',
+  //       endpoint:' ',
+  //       accessKeyId:' ',
+  //       accessKeySecret:' ',
+  //       bucket:' ',
+  //     }
+  //     // 获取秘钥
+  //     axios.get(
+  //       "http://8.130.25.70:5000/api/Teams/Access"
+  //     )
+  //     .then((res) => {
+  //         console.log(res.data.endpoint);
+  //         console.log(res.data.accessKeyId);
+  //         console.log(res.data.accessKeySecret);
+  //         console.log(res.data.bucketName);
+  //         OSSOptions.endpoint=res.data.endpoint;
+  //         OSSOptions.accessKeyId=res.data.accessKeyId;
+  //         OSSOptions.accessKeySecret=res.data.accessKeySecret;
+  //         OSSOptions.bucket=res.data.bucketName;
+  //     });
+  //     const ossClient = new OSS(OSSOptions)
+  // console.log(ossClient)
 
+  // const fileInput = ref(null)
+  // const teamContactImg = ref('')
+
+  //   });
+
+  // });
+
+  // // 上传小队二维码
+  //       const OSSOptions = {
+        // endpoint:'oss-cn-shanghai.aliyuncs.com',
+        // accessKeyId:'LTAI5tMoioGDkZfV6raRtiFi',
+        // accessKeySecret:'jp9tXLlFAIcf9PNOnRJVB5jDiAL4OV',
+        // bucket:'jiyidatabase',
+  //       endpoint:' ',
+  //       accessKeyId:' ',
+  //       accessKeySecret:' ',
+  //       bucket:' ',
+  //     }
+
+  // // 获取秘钥
+  // axios.get(
+  //   "http://8.130.25.70:5000/api/Teams/Access"
+  // )
+  // .then((res) => {
+  //     console.log(res.data.endpoint);
+  //     console.log(res.data.accessKeyId);
+  //     console.log(res.data.accessKeySecret);
+  //     console.log(res.data.bucketName);
+      // OSSOptions.endpoint=res.data.endpoint;
+      // OSSOptions.accessKeyId=res.data.accessKeyId;
+      // OSSOptions.accessKeySecret=res.data.accessKeySecret;
+      // OSSOptions.bucket=res.data.bucketName;
+  // });
+
+  // const OSSOptions = {
+  //       endpoint:'oss-cn-shanghai.aliyuncs.com',
+  //       accessKeyId:'LTAI5tMoioGDkZfV6raRtiFi',
+  //       accessKeySecret:'jp9tXLlFAIcf9PNOnRJVB5jDiAL4OV',
+  //       bucket:'jiyidatabase',
+  // }
+
+  const OSSOptions = {
+        endpoint:'a',
+        accessKeyId:'b',
+        accessKeySecret:'c',
+        bucket:'d',
+  }
+  let ossClient={};
+ 
+  const getOssOptions = () => {
+  return new Promise((resolve, reject) => {
+    axios.get("/api/Teams/Access")
+      .then(res => {
+        console.log('get it');
+        console.log(res.data);
+        resolve(res.data); // 返回res.data作为Promise的解决值
+      })
+      .catch(err => {
+        console.log("can't get accesskeyId");
+        reject('no');
+      })
+  });
+}
+
+getOssOptions().then(res => {
+  if (res !== 'no') {
+    const OSSOptions = {
+      endpoint: res.endpoint,
+      accessKeyId: res.accessKeyId,
+      accessKeySecret: res.accessKeySecret,
+      bucket: res.bucketName
+    };
+
+    ossClient = new OSS(OSSOptions);
+    console.log(ossClient);
+  }
+});
+ 
   const fileInput = ref(null)
   const teamContactImg = ref('')
 

@@ -261,8 +261,6 @@ const customTagImg = [
   "team/custom-tag-5.png",
 ]
 
-const IMGSRC="https://jiyidatabase.oss-cn-shanghai.aliyuncs.com/contatct/headimage-04887.jpg"
-
 const router = useRouter()
 const route = useRoute()
 console.log("切换至小队详情页")
@@ -307,7 +305,7 @@ const cur_user_id="小美"
 // 请求加入小队
 const joinTeam = (item) => {
 // 将该用户添加到小队申请者列表applicants
-axios.post('http://8.130.25.70:5555/api/Teams/Apply',{
+axios.post('/api/Teams/Apply',{
     teamid: item.teamId,
     name:cur_user_id,
     info:applicant.value.info,

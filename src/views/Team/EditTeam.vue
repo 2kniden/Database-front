@@ -133,6 +133,21 @@
               type="text"
             />
           </el-form-item>
+          <!-- 小队二维码 -->
+          <el-form-item label="小队二维码" :label-width="formLabelWidth">
+            <div>
+              <div style="float: left; margin-bottom: 10px;">
+                <el-button type="primary" dark @click="handleClick_cover">选择图片</el-button>
+                <input type="file" ref="fileInput" style="display: none" accept="image/*" @change="handleCoverUpload">
+                <div class="QRcode_tips">（如需更改请点击上传）</div>
+              </div>
+              <div class="clearfloat"></div>
+              <!-- 展示图片 -->
+              <div v-if="teamContactImg">
+                <el-image class="team-image" :src="teamContactImg" :fit="fit" />
+              </div> 
+            </div>
+          </el-form-item>
           <el-divider class="divider">成员信息管理</el-divider>
           <!-- 小队成员 -->
           <el-form-item label="小队成员" :label-width="formLabelWidth">
@@ -271,6 +286,7 @@ import { useRoute, useRouter } from "vue-router";
 import { Check, Delete } from "@element-plus/icons-vue";
 import { ElMessage, ElInput } from "element-plus";
 import axios from "axios";
+import OSS from 'ali-oss';
 
 const router = useRouter();
 
@@ -292,7 +308,7 @@ const item = {
   total: route.query.total,
   traveltime: route.query.traveltime,
   posttime: route.query.posttime,
-  // media:route.query.media,
+  media:route.query.media,
 }
 console.log(item)
 
@@ -310,15 +326,14 @@ const team = ref({
     applicants: item.applicants,
     total: item.total,
     traveltime: item.traveltime,
-    posttime:item.posttime
+    posttime:item.posttime,
+    teamContact:item.media
 });
 
 console.log(team.value.status);
 
 // 信息名称长度
 const formLabelWidth = "90px";
-
-const IMGSRC="https://jiyidatabase.oss-cn-shanghai.aliyuncs.com/contatct/headimage-04887.jpg"
 
 // 自定义标签
 const inputValue = ref('')
@@ -452,27 +467,105 @@ const changeTeamStatus=()=>{
     }
 }
 
-const cur_user_id = "小美";
+  // 获取当前时间
+  const getCurrentTime = () => {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month =
+      date.getMonth() + 1 < 10
+        ? "0" + (date.getMonth() + 1)
+        : date.getMonth() + 1;
+    var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    var hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+    var minute =
+      date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+    var second =
+      date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+    // 格式如："2023-08-30 13:48:44"
+    const currentTime =
+      year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+    return currentTime;
+  };
+
+const OSSOptions = {
+        endpoint:'oss-cn-shanghai.aliyuncs.com',
+        accessKeyId:'LTAI5tMoioGDkZfV6raRtiFi',
+        accessKeySecret:'jp9tXLlFAIcf9PNOnRJVB5jDiAL4OV',
+        bucket:'jiyidatabase',
+      }
+
+  const ossClient = new OSS(OSSOptions)
+  console.log(ossClient)
+
+  const fileInput = ref(null)
+  const teamContactImg = ref('')
+
+  const handleClick_cover = () => {
+    fileInput.value.click()
+  }
+
+  const handleCoverUpload = (event) => {
+    const files = event.target.files
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i
+
+    if (!allowedExtensions.exec(files[0].name)) {
+      alert('只允许上传图片文件')
+      return
+    }
+
+    const formData = new FormData()
+    formData.append('file', files[0])
+    const coverObj = formData.get('file')
+
+    // 配置oss相关
+    const storeAs = 'contact/'
+
+    // 并不,这个只是对象
+    console.log(coverObj)
+    // 增加时间戳、防止名称重复
+    const imgCreatedTime = getCurrentTime()
+
+    // 重命名:
+    const ext = coverObj.name.split('.').pop() // 后缀名只能为最后一个
+    const coverRename = coverObj.name.split(ext)[0] + imgCreatedTime + cur_user_id + '.' + ext
+    console.log(coverRename)
+
+    // 上传给oss
+    // const promiseList = Promise(that.ossClient.put(storeAs+coverRename,coverObj));
+
+    ossClient.put(coverRename, coverObj)
+      .then(res => {
+        console.log('yes')
+        teamContactImg.value = res.url
+        team.value.teamContact = teamContactImg.value
+        console.log(team.value.teamContact)
+      })
+      .catch(err => {
+        console.log('no')
+      });
+  }
+
+  const cur_user_id = "小美";
 // 确认修改
 const commitEdit = () => {
     //获取对应的小队状态码
     changeTeamStatus();
     // 这里在控制台打印小队主题进行测试验证修改成功
-    console.log(team.value.teamId);
-    console.log(team.value.posttime);
-    console.log(team.value.destination);
+    // console.log(team.value.teamId);
+    // console.log(team.value.posttime);
+    // console.log(team.value.destination);
     console.log(team.value.title);
-    console.log(team.value.detail);
-    console.log(team.value.traveltime);
-    console.log(team.value.members);
-    console.log(num_of_status.value);
-    console.log(team.value.applicants);
-    console.log(team.value.publisher.info);
-    console.log(team.value.publisher.contact);
-    console.log(team.value.customTags),
+    // console.log(team.value.detail);
+    // console.log(team.value.traveltime);
+    // console.log(team.value.members);
+    // console.log(num_of_status.value);
+    // console.log(team.value.applicants);
+    // console.log(team.value.publisher.info);
+    // console.log(team.value.publisher.contact);
+    // console.log(team.value.customTags),
+    console.log(team.value.teamContact),
     // 根据team_id从数据库中查找到该小队信息，进行更新
-    axios
-        .put("http://8.130.25.70:5555/api/Teams", {
+    axios.put("/api/Teams", {
         teamId: team.value.teamId,
         pubContact: team.value.publisher.contact,
         pubInfo: team.value.publisher.info,
@@ -482,11 +575,11 @@ const commitEdit = () => {
         status: num_of_status.value,
         tags: team.value.tags,
         customTags:team.value.customTags,
-      members: team.value.members,
+        members: team.value.members,
         applicants: team.value.applicants,
         total: team.value.total,
         traveltime: team.value.traveltime,
-        media: "aaaa"
+        media: team.value.teamContact
         })
         .then((res) => {
         console.log(res.data);
@@ -543,6 +636,11 @@ const commitEdit = () => {
   height: 30px;
   object-fit: cover; /* 保持图片比例并填充整个圆形区域 */
   margin-right: 10px; /* 根据需要调整距离 */
+}
+
+.QRcode_tips{
+  font-size: 12px; 
+  color: #999;
 }
 
 </style>

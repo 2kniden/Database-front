@@ -83,26 +83,42 @@
                         <div>
                             <!-- 发布者 -->
                             <div style="margin: 12px 0 10px 10px; text-align: left; font-weight: bold; color: #808080; font-size: 16px;">小队发布者</div>
-                            <el-table :data="publisherList" style="width: 100%">
-                                <el-table-column prop="name" label="姓名" width="180" />
-                                <el-table-column prop="info" label="自我简介" width="320" />
-                                <el-table-column prop="contact" label="联系方式" />
-                            </el-table>
+                                <div v-if="item.isJoined == 1">
+                                    <el-table :data="publisherList" style="width: 100%">
+                                        <el-table-column prop="name" label="姓名" width="180" />
+                                        <el-table-column prop="info" label="自我简介" width="320" />
+                                        <el-table-column prop="contact" label="联系方式" />
+                                    </el-table>
+                                </div>
+                                <div v-else>
+                                    <el-table :data="publisherList" style="width: 100%">
+                                        <el-table-column prop="name" label="姓名" width="320" />
+                                        <el-table-column prop="info" label="自我简介" />
+                                    </el-table>
+                                </div>
                             <!-- 小队成员 -->
                             <div style="margin: 20px 0 10px 10px; text-align: left; font-weight: bold; color: #808080; font-size: 16px;">小队成员</div>
                             <div v-if="item.members && item.members.length > 0">
-                                <el-table :data="item.members" style="width: 100%">
-                                    <el-table-column prop="name" label="姓名" width="180" />
-                                    <el-table-column prop="info" label="自我简介" width="320" />
-                                    <el-table-column prop="contact" label="联系方式" />
-                                </el-table>
+                                <div v-if="item.isJoined == 1">
+                                    <el-table :data="item.members" style="width: 100%">
+                                        <el-table-column prop="name" label="姓名" width="180" />
+                                        <el-table-column prop="info" label="自我简介" width="320" />
+                                        <el-table-column prop="contact" label="联系方式" />
+                                    </el-table>
+                                </div>
+                                <div v-else>
+                                    <el-table :data="item.members" style="width: 100%">
+                                        <el-table-column prop="name" label="姓名" width="320" />
+                                        <el-table-column prop="info" label="自我简介" />
+                                    </el-table>
+                                </div>
                             </div>
                             <div v-else>
                                 该小队暂无成员加入~
                             </div>
-                            <!-- 小队申请者（通过flag只有我发布的小队会显示） -->
+                            <!-- 小队申请者（通过Ismine只有我发布的小队会显示） -->
                             <!-- 小队申请者 -->
-                            <div v-if="flag == 1">
+                            <div v-if="Ismine == 1">
                                 <!-- 添加距离 -->
                                 <div style="margin-top: 25px;"></div>
                                 <div class="mem-img"></div>
@@ -142,8 +158,8 @@
                             <div class="clearfloat"></div>
                         </div>
                     </div>
-                    <!-- 小队申请者（通过flag只有我发布的小队会显示） -->
-                    <div v-if="flag == 1">
+                    <!-- 小队申请者（通过Ismine只有我发布的小队会显示） -->
+                    <div v-if="Ismine == 1">
                         <!-- 添加距离 -->
                         <div style="margin-top: 25px;"></div>
                         <div class="mem-img"></div>
@@ -223,6 +239,16 @@
             <div class="clearfloat"></div>
             </div>
         </div>
+        <!-- 小队二维码 -->
+        <div v-if="item.isJoined == 1">
+            <div style="margin-bottom: 10px;">
+                <div class="QR-img"></div>
+                <div class="detail-title">小队二维码</div>
+                <div class="clearfloat"></div>
+                <img class="QRImage" :src=" item.media" alt="">
+                <div class="clearfloat"></div>
+            </div>
+        </div>
         <!-- 底部：发布日期 -->
         <div class="posttime">
             {{ item.posttime }}
@@ -269,11 +295,11 @@ const item = {
   total: route.query.total,
   traveltime: route.query.traveltime,
   posttime: route.query.posttime,
-  // media:route.query.media,
+  media:route.query.media,
+  isJoined:route.query.isJoined
 }
-const flag=route.query.flag;
-console.log(item)
-console.log(flag)
+const Ismine=route.query.Ismine; //用于区分我加入的小队与我发布的小队
+console.log(item.isJoined)
 
 const publisherList = []
 publisherList[0] = item.publisher
@@ -285,5 +311,21 @@ publisherList[0] = item.publisher
     color: #808080; 
     text-align: left;
     margin-top: 10px; 
+}
+
+.QR-img{
+    float: left;
+    margin-left: 5px;
+    margin-right: 8px;
+    height: 30px;
+    width: 30px;
+    background-image: url(../../assets/team/QR-code.png);
+}
+
+.QRImage{
+    float: left;
+    margin-top: 15px;
+    width: 200px;
+    height: auto;
 }
 </style>

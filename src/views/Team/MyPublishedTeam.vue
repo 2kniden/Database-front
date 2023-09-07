@@ -24,7 +24,7 @@
     </el-dialog>
     <!-- 分割线：招募中的小队 -->
     <el-divider class="divider">招募中的小队</el-divider>
-    <div v-if="myRecruitingList.length === 0" class="no-teams-message">
+    <div v-if="myRecruitingList.length === 0 && stoptime1 === 1" class="no-teams-message">
         您暂无招募中的小队
     </div>
     <div v-else>
@@ -91,7 +91,7 @@
 
     <!-- 分割线：招募完成的小队 -->
     <el-divider class="divider">招募完成的小队</el-divider>
-    <div v-if="myRecruitedList.length === 0" class="no-teams-message">
+    <div v-if="myRecruitedList.length === 0 && stoptime2 === 1" class="no-teams-message">
         您暂无招募完成的小队
     </div>
     <div v-else>
@@ -179,7 +179,7 @@ router.push({
     path: "/Team/MyTeamDetails",
     // query: item,
     query: {
-      flag:1,
+      Ismine:1,
       teamId: item.teamId,
       destination: item.destination,
       title: item.title,
@@ -193,7 +193,8 @@ router.push({
       total: item.total,
       traveltime: item.traveltime,
       posttime: item.posttime,
-      // media: item.media,
+      media: item.media,
+      isJoined:item.isJoined
     }
 });
 };
@@ -217,7 +218,7 @@ router.push({
       total: item.total,
       traveltime: item.traveltime,
       posttime: item.posttime,
-      // media: item.media,
+      media: item.media,
     }
 });
 };
@@ -233,24 +234,30 @@ const myRecruitingList = ref([]);
 const myRecruitedList = ref([]);
 const cur_user_id = "小美";
 
+//设置一个延时，用于防止没有调用完接口提前显示没有查询结果
+let stoptime1=ref(0);
+let stoptime2=ref(0);
+
 // 实际使用时需筛选出发布者为当前用户且小队状态为“招募中”的小队
-axios
-.get(
-     'http://8.130.25.70:5555/api/Teams/SelectTeam?name='+String(cur_user_id)+'&status=2'
-)
-.then((res) => {
-    console.log(res.data);
-    myRecruitingList.value = res.data;
-});
+axios.get('/api/Teams/SelectTeam?name='+String(cur_user_id)+'&status=2')
+    .then((res) => {
+        console.log(res.data);
+        myRecruitingList.value = res.data;
+        stoptime1 = 1;
+        })
+    .catch(error => {
+            console.error("获取小队列表失败:", error);
+        }); 
 // 实际使用时需筛选出发布者为当前用户且小队状态为“招募完成”的小队
-axios
-.get(
-    'http://8.130.25.70:5555/api/Teams/SelectTeam?name='+String(cur_user_id)+'&status=3'
-)
-.then((res) => {
-    console.log(res.data);
-    myRecruitedList.value = res.data;
-});
+axios.get('/api/Teams/SelectTeam?name='+String(cur_user_id)+'&status=3')
+    .then((res) => {
+        console.log(res.data);
+        myRecruitedList.value = res.data;
+        stoptime2 = 1;
+        })
+    .catch(error => {
+            console.error("获取小队列表失败:", error);
+        }); 
 </script>
 
 <style>

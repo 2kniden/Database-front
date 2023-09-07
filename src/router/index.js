@@ -10,6 +10,7 @@ import MyJoinedTeam from "@/views/Team/MyJoinedTeam.vue";
 import TeamDetails from "@/views/Team/TeamDetails.vue";
 import MyTeamDetails from "@/views/Team/MyTeamDetails.vue";
 import EditTeam from "@/views/Team/EditTeam.vue";
+import SearchTeam from "@/views/Team/SearchTeam.vue";
 const routes = [
   {
     path: "/",
@@ -66,6 +67,11 @@ const routes = [
     path: "/Team/EditTeam",
     name: "editTeam",
     component: EditTeam,
+  },
+  {
+    path: "/Team/SearchTeam",
+    name: "searchTeam",
+    component: SearchTeam,
   },
 ];
 
