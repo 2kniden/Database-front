@@ -236,78 +236,78 @@ export default {
     handleScroll(){
       this.currentScroll = window.pageYOffset //表示当前滚动的位置
 
-      if (this.currentScroll >= this.$refs.aboutUs.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.aboutUs.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showAboutUs = true;
       }
-      if (this.currentScroll >= this.$refs.pageDetail.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.pageDetail.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showPageDetail = true;
       }
-      if (this.currentScroll >= this.$refs.Provide.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.Provide.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showProvide = true;
       }
 
       //四个部分
-      if (this.currentScroll >= this.$refs.contentImage1.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.contentImage1.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showContentImage1 = true;
       }
-      if (this.currentScroll >= this.$refs.contentTitle1.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.contentTitle1.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showContentTitle1 = true;
       }
-      if (this.currentScroll >= this.$refs.contentDetail1.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.contentDetail1.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showContentDetail1 = true;
       }
-      if (this.currentScroll >= this.$refs.jumpButton1.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.jumpButton1.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showJumpButton1 = true;
       }
-      if (this.currentScroll >= this.$refs.jumpButtonText1.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.jumpButtonText1.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showJumpButtonText1 = true;
       }
 
-      if (this.currentScroll >= this.$refs.contentImage2.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.contentImage2.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showContentImage2 = true;
       }
-      if (this.currentScroll >= this.$refs.contentTitle2.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.contentTitle2.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showContentTitle2 = true;
       }
-      if (this.currentScroll >= this.$refs.contentDetail2.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.contentDetail2.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showContentDetail2 = true;
       }
-      if (this.currentScroll >= this.$refs.jumpButton2.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.jumpButton2.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showJumpButton2 = true;
       }
-      if (this.currentScroll >= this.$refs.jumpButtonText2.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.jumpButtonText2.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showJumpButtonText2= true;
       }
 
-      if (this.currentScroll >= this.$refs.contentImage3.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.contentImage3.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showContentImage3 = true;
       }
-      if (this.currentScroll >= this.$refs.contentTitle3.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.contentTitle3.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showContentTitle3 = true;
       }
-      if (this.currentScroll >= this.$refs.contentDetail3.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.contentDetail3.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showContentDetail3 = true;
       }
-      if (this.currentScroll >= this.$refs.jumpButton3.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.jumpButton3.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showJumpButton3 = true;
       }
-      if (this.currentScroll >= this.$refs.jumpButtonText3.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.jumpButtonText3.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showJumpButtonText3 = true;
       }
 
-      if (this.currentScroll >= this.$refs.contentImage4.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.contentImage4.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showContentImage4 = true;
       }
-      if (this.currentScroll >= this.$refs.contentTitle4.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.contentTitle4.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showContentTitle4 = true;
       }
-      if (this.currentScroll >= this.$refs.contentDetail4.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.contentDetail4.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showContentDetail4 = true;
       }
-      if (this.currentScroll >= this.$refs.jumpButton4.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.jumpButton4.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showJumpButton4 = true;
       }
-      if (this.currentScroll >= this.$refs.jumpButtonText4.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+      if (this.currentScroll >= this.$refs.jumpButtonText4.offsetTop - 100) { //当前滚动位置到达的时候，显示div（100作为调整用）
         this.showJumpButtonText4 = true;
       }
     },
