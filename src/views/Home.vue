@@ -80,6 +80,45 @@
     <div class="detail-page">
       <!-- 底下的曲线部分 -->
       <img class="curve-line" src="../assets/home/curveLine.png"/>
+
+      <!--中间的内容-->
+      <div class="about-us">关于我们</div>
+      <div class="page-detail">专为年轻人打造的旅游资源一体化平台，让<br>你的旅行变得简单而幸福。<br>关注我们，获得第一手旅游讯息。</div>
+      <div class="provide">我们能够为您提供什么？</div>
+
+      <!--景点-->
+      <img class="content-image" src="../assets/home/tour.png"/>
+      <div class="content-title">旅途中无论在哪里<br>都有亮丽如画的风景</div>
+      <div class="content-detail">在这里，你可以拥有独特的旅行体验，感受不一样的旅程，享受真正的自由，自由探索想去的美景。</div>
+      <div class="jump-button" @click="changePage('景点')">
+        <div class="jump-button-text">立&ensp;即<br><br>查&ensp;询</div>
+      </div>
+
+      <!--他人日志-->
+      <img class="content-image" src="../assets/home/otherDesign.png" style="margin-top: 2180px;margin-left: 100px;"/>
+      <div class="content-title" style="margin-top: 2050px;margin-left: 290px;">详实有效的他人旅游计划<br>可在线搜索</div>
+      <div class="content-detail" style="margin-top: 2350px;margin-left: 500px;">旅行带你走出安逸之乡，教会你以一种全新的方式感受世界万物，让你的记忆被奇妙的经历充满。</div>
+      <div class="jump-button" style="margin-top: 2350px;margin-left: 290px;" @click="changePage('他人日志')">
+        <div class="jump-button-text">立&ensp;即<br><br>查&ensp;询</div>
+      </div>
+
+      <!--个人日志-->
+      <img class="content-image" src="../assets/home/journal.png" style="margin-top: 3120px;margin-left: -570px;"/>
+      <div class="content-title" style="margin-top: 3220px;width: 600px;">当回忆成为宝贵的宝藏<br>个人日志是打开珍藏之门的钥匙</div>
+      <div class="content-detail" style="margin-top: 3420px;">记录生活，留下情感，探索自我，体验成长。让每一天都有故事，让每一个瞬间都有意义。用个人日志，让你的回忆永不褪色。开始记录，开始珍藏。</div>
+      <div class="jump-button" style="margin-top: 3420px;" @click="changePage('个人日志')">
+        <div class="jump-button-text">立&ensp;即<br><br>查&ensp;询</div>
+      </div>
+
+      <!--小队-->
+      <img class="content-image" src="../assets/home/team.png" style="margin-top: 4100px;margin-left: 100px;"/>
+      <div class="content-title" style="margin-top: 4300px;margin-left: 100px;">公开透明的旅游小队召集<br>寻求你的志同道合旅客</div>
+      <div class="content-detail" style="margin-top: 4500px;margin-left: 100px;">一个人的旅行难免孤独，茫茫宇宙中去寻找与你心跳共频的人是多么浪漫，携手走向未知的浪漫。</div>
+      <div class="jump-button" style="margin-top: 4500px;margin-left: 450px;" @click="changePage('小队')">
+        <div class="jump-button-text">立&ensp;即<br><br>查&ensp;询</div>
+      </div>
+
+      <!--最下部的地图-->
       <div ref="refChart" class="map"></div>
     </div>
 
@@ -149,6 +188,20 @@ export default {
     },
     changeToLogin(){
       this.$router.push("/login");
+    },
+    changePage(name){
+      if(name==='景点'){
+        this.$router.push("/Attraction");
+      }
+      else if(name==='他人日志'){
+        this.$router.push("/Journal/JournalPlaza");
+      }
+      else if(name==='个人日志'){
+        this.$router.push("/Journal/MyJournal");
+      }
+      else if(name==='小队'){
+        this.$router.push("/Team");
+      }
     },
     init() {
       var myChart = echarts.init(this.$refs.refChart);
@@ -361,7 +414,7 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin-right: calc(100% - 100vw);
   padding-right: 17px;
 }
@@ -639,6 +692,7 @@ export default {
   height: 5400px;
   width: 1200px;
   margin-left: -600px;
+  z-index: 1;
 }
 /* 地图样式 */
 .map{
@@ -647,5 +701,126 @@ export default {
   height: 1000px;
   margin-top: 5600px;
   margin-left: 350px;
+}
+
+/* 下部逐渐显现的div */
+.about-us{
+  position: absolute;
+  width: max-content;
+  height: 75px;
+  margin-left: 880px;
+  margin-top: 230px;
+
+  color: #FFF;
+  text-align: center;
+  font-family: STHupo;
+  font-size: 52px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.page-detail{
+  position: absolute;
+  width: 1100px;
+  height: 200px;
+  margin-left: 430px;
+  margin-top: 350px;
+
+  color: #FFF;
+  text-align: center;
+  font-family: STHupo;
+  font-size: 56px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.provide{
+  position: absolute;
+  width: max-content;
+  height: 50px;
+  margin-left: 290px;
+  margin-top: 1020px;
+
+  color: #5E5E5E;
+  text-align: center;
+  font-family: STHupo;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.content-image{
+  position: absolute;
+  width: 615px;
+  height: 700px;
+  margin-left: -570px;
+  margin-top: 1150px;
+}
+.content-title{
+  position: absolute;
+  width: 570px;
+  height: 100px;
+  margin-left: 1050px;
+  margin-top: 1300px;
+
+  color: #5E5E5E;
+  text-align: center;
+  font-family: STHupo;
+  font-size: 42px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.content-detail{
+  position: absolute;
+  width: 270px;
+  height: 330px;
+  margin-left: 1050px;
+  margin-top: 1500px;
+
+  color: #000;
+  font-family: MiSans;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/* 跳转按钮 */
+.jump-button{
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  margin-left: 1400px;
+  margin-top: 1500px;
+  border-radius: 30px;
+  justify-content: center;
+  align-items: center;
+  background: rgba(137, 126, 255, 0.69);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
+
+  color: #FFF;
+  font-family: STHupo;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.jump-button-text{
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin-left: 10px;
+  margin-top: 20px;
+}
+.enter{
+  opacity: 1 !important;
+  transform: translateY(0%) !important;
+  transition: all .5s ease;
+}
+.hide{
+  opacity: 0;
+  transform: translateY(10%);
 }
 </style>

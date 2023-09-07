@@ -333,7 +333,7 @@ export default {
 .testcode-input-box{
   position: relative;
   display: flex;
-  width: 320px;
+  width: 300px;
   height: 70px;
   border-radius: 33px;
   padding-left: 20px;
