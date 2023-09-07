@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import Home from '@/views/Home.vue';
+import Home from "@/views/Home.vue";
 import Attraction from "@/views/Attraction.vue";
 import Journal from "@/views/Journal.vue";
 import Team from "@/views/Team.vue";
@@ -18,12 +18,14 @@ import MissPass from "@/views/Login/missPass";
 import AttractionSearch from '@/views/Attraction/AttractionSearch';
 import AttractionDetail from '@/views/Attraction/AttractionDetail';
 import CommentEdit from '@/views/Attraction/editcomment'
-
+import MyTeamDetails from "@/views/Team/MyTeamDetails.vue";
+import EditTeam from "@/views/Team/EditTeam.vue";
+import SearchTeam from "@/views/Team/SearchTeam.vue";
 const routes = [
   {
     path: "/",
     name: "home",
-    component: Home
+    component: Home,
   },
   {
     path: "/Login",
@@ -38,7 +40,7 @@ const routes = [
   {
     path: "/Attraction",
     name: "attractions",
-    component: Attraction
+    component: Attraction,
   },
   {
     path: "/Journal",
@@ -76,37 +78,64 @@ const routes = [
   {
     path: "/Team",
     name: "teams",
-    component: Team
+    component: Team,
   },
   {
     //搜索结果的展示页面
     path: "/searchout",
     name: "SearchOut",
-    component: SearchOut
+    component: SearchOut,
   },
   {
     path: "/Personal",
     name: "personal",
-    component: Personal
+    component: Personal,
   },
   {
     path: "/Team/MyPublishedTeam",
     name: "myPublishedTeams",
-    component: MyPublishedTeam
+    component: MyPublishedTeam,
   },
   {
     path: "/Team/MyJoinedTeam",
     name: "myJoinedTeams",
-    component: MyJoinedTeam
+    component: MyJoinedTeam,
   },
   {
     path: "/Team/TeamDetails",
     name: "teamDetails",
     component: TeamDetails
   },
-  { path: "/attraction-search", name: "attractionsearchs", component: AttractionSearch },
-  { path: "/attraction-detail", name: "attractiondetails", component: AttractionDetail },
-  { path: "/comment-edit", name: "commentedit", component: CommentEdit }
+  { 
+    path: "/attraction-search", 
+    name: "attractionsearchs", 
+    component: AttractionSearch 
+  },
+  { 
+    path: "/attraction-detail", 
+    name: "attractiondetails", 
+    component: AttractionDetail 
+  },
+  { 
+    path: "/comment-edit", 
+    name: "commentedit", 
+    component: CommentEdit 
+  },
+  {
+    path: "/Team/MyTeamDetails",
+    name: "myTeamDetails",
+    component: MyTeamDetails,
+  },
+  {
+    path: "/Team/EditTeam",
+    name: "editTeam",
+    component: EditTeam,
+  },
+  {
+    path: "/Team/SearchTeam",
+    name: "searchTeam",
+    component: SearchTeam,
+  },
 ];
 
 const router = createRouter({
