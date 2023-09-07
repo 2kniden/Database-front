@@ -434,7 +434,7 @@
         <div class="account_page_text"></div>
         <img class="account_page_icon" src="../assets/personal/accountRightArrow.png"/>
       </div>
-      
+
     </div>
 
   </div>
@@ -1494,8 +1494,6 @@ export default {
   top:350px;
 }
 
-<<<<<<< Updated upstream
-=======
 /* 收藏夹子目录 */
 .big_content_son{
   position: relative;
@@ -1593,5 +1591,4 @@ export default {
   margin-top: 12px;
 }
 
->>>>>>> Stashed changes
 </style>
