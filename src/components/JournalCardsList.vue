@@ -6,7 +6,7 @@
         <p>换一个关键词试试吧</p>
       </div>
       <div class="hint-img">
-        <img src="../assets/journal/journal-have-no-result.png" alt="">
+        <img src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal//journal-have-no-result.png" alt="">
       </div>
     </div>
     <div v-else>
@@ -19,7 +19,7 @@
                 <img :src="card.photoUrl" alt="这里是封面图" class="cover-image"/>
               </div>
               <span v-if="card.authorization === 3" class="c-is-locked">
-                <img src="../assets/journal/journal_locked.png" class="locked-icon" />
+                <img src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/journal_locked.png" class="locked-icon" />
               </span>
               <div class="c-info">
                 <div class="c-info-bg">
@@ -104,7 +104,6 @@ function decideURL(){
 function getCardLists() {
   axios.get(requestUrl.value+"/"+String(curPageNum.value)+"/"+String(pageSpec.pageSize)+"/"+String(pageSpec.displayType))
     .then(res=>{
-      console.log(requestUrl.value+"/"+String(curPageNum.value)+"/"+String(pageSpec.pageSize)+"/"+String(pageSpec.displayType));
       totalNum.value = res.data.totalNum;
       cards.length=0;
       res.data.journalList.forEach(element => {
@@ -112,8 +111,6 @@ function getCardLists() {
           element.postDate = publishTime.getFullYear()+'-'+(publishTime.getMonth()+1)+'-'+publishTime.getDate();
           cards.push(element);
         });
-      console.log("res.data.journalList",res.data.journalList);
-      console.log("cards",cards);
       
     },
     err =>{
@@ -126,7 +123,6 @@ function getCardLists() {
 function getCardLists_keyword() {
   axios.get(requestUrl.value+"/"+ String(curPageNum.value) + "/" + String(pageSpec.pageSize)+"/"+String(pageSpec.keyword)+"/"+String(pageSpec.displayType))
   .then(res=>{
-      console.log(requestUrl.value+"/"+ String(curPageNum.value) + "/" + String(pageSpec.pageSize)+"/"+String(pageSpec.keyword)+"/"+String(pageSpec.displayType));
       totalNum.value = res.data.totalNum;
       cards.length=0;//先清空cards，push的方法会使得cards中的内容在不断累积
       res.data.journalList.forEach(element => {
@@ -135,8 +131,6 @@ function getCardLists_keyword() {
         element.postDate = publishTime.getFullYear()+'-'+publishTime.getMonth()+'-'+publishTime.getDate();
         cards.push(element);
       });
-      console.log("res.data.journalList",res.data.journalList);
-      console.log("cards",cards);
   },err=>{
     console.log("can't get cards info")
   });
@@ -191,34 +185,8 @@ watch(()=>[pageSpec.keyword,pageSpec.displayType],([newKey,newType],[oldKey,oldT
   
   console.log("pageSpec.keyword=",pageSpec.keyword);
   console.log("pageSpec.displayType=",pageSpec.displayType);
-  // console.log("newValue",newValue);
-  // console.log("oldValue",oldValue);
-  // 此时keyword变化时，displayType一定会改变；反之不然，但一定会调用接口，所以理论上这个监听函数可以不需要
-  // // 展开搜索，因此页码从起始页开始计算
-  // curPageNum.value=1;
-  // // 按照道理来讲由于curPage.value也有一个监听函数，会产生回调，因此无需再在此处调用卡片更新函数
-  // if(pageSpec.keyword === "全部" || pageSpec.keyword === "") { 
-  //   //后面那个是防止因为关键词缺失造成接口调用错误从而导致网页加载崩溃
-  //   getCardLists();
-  // }
-  // else{
-  //   getCardLists_keyword();
-  // }
 })
 
-// watch(()=>pageSpec.displayType,()=>{
-//   console.log("监听到displayType变化");
-//   console.log("pageSpec.keyword=",pageSpec.keyword);
-//   console.log("pageSpec.displayType=",pageSpec.displayType);
-//   curPageNum.value=1;
-//   if(pageSpec.keyword === "全部" || pageSpec.keyword === "") { 
-//     //后面那个是防止因为关键词缺失造成接口调用错误从而导致网页加载崩溃
-//     getCardLists();
-//   }
-//   else{
-//     getCardLists_keyword();
-//   }
-// })
 
 // 日志卡片样式的动态绑定
 function whenLocked(card) {
@@ -374,13 +342,6 @@ function checkDetails(card){
 span.el-tag.el-tag--dark.is-round {
     margin-right: 2px;
 }
-// .bottom {
-//   margin-top: 5px;
-//   line-height: 12px;
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-// }
 
 // 时间
 .time {

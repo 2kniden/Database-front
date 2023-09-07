@@ -7,19 +7,19 @@
                 <br>
                 <button class="interaction-button" size="small" @click="changeLikeStatus">
                     <p v-if="reader.is_like">
-                        <img  src="../../assets/journal/details_like.png" style="height:27px">
+                        <img  src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/details_like.png" style="height:27px">
                     </p>
                     <p v-else>
-                        <img src="../../assets/journal/details_unlike.png" style="height:27px">
+                        <img src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/details_unlike.png" style="height:27px">
                     </p>
                 </button>
                 
                 <button class="interaction-button" @click="changeCollectStatus">
                     <p v-if="reader.is_collect">
-                        <img src="../../assets/journal/details_collect.png" style="height:28px;">
+                        <img src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/details_collect.png" style="height:28px;">
                     </p>
                     <p v-else>
-                        <img src="../../assets/journal/details_uncollect.png" style="height:28px">
+                        <img src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/details_uncollect.png" style="height:28px">
                     </p> 
                 </button>
             </div>
@@ -67,11 +67,11 @@
                 <!-- 本文点赞评论数量 -->
                 <div class="interaction">
                     <p>
-                        <img src="../../assets/journal/details_read.png" style="height:20px">
+                        <img src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/details_read.png" style="height:20px">
                         浏览 {{read_num}} &nbsp;
-                        <img src="../../assets/journal/details_like.png" style="height:20px">
+                        <img src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/details_like.png" style="height:20px">
                         点赞  {{kudos_num}} &nbsp;
-                        <img src="../../assets/journal/details_collect.png" style="height:20px">
+                        <img src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/details_collect.png" style="height:20px">
                         收藏  {{collect_num}}
                     </p>
                     <p class="post-time">
@@ -115,7 +115,7 @@
         <div class="reviews-div">  
             <div class="post-review-wrapper">
                 <div class="comment-icon">
-                    <img src="../../assets/journal/details_comment.png" style="height:40px">
+                    <img src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/details_comment.png" style="height:40px">
                 </div>
                 <div class="comment-input">
                     <el-input v-model="reader.post_comment"  size="large" placeholder="我也有话说……" />
@@ -151,8 +151,8 @@
                     <p class="com-time-kudos-reply" >
                         {{comment.post_time}}&nbsp;&nbsp;
                         <a @click.stop="change_com_LikeStatus(index1)">
-                            <img v-if="comment.is_like === false" src="../../assets/journal/details_com_like.png"  style="height:10px">
-                            <img v-if="comment.is_like === true" src="../../assets/journal/details_com_givelike.png" style="height:10px">
+                            <img v-if="comment.is_like === false" src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/details_com_like.png"  style="height:10px">
+                            <img v-if="comment.is_like === true" src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/details_com_givelike.png" style="height:10px">
                             {{comment.post_likes}}
                         </a>
                         &nbsp;&nbsp;
@@ -197,8 +197,8 @@
                             <p class="rep-time-kudos-reply">
                                 {{reply.post_time}}&nbsp;&nbsp;
                                 <a @click="change_rep_LikeStatus(index1, index2)">
-                                    <img v-if="reply.is_like === false" src="../../assets/journal/details_com_like.png"  style="height:10px">
-                                    <img v-if="reply.is_like === true" src="../../assets/journal/details_com_givelike.png" style="height:10px">
+                                    <img v-if="reply.is_like === false" src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/details_com_like.png"  style="height:10px">
+                                    <img v-if="reply.is_like === true" src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/details_com_givelike.png" style="height:10px">
                                     {{reply.post_likes}}
                                 </a>
                                 &nbsp;&nbsp;
@@ -327,6 +327,7 @@ export default {
         comments_of_comments: [         //日志评论的评论（包括评论的评论的评论），与comments一一对应
             [],
         ],
+        isDark:true,
     }},
     mounted() {
         // 挂载前先获取到用户想要查看的日志的详细信息
@@ -924,6 +925,13 @@ button.el-button.edit-journal:hover,button.el-button.edit-journal:focus {
 .body-wrapper {
     padding: 30px;
     text-align: left;
+
+    div {
+        background-color: rgba(255,255,255,0.7);
+    }
+    p img {
+        text-align: center;
+    }
 }
 
 /* 评论区 */

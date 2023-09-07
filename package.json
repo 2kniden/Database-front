@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "^4.0.7",
+    "ali-oss": "^6.18.0",
     "axios": "^1.4.0",
     "core-js": "^3.8.3",
     "element-plus": "^2.3.7",

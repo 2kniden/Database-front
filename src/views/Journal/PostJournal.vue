@@ -12,7 +12,7 @@
       </div>
       <div v-if="cover_url" class="show-cover">
         <div class="cover-image-border">
-          <el-image class="cover-image" :src="cover_url" :fit="fit" />
+          <el-image class="cover-image" :src="cover_url"/>
         </div>
       </div> 
 
@@ -113,6 +113,27 @@ import { ElInput,ElMessage,ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import axios  from "axios";
 import { useRouter,useRoute } from "vue-router"
+import OSS from 'ali-oss'
+
+function formatDateTime(d) {
+    const date = new Date(d);      //发布日期
+    const date_year = date.getFullYear();
+    const date_month = date.getMonth() + 1;
+    const date_day = date.getDate(); 
+
+    var y = date.getFullYear();  
+    var m = date.getMonth() + 1;  
+    m = m < 10 ? ('0' + m) : m;  
+    var d = date.getDate();  
+    d = d < 10 ? ('0' + d) : d;  
+    var h = date.getHours();  
+    h = h < 10 ? ('0' + h) : h;  
+    var minute = date.getMinutes();  
+    minute = minute < 10 ? ('0' + minute) : minute;  
+    var second=date.getSeconds();  
+    second=second < 10 ? ('0' + second) : second;  
+    return y + m + d + h + minute + second;  
+};
 
 export default{
     name: "PostJournal",    
@@ -142,9 +163,7 @@ export default{
         file_picker_types: 'image',
         file_picker_callback: this.openFilePicker,
         // 图片处理函数，不要以base64的方式拿到图片
-        // image_upload_handler:() => {
-
-        // }
+        images_upload_handler:this.imagesUploadHandler,
         init: (editor) => {
           editor.on('init', () => {
             this.content = editor.getContent();
@@ -161,50 +180,85 @@ export default{
 
       is_public:1,
 
-      gifPath: {url: require('../../assets/journal/journal-upload.gif')},
+      gifPath: {url: 'https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/journal-upload.gif'},
       inputIsValid:true,
 
       mode:'post',
       journal_id:'',
+      OSSOptions: {
+        endpoint:'',
+        accessKeyId:'',
+        accessKeySecret:'',
+        bucket:'',
+      },
+      ossClient:'',
     }
   },
   mounted() {
     this.initializeData();
   },
   methods: {
+    getOssOptions() {
+      return new Promise((resolve,reject)=>{
+        axios.get('/api/Teams/Access')
+        .then (res=>{
+          console.log('get it');
+          console.log('res.data=',res.data);
+          resolve(res.data);
+        })
+        .catch(err=>{
+          console.log("can't get accesskeyId");
+          reject('no');
+        })
+      })
+    },
     initializeData(){
       var that = this;
       const query = this.$route.query;
       that.mode = query.mode;
-      // 获得当前浏览者的id,先写死
-      that.poster_id = "843526A2B7784E73B28E73C797A2C81C"; 
+      this.getOssOptions().then((res)=>{
+        if(res !== 'no'){
+            console.log('res=',res);
+            const endpoint = res.endpoint;
+            // that.OSSOptions.endpoint='oss-cn-shanghai.aliyuncs.com';
+            that.OSSOptions.endpoint=res.endpoint;
+            that.OSSOptions.accessKeyId=res.accessKeyId;
+            that.OSSOptions.accessKeySecret=res.accessKeySecret;
+            that.OSSOptions.bucket=res.bucketName;
+            that.ossClient = new OSS(that.OSSOptions);
+            console.log('that.OSSOptions=',that.OSSOptions);
+            // console.log('that.ossClient=',that.ossClient);
+          // 获得当前浏览者的id,先写死
+          that.poster_id = "843526A2B7784E73B28E73C797A2C81C"; 
 
-      //获取现有标签
-      axios.get('/api/Journals/Tags/').then(res =>{
-        that.re_tabs = res.data.tabs;
-      });
+          //获取现有标签
+          axios.get('/api/Journals/Tags/').then(res =>{
+            that.re_tabs = res.data.tabs;
+          });
 
-      if(that.mode === 'edit'){
-        // 则对相应内容进行填充
-        that.journal_id = query.journal;
-        axios.get('/api/Journals/'+ that.journal_id + '/' + that.poster_id)
-          .then(res=>{
-              // 本篇日志的信息
-              that.title = res.data.Journal.title;
-              that.cover_url = res.data.Journal.cover_url;
-              that.selected_tabs = res.data.Journal.tabs;
-              that.content = res.data.Journal.body;
-              // that.is_public = res.data.Journal. 
-          })
-          .catch(err=>{
-            ElMessage.error("获取信息失败");
-          })
-
-      }
-      else{
-        ;
-      }
-      
+          if(that.mode === 'edit'){
+            // 则对相应内容进行填充
+            that.journal_id = query.journal;
+            axios.get('/api/Journals/'+ that.journal_id + '/' + that.poster_id)
+              .then(res=>{
+                  // 本篇日志的信息
+                  that.title = res.data.Journal.title;
+                  that.cover_url = res.data.Journal.cover_url;
+                  that.selected_tabs = res.data.Journal.tabs;
+                  that.content = res.data.Journal.body;
+                  // that.is_public = res.data.Journal. 
+              })
+              .catch(err=>{
+                ElMessage.error("获取信息失败");
+              })
+          }
+          else{
+            ;
+          }//edit mode
+        } else {
+          console.log("fail to initializa!!!");
+        }
+      })//end of promise.then
     },
 
     // 上传图片,先获取图片,最后一起上传
@@ -223,29 +277,29 @@ export default{
       }
       const formData = new FormData();
       formData.append('file', files[0]);
-      // 看一下是不是直接就取得了相应的url
-      // 并不,这个只是对象
-      console.log(formData.get('file'));
-      // console.log(URL.createObjectURL(formData.get('file')));
-      // that.cover_url = URL.createObjectURL(formData.get('file'));
-      // 先写死
-      that.cover_url = "https://youimg1.c-ctrip.com/target/0100112000830aypz6879_W_671_0_Q90.jpg?proc=autoorient";
+      const coverObj = formData.get('file');
+
+      const storeAs = 'Journal/';
       
-      // 处理封面上传
-      // axios.post('/Journal/PostJournal/uploadCover/', {
-      //   id: that.poster_id,
-      //   cover: formData.get('file'),
-      //   })
-      //   .then(res => {
-      //     // 处理服务器返回的响应
-      //     that.cover_url = res.data.cover_url;
-      //     that.cover_id = res.data.cover_id;
-      //   })
-      //   .catch(error => {
-      //     // 处理错误
-      //     alert('上传失败！');
-      //   });
-        
+      // 并不,这个只是对象
+      console.log(coverObj);
+      // 增加时间戳、防止名称重复
+      const imgCreatedTime = formatDateTime(coverObj.lastModifiedDate);
+
+      // 重命名:
+      const ext = coverObj.name.split('.').pop();//后缀名只能为最后一个
+      const coverRename = coverObj.name.split(ext)[0] + imgCreatedTime + '.' + ext;
+      
+      that.ossClient.put(storeAs+coverRename,coverObj)
+      .then (res=>{
+        console.log('yes');
+        that.cover_url = res.url;
+        console.log(that.cover_url);
+      })
+      .catch(err=>{
+        console.log('no');
+      })
+      // that.cover_url = "https://dimg04.c-ctrip.com/images/01051120009q53j342A87_R_1600_10000.jpg";
     },
 
     handleClose(tag) {
@@ -301,6 +355,28 @@ export default{
       input.click()
     },
 
+    imagesUploadHandler(blobInfo,success,failure) {
+          let that = this;
+          let ext = blobInfo.filename().split('.').pop();
+          let name = blobInfo.name();
+          let curTime = new Date();
+          curTime = formatDateTime(curTime);
+          const imgName = that.poster_id + name + curTime + '.' + ext;
+          const dirName = 'Journal/';
+          console.log(imgName);
+
+          that.ossClient.put(dirName+imgName,blobInfo.blob())
+          .then(res=>{
+            console.log('image_upload_handler:yes');
+            success(res.url)
+          })
+          .catch(err =>{
+            console.log(err);
+          })
+          console.log("done");
+          
+        },
+
     handlePublicStatus(is_public){
       console.log("is_public=",is_public);
     },
@@ -322,10 +398,6 @@ export default{
       //const blob = new Blob([this.content], { type: 'text/html;charset=utf-8' });
       //saveAs(blob, 'article.html');   //保存正文html
 
-      console.log(that.poster_id);
-      console.log(that.cover_url);
-      console.log(that.title);
-      console.log(that.content);                //查看内容，这里暂时保存为文件便于查看
       // 要将tabs转换成以逗号相隔的字符串进行上传
       let all_tabs="";
       this.selected_tabs.forEach(e => {
@@ -360,17 +432,18 @@ export default{
           
         });
       } else {
+        console.log(that.content);
           axios.post('/api/Journals', {
-          title: that.title,
-          journalContent: that.content,
-          authorization: that.is_public,
-          // travelTime:
-          // 这里还有一个cover_id
-          photoUrl: that.cover_url,
-          // travelType:
-          journalTag: all_tabs,
-          // routeId:
-          userId: that.poster_id,
+            title: that.title,
+            journalContent: that.content,
+            authorization: that.is_public,
+            // travelTime:
+            // 这里还有一个cover_id
+            photoUrl: that.cover_url,
+            // travelType:
+            journalTag: all_tabs,
+            // routeId:
+            userId: that.poster_id,
           })
           .then(res => {
             if (res.data.status) {
