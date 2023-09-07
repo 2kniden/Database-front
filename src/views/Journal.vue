@@ -18,7 +18,7 @@
             <router-View></router-View>
         </div>
     </main>
-   
+
   </div>
 </template>
 
@@ -56,7 +56,7 @@ export default {
 .JournalPage {
     content:"";
     display: block;
-    height:100%;
+    height:100vh;
     background-color:purple;
 } */
 
@@ -90,7 +90,7 @@ nav {
 }
 
 main {
-    height:500px;
+    height:720px;
     /* margin:10px 0px; */
     background-color: transparent;
 }

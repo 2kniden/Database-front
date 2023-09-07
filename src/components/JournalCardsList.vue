@@ -52,14 +52,14 @@
       </div>
 
       <div v-if="pageSpec.ifInation === true" class="pgination-area">
-        <el-pagination background layout="prev, pager, next" 
-          :total="totalNum" 
+        <el-pagination background layout="prev, pager, next"
+          :total="totalNum"
           :default-page-size="pageSpec.pageSize"
           v-model:current-page ="curPageNum"
           @update:current-page="handleCurrentPageChange"/>
       </div>
     </div>
-    
+
 </template>
 
 <script setup>
@@ -95,7 +95,7 @@ function decideURL(){
   else if(pageSpec.authorID !== "" && pageSpec.readerID !== ""){
     requestUrl.value = "/api/Journals/user/page/" + pageSpec.authorID;
   }
-  else 
+  else
     ;
 }
 
@@ -114,7 +114,7 @@ function getCardLists() {
         });
       console.log("res.data.journalList",res.data.journalList);
       console.log("cards",cards);
-      
+
     },
     err =>{
       console.log("can't get cards info");
@@ -153,7 +153,7 @@ function handleCurrentPageChange(){
   console.log("监听到页面更新");
   console.log("curPageNum=",curPageNum);//
   // 是否有关键词？
-  if(pageSpec.keyword === "全部" || pageSpec.keyword === "") { 
+  if(pageSpec.keyword === "全部" || pageSpec.keyword === "") {
     //后面那个是防止因为关键词缺失造成接口调用错误从而导致网页加载崩溃
     getCardLists();
   }
@@ -169,7 +169,7 @@ watch(()=>[pageSpec.keyword,pageSpec.displayType],([newKey,newType],[oldKey,oldT
   if(newKey !== oldKey) {
     // 说明keyword发生了变化:重置displayType，调用接口
     console.log("监听到keyword变化");
-    if(pageSpec.keyword === "全部" || pageSpec.keyword === "") { 
+    if(pageSpec.keyword === "全部" || pageSpec.keyword === "") {
       //后面那个是防止因为关键词缺失造成接口调用错误从而导致网页加载崩溃
       getCardLists();
     }
@@ -180,7 +180,7 @@ watch(()=>[pageSpec.keyword,pageSpec.displayType],([newKey,newType],[oldKey,oldT
   else {
     console.log("监听到displayType变化");
     // keyword没发生变化，但仍然进入了这个函数，说明页面发生了变化
-    if(pageSpec.keyword === "全部" || pageSpec.keyword === "") { 
+    if(pageSpec.keyword === "全部" || pageSpec.keyword === "") {
     //后面那个是防止因为关键词缺失造成接口调用错误从而导致网页加载崩溃
       getCardLists();
     }
@@ -188,7 +188,7 @@ watch(()=>[pageSpec.keyword,pageSpec.displayType],([newKey,newType],[oldKey,oldT
       getCardLists_keyword();
     }
   }
-  
+
   console.log("pageSpec.keyword=",pageSpec.keyword);
   console.log("pageSpec.displayType=",pageSpec.displayType);
   // console.log("newValue",newValue);
@@ -197,7 +197,7 @@ watch(()=>[pageSpec.keyword,pageSpec.displayType],([newKey,newType],[oldKey,oldT
   // // 展开搜索，因此页码从起始页开始计算
   // curPageNum.value=1;
   // // 按照道理来讲由于curPage.value也有一个监听函数，会产生回调，因此无需再在此处调用卡片更新函数
-  // if(pageSpec.keyword === "全部" || pageSpec.keyword === "") { 
+  // if(pageSpec.keyword === "全部" || pageSpec.keyword === "") {
   //   //后面那个是防止因为关键词缺失造成接口调用错误从而导致网页加载崩溃
   //   getCardLists();
   // }
@@ -211,7 +211,7 @@ watch(()=>[pageSpec.keyword,pageSpec.displayType],([newKey,newType],[oldKey,oldT
 //   console.log("pageSpec.keyword=",pageSpec.keyword);
 //   console.log("pageSpec.displayType=",pageSpec.displayType);
 //   curPageNum.value=1;
-//   if(pageSpec.keyword === "全部" || pageSpec.keyword === "") { 
+//   if(pageSpec.keyword === "全部" || pageSpec.keyword === "") {
 //     //后面那个是防止因为关键词缺失造成接口调用错误从而导致网页加载崩溃
 //     getCardLists();
 //   }
@@ -224,11 +224,11 @@ watch(()=>[pageSpec.keyword,pageSpec.displayType],([newKey,newType],[oldKey,oldT
 function whenLocked(card) {
   if (card.authorization === 3) {
       return "private-style";
-  } 
+  }
 }
 
 // 查看日志详情
-const toDetails = useRouter(); 
+const toDetails = useRouter();
 function checkDetails(card){
   toDetails.push({
     path:"/Journal/JournalDetails/" + card.journal_id,
@@ -243,8 +243,8 @@ function checkDetails(card){
   width:180px;
   height:180px;
   float:left;
-  margin-right:23px;
-  margin-bottom:20px;
+  margin-left: 50px;
+  margin-top: 40px;
   border-radius: 15px;
   text-align: left;
 }
@@ -404,6 +404,8 @@ span.el-tag.el-tag--dark.is-round {
   float:left;
   position:relative;
   width:100%;
+  margin-top: 40px;
+  margin-left: 100px;
   display: flex;
   align-items: center;
   justify-content: center;

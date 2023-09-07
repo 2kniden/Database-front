@@ -14,7 +14,7 @@
         <div class="cover-image-border">
           <el-image class="cover-image" :src="cover_url" :fit="fit" />
         </div>
-      </div> 
+      </div>
 
       <div class="title-wrapper">
         <div class="title-label">标题：</div>
@@ -32,7 +32,7 @@
       </div>
 
       <div class="tabs-wrapper">
-        <div class="tabs-label">标签：</div>
+        <div class="tabs-label" style="width: 48px;">标签：</div>
         <div class="tabs-container">
           <el-tag
             v-for="tag in selected_tabs"
@@ -61,11 +61,11 @@
             + 添加
           </el-button>
 
-          <div class="tabs-label_2">推荐标签：</div> 
+          <div class="tabs-label_2">推荐标签：</div>
           <div v-for="tag in re_tabs" :key="tag" class="re_tabs_item"
           :class="{ 'selected': is_tabSelected(tag) }" @click="handle_re_tabs(tag)">
             <div class="tag-text">{{tag}}</div>
-          </div>          
+          </div>
         </div>
       </div>
 
@@ -87,12 +87,12 @@
               />
               </el-tooltip> -->
           </div>
-      </div>    
+      </div>
 
       <div class="save-journal">
         <el-button v-if="title" size="large" color="#626aef" dark @click="saveContent">发布</el-button>
       </div>
-      
+
   </div>
 
   <div v-else>
@@ -115,7 +115,7 @@ import axios  from "axios";
 import { useRouter,useRoute } from "vue-router"
 
 export default{
-    name: "PostJournal",    
+    name: "PostJournal",
     components:{
         'editor': Editor,
         ElInput,
@@ -125,8 +125,8 @@ export default{
     return {
       poster_id: "001",
 
-      is_post: true,    
-      
+      is_post: true,
+
       cover_url: '',
       cover_id: '',
 
@@ -152,7 +152,7 @@ export default{
         }
       },
       content: '',
-      
+
       input_tab: '',
       selected_tabs: [],
       input_tab_Visible: false,
@@ -177,7 +177,7 @@ export default{
       const query = this.$route.query;
       that.mode = query.mode;
       // 获得当前浏览者的id,先写死
-      that.poster_id = "843526A2B7784E73B28E73C797A2C81C"; 
+      that.poster_id = "843526A2B7784E73B28E73C797A2C81C";
 
       //获取现有标签
       axios.get('/api/Journals/Tags/').then(res =>{
@@ -194,7 +194,7 @@ export default{
               that.cover_url = res.data.Journal.cover_url;
               that.selected_tabs = res.data.Journal.tabs;
               that.content = res.data.Journal.body;
-              // that.is_public = res.data.Journal. 
+              // that.is_public = res.data.Journal.
           })
           .catch(err=>{
             ElMessage.error("获取信息失败");
@@ -204,7 +204,7 @@ export default{
       else{
         ;
       }
-      
+
     },
 
     // 上传图片,先获取图片,最后一起上传
@@ -230,7 +230,7 @@ export default{
       // that.cover_url = URL.createObjectURL(formData.get('file'));
       // 先写死
       that.cover_url = "https://youimg1.c-ctrip.com/target/0100112000830aypz6879_W_671_0_Q90.jpg?proc=autoorient";
-      
+
       // 处理封面上传
       // axios.post('/Journal/PostJournal/uploadCover/', {
       //   id: that.poster_id,
@@ -245,7 +245,7 @@ export default{
       //     // 处理错误
       //     alert('上传失败！');
       //   });
-        
+
     },
 
     handleClose(tag) {
@@ -357,7 +357,7 @@ export default{
         })
         .catch(err=>{
           ElMessage.error("上传失败");
-          
+
         });
       } else {
           axios.post('/api/Journals', {
@@ -387,7 +387,7 @@ export default{
             ElMessage.error('上传失败！');
           });
         }
-      
+
 
     },
   }
@@ -399,6 +399,8 @@ export default{
 .headtext {
     position: relative;
     height: 50px;
+  margin-left: 180px;
+  margin-top: 30px;
     font-size: 20px;
     font-weight: bold;
     line-height: 50px;
@@ -407,6 +409,7 @@ export default{
 /* 封面 */
 .cover-wrapper {
   display: flex;
+  margin-left: 180px;
   align-items: flex-start;
 }
 .cover-label {
@@ -415,7 +418,7 @@ export default{
   font-weight: bold;
 }
 .cover-container {
-  height: 40px; 
+  height: 40px;
 }
 .show-cover{
   height: 175px;
@@ -429,8 +432,8 @@ export default{
   border:1px dashed;
 }
 .cover-image{
-  width: 150px; 
-  height: 150px; 
+  width: 150px;
+  height: 150px;
   border-radius: 15px;
 }
 
@@ -438,6 +441,7 @@ export default{
 .title-wrapper {
   display: flex;
   align-items: flex-start;
+  margin-left: 180px;
 }
 .title-label {
   margin-left: 10px;
@@ -447,7 +451,7 @@ export default{
 .input-container {
   flex: 1;
   margin-right: 20px;
-  height: 50px; 
+  height: 50px;
   text-align: left;
   .check-input-hint {
     font-size: 7px;
@@ -459,6 +463,7 @@ export default{
 .editor-wrapper {
   display: flex;
   align-items: flex-start;
+  margin-left: 180px;
 }
 .editor-label {
   margin-left: 10px;
@@ -475,6 +480,7 @@ export default{
 .tabs-wrapper {
   display: flex;
   align-items: flex-start;
+  margin-left: 180px;
 }
 .tabs-label {
   margin-left: 10px;
@@ -485,7 +491,8 @@ export default{
 .tabs-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;  
+  gap: 5px;
+  width: 700px;
 }
 .tabs-label_2{
   font-size: 10px;
@@ -524,7 +531,7 @@ export default{
   background: #8097FD;
 }
 
-:deep(.el-radio__input.is-checked){   
+:deep(.el-radio__input.is-checked){
   --el-color-primary:#8097FD;
 }
 /* 是否公开 */
@@ -540,6 +547,7 @@ export default{
 .public-wrapper {
   display: flex;
   align-items: flex-start;
+  margin-left: 180px;
 }
 .public-label {
   margin-left: 10px;

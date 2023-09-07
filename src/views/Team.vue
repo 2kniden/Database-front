@@ -1,6 +1,6 @@
 <template>
   <div class="background">
-    <div class="head"></div>
+<!--    <div class="head"></div>-->
     <Header></Header>
     <TeamNav />
     <div class="team-content">
@@ -16,10 +16,10 @@
           @keyup.enter="submitSearchText"
           />
         </div>
-      
-        <div > 
+
+        <div >
           <el-button class="search-button" color="#8097FD" plain
-           native-type="submit" 
+           native-type="submit"
           @click="submitSearchText">搜索</el-button>
         </div>
 
@@ -59,7 +59,7 @@
               @click="goDetails(item)">查看详情</el-button>
             <el-button class="card-button" v-if="item.status === '招募中'" type="primary" size="large" color="#8097FD" plain
             @click="joinTeamDialogVisible = true; applicantTeam = item;">加入小队</el-button>
-            <el-button class="card-button" v-if="item.status === '招募结束'" type="primary" size="large" plain disabled 
+            <el-button class="card-button" v-if="item.status === '招募结束'" type="primary" size="large" plain disabled
             style="background-color: rgb(242, 245, 255); color: rgb(169, 185, 253); border-color: rgb(192, 203, 254);"
             @click="joinTeamDialogVisible = true; applicantTeam = item;">加入小队</el-button>
           </div>
@@ -161,7 +161,7 @@ function submitSearchText() {
         path: '/Team/SearchTeam',
         query: {
           searchkey:input.value,
-        }        
+        }
       })
     }
     else{
@@ -172,7 +172,7 @@ function submitSearchText() {
     });
     }
 }
-    
+
 axios.get('/api/Teams/'+String(cur_user_id))
   .then(res => {
     console.log(res.data);
@@ -180,7 +180,7 @@ axios.get('/api/Teams/'+String(cur_user_id))
   })
   .catch(error => {
       console.error("获取小队列表失败:", error);
-    }); 
+    });
 
 // 请求加入小队
 const joinTeam = (applicantTeam) => {
@@ -237,7 +237,7 @@ const joinTeam = (applicantTeam) => {
 
 <style>
 .background {
-  background-color: #F1F3FF;;
+  background-color: #F1F3FF;
 
   /* min-height: 100vh; */
   &::before {
@@ -269,6 +269,14 @@ const joinTeam = (applicantTeam) => {
   width: 1090px;
   height: auto;
   border-radius: 10px;
+  overflow-y: auto;
+  /* 隐藏浏览器默认的滚动条 */
+  -ms-overflow-style: none; /* IE 11 */
+
+  /* 自定义滚动条样式（Webkit浏览器）*/
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 }
 
 .card {
@@ -276,7 +284,7 @@ const joinTeam = (applicantTeam) => {
   padding: 10px 0;
   float: left;
   width: 480px;
-  
+
 }
 
 .card-line {

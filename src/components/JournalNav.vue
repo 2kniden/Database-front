@@ -13,7 +13,7 @@
         </router-link>
       </li>
       <!-- choice2 -->
-      <li class="choice clearfix">
+      <li class="choice clearfix" style="margin-top: 30px;">
         <router-link to="/Journal/MyJournal">
           <div class="nav-icon">
             <img src="../assets/journal/my-journal-icon.png"/>
@@ -43,7 +43,7 @@
       </li>
     </ul>
   </template>
-  
+
   <script>
   import { useRoute } from "vue-router";
   import { watch,ref} from "vue"
@@ -70,35 +70,36 @@
     }
   }
   </script>
-   
+
   <style scoped>
   /* 清除基本样式，但这个再加上scoped后不起作用了!!! */
   * {
     margin:0;
     padding:0;
   }
-  
+
   ul {
     list-style-type: none;
   }
-  
+
   /* 清除浮动 */
   .clearfix::before,.clearfix::after{
       content:"";
       display: block;
   }
-  
+
   .clearfix::after{
       clear:both;
   }
-  
+
   /* 设置按键样式 */
   li.choice{
     /* background-color:pink; */
     position:relative;
-    top:20px;
+    margin-top: 70px;
     height:60px;
-    width:150px;
+    width:200px;
+    margin-left: 30px;
     border-radius: 25px;
   }
 
@@ -127,7 +128,7 @@ li.choice a.router-link-active.router-link-exact-active {
     /* z-index: auto; */
     border-radius: 25px;
   }
-  
+
   .nav-icon {
     float:left;
     /* background-color: purple; */
@@ -135,21 +136,22 @@ li.choice a.router-link-active.router-link-exact-active {
     margin-left: 10px;
     margin-top: 5px;
   }
-  
+
   .nav-text {
     float:left;
     /* background-color: purple; */
     padding: 3px;
     margin-top: 15px;
   }
-  
+
   .bgImg {
     /* position:static 使得top无法奏效 */
     position:relative;
-    top:80px;
+    margin-left: 50px;
+    margin-top: 230px;
     /* 为了设置成图片浮动在最上方的效果 */
     z-index: 100;
     /* background-color: black; */
   }
-  
+
   </style>

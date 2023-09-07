@@ -4,7 +4,7 @@
         <div class="operation-display clearfix">
             <div class="post">
                 <el-button class="postbtn"
-                round native-type="submit" 
+                round native-type="submit"
                 @click="postJournal()">新建日志</el-button>
             </div>
 
@@ -18,12 +18,13 @@
                 />
 
                 <el-button class="searchbtn"
-                round native-type="submit" 
+                round native-type="submit"
                 @click="submitSearchText">搜索</el-button>
             </div>
 
             <el-select v-model="value" value-key="id" placeholder="列表展示方式"
-            @change="changeDisplayType(value)">
+            @change="changeDisplayType(value)"
+            style="left: 400px;top: 35px;">
                 <el-option
                     v-for="item in displayOptions"
                     :key="item.id"
@@ -165,10 +166,13 @@ const postJournal = () => {
 /********* "我的日志"展示区背景 ********/
 .my-journal-BG {
     float:left;
-    border-radius: 20px;
-    background-color: rgba(255,255,255,0.5);
-    width:1050px;
-    height:540px;
+  border-radius: 20px;
+  /* 如果直接使用opacity，那么文字颜色透明度也会随之改变 */
+  background-color: rgba(255,255,255,0.5);
+  width: 1300px;
+  height: 720px;
+  margin-left: 120px;
+  margin-top: 50px;
 }
 
     /* 搜索框、新建日志行样式*/
@@ -223,8 +227,8 @@ const postJournal = () => {
     /* 卡片展示区样式 */
     .journal-display {
         position: relative;
-        top: 40px;
-        left: 46px;
+        margin-top: 40px;
+      margin-left: 60px;
     }
     ::v-deep .cards-list {
         height:400px;

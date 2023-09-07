@@ -3,10 +3,10 @@
       <div class="head"></div>
       <Header></Header>
       <TeamNav />
-      
+
     <div class="team-content">
     <el-divider class="divider">以下结果符合关键字：<span class="search-text">{{ searchkey }}</span></el-divider>
-    <div v-if="searchResult.length > 0">  
+    <div v-if="searchResult.length > 0">
     <div v-for="(item, index) in searchResult" :key="index" class="card-list">
         <!-- 卡片 -->
         <el-card class="card">
@@ -42,7 +42,7 @@
             @click="goDetails(item)">查看详情</el-button>
             <el-button class="card-button" v-if="item.status === '招募中'" type="primary" size="large" color="#8097FD" plain
             @click="joinTeamDialogVisible = true; applicantTeam = item;">加入小队</el-button>
-            <el-button class="card-button" v-if="item.status === '招募结束'" type="primary" size="large" plain disabled 
+            <el-button class="card-button" v-if="item.status === '招募结束'" type="primary" size="large" plain disabled
             style="background-color: rgb(242, 245, 255); color: rgb(169, 185, 253); border-color: rgb(192, 203, 254);"
             @click="joinTeamDialogVisible = true; applicantTeam = item;">加入小队</el-button>
         </div>
@@ -55,7 +55,7 @@
     </div>
     <div class="clearfloat"></div>
     </div>
-  </div> 
+  </div>
   <!-- 加入小队信息填写页面 -->
   <el-dialog v-model="joinTeamDialogVisible" title="加入小队申请信息">
     <el-form :model="form" style="margin-top: 30px;">
@@ -84,7 +84,7 @@
     </div>
   </el-dialog>
   </template>
-  
+
 <script setup>
 import Header from "@/components/Header";
 import TeamNav from "@/components/TeamNav";
@@ -152,7 +152,7 @@ axios.get('/api/Teams/Search/'+String(searchkey))
     })
     .catch(error => {
         console.error("获取搜素列表失败:", error);
-    }); 
+    });
 
 // 请求加入小队
 const joinTeam = (applicantTeam) => {
@@ -238,6 +238,14 @@ background-color: #fff;
 width: 1090px;
 height: auto;
 border-radius: 10px;
+overflow-y: auto;
+/* 隐藏浏览器默认的滚动条 */
+-ms-overflow-style: none; /* IE 11 */
+
+/* 自定义滚动条样式（Webkit浏览器）*/
+&::-webkit-scrollbar {
+width: 0;
+}
 }
 
 .card {

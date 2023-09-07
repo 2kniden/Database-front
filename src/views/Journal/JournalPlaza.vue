@@ -11,20 +11,20 @@
           @keyup.enter="submitSearchText"
         />
         </div>
-        
+
         <div class="search-button">
           <el-button class="searchbtn"
-          round native-type="submit" 
+          round native-type="submit"
           @click="submitSearchText">搜索</el-button>
         </div>
-        
+
       </div>
-  
+
       <!-- 热门 -->
       <div>
         <div class="hotspot clearfix">
-          <el-button class="hot-tag" 
-          v-for="(spot,index) in spots" 
+          <el-button class="hot-tag"
+          v-for="(spot,index) in spots"
           :key="index"
           v-model="nowChosen"
           :class="chosenSpotStyle(spot)"
@@ -41,22 +41,22 @@
             :value="item"
           />
         </el-select>
-      </div> 
+      </div>
 
       <!-- 日志展示 -->
       <div class="card-display">
-        <JournalCardsList 
-        :pageSize="jppagesize" 
-        v-model:keyword="jpcurKeyword" 
-        :ifInation="jptoInation" 
+        <JournalCardsList
+        :pageSize="jppagesize"
+        v-model:keyword="jpcurKeyword"
+        :ifInation="jptoInation"
         :readerID="jpreaderId"
         :authorID="jpauthorId"
         :displayType="jpdisplayType"></JournalCardsList>
-      </div>      
+      </div>
       <!-- 翻页 -->
     </div>
 </template>
-  
+
 <script setup>
 import { ref,reactive,onMounted } from "vue"
 import axios from "axios"
@@ -182,9 +182,9 @@ function changeDisplayType(value) {
   // 当值发生改变后，就需要把它传递给子组件，以获取相应的结果
   jpdisplayType.value = value.id;
 }
-  
+
 </script>
-  
+
 <style scoped>
 /* 待修改:
   按钮被选中的样式不应该只由焦点决定,不然焦点移走的时候就会失去相关的效果 */
@@ -203,8 +203,10 @@ function changeDisplayType(value) {
   border-radius: 20px;
   /* 如果直接使用opacity，那么文字颜色透明度也会随之改变 */
   background-color: rgba(255,255,255,0.5);
-  width:1050px;
-  height:545px;
+  width: 1300px;
+  height: 720px;
+  margin-left: 120px;
+  margin-top: 50px;
 }
 
 /* 设置搜索栏样式 */
@@ -319,11 +321,10 @@ button.el-button.hot-tag.defaultChosen {
 /* 设置卡片显示位置 */
 .card-display {
   /* background-color: pink; */
-  width:1030px;
-  height:405px;
+  width:1200px;
+  height:550px;
   position:relative;
-  left:30px;
-  top: 10px;
+  margin-left: 40px;
   border-radius: 20px;
 }
 
