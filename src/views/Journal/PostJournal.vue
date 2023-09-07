@@ -90,7 +90,7 @@
       </div>
 
       <div class="save-journal">
-        <el-button v-if="title" size="large" color="#626aef" dark @click="saveContent">发布</el-button>
+        <el-button v-if="title" size="large" color="#626aef" drak @click="saveContent">发布</el-button>
       </div>
 
   </div>
@@ -130,7 +130,7 @@ export default{
       cover_url: '',
       cover_id: '',
 
-      title: '',
+      title: true,
       apikey:"5wey00pxhyichb698p1la4mlbm524jx7czschewimnv5mvbw",
       editorConfig: {
         language_url: '/tinymce/langs/zh_CN.js',
@@ -570,8 +570,9 @@ export default{
 
 /* 发布 */
 .save-journal{
-  height: 30px;
-  margin-bottom: 20px;
+  height: 60px;
+  width: 200px;
+  margin-left: 500px;
 }
 
 /* 发布后 */
