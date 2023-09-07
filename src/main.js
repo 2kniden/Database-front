@@ -39,7 +39,7 @@ app.config.globalProperties.$http = axios;
 // axios.defaults.baseURL = "http://localhost:5000";
 
 // 测试
-axios.defaults.baseURL = "http://8.130.25.70:5545";
+axios.defaults.baseURL = "http://8.130.25.70:5000";
 
 // 注册全局变量
 app.config.globalProperties.$globalData = globalData;
