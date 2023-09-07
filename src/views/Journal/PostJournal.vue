@@ -130,7 +130,7 @@ export default{
       cover_url: '',
       cover_id: '',
 
-      title: true,
+      title: '',
       apikey:"5wey00pxhyichb698p1la4mlbm524jx7czschewimnv5mvbw",
       editorConfig: {
         language_url: '/tinymce/langs/zh_CN.js',

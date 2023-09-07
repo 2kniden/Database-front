@@ -82,40 +82,40 @@
       <img class="curve-line" src="../assets/home/curveLine.png"/>
 
       <!--中间的内容-->
-      <div class="about-us">关于我们</div>
-      <div class="page-detail">专为年轻人打造的旅游资源一体化平台，让<br>你的旅行变得简单而幸福。<br>关注我们，获得第一手旅游讯息。</div>
-      <div class="provide">我们能够为您提供什么？</div>
+      <div class="about-us" ref="aboutUs" :class="{hide:true,enter:showAboutUs}">关于我们</div>
+      <div class="page-detail" ref="pageDetail" :class="{hide:true,enter:showPageDetail}">专为年轻人打造的旅游资源一体化平台，让<br>你的旅行变得简单而幸福。<br>关注我们，获得第一手旅游讯息。</div>
+      <div class="provide" ref="Provide" :class="{hide:true,enter:showProvide}">我们能够为您提供什么？</div>
 
       <!--景点-->
-      <img class="content-image" src="../assets/home/tour.png"/>
-      <div class="content-title">旅途中无论在哪里<br>都有亮丽如画的风景</div>
-      <div class="content-detail">在这里，你可以拥有独特的旅行体验，感受不一样的旅程，享受真正的自由，自由探索想去的美景。</div>
-      <div class="jump-button" @click="changePage('景点')">
-        <div class="jump-button-text">立&ensp;即<br><br>查&ensp;询</div>
+      <img class="content-image" src="../assets/home/tour.png" ref="contentImage1" :class="{hide:true,enter:showContentImage1}"/>
+      <div class="content-title" ref="contentTitle1" :class="{hide:true,enter:showContentTitle1}">旅途中无论在哪里<br>都有亮丽如画的风景</div>
+      <div class="content-detail" ref="contentDetail1" :class="{hide:true,enter:showContentDetail1}">在这里，你可以拥有独特的旅行体验，感受不一样的旅程，享受真正的自由，自由探索想去的美景。</div>
+      <div class="jump-button" @click="changePage('景点')" ref="jumpButton1" :class="{hide:true,enter:showJumpButton1}">
+        <div class="jump-button-text" ref="jumpButtonText1" :class="{hide:true,enter:showJumpButtonText1}">立&ensp;即<br><br>查&ensp;询</div>
       </div>
 
       <!--他人日志-->
-      <img class="content-image" src="../assets/home/otherDesign.png" style="margin-top: 2180px;margin-left: 100px;"/>
-      <div class="content-title" style="margin-top: 2050px;margin-left: 290px;">详实有效的他人旅游计划<br>可在线搜索</div>
-      <div class="content-detail" style="margin-top: 2350px;margin-left: 500px;">旅行带你走出安逸之乡，教会你以一种全新的方式感受世界万物，让你的记忆被奇妙的经历充满。</div>
-      <div class="jump-button" style="margin-top: 2350px;margin-left: 290px;" @click="changePage('他人日志')">
-        <div class="jump-button-text">立&ensp;即<br><br>查&ensp;询</div>
+      <img class="content-image" src="../assets/home/otherDesign.png" style="margin-top: 2180px;margin-left: 100px;" ref="contentImage2" :class="{hide:true,enter:showContentImage2}"/>
+      <div class="content-title" style="margin-top: 2050px;margin-left: 290px;" ref="contentTitle2" :class="{hide:true,enter:showContentTitle2}">详实有效的他人旅游计划<br>可在线搜索</div>
+      <div class="content-detail" style="margin-top: 2350px;margin-left: 500px;" ref="contentDetail2" :class="{hide:true,enter:showContentDetail2}">旅行带你走出安逸之乡，教会你以一种全新的方式感受世界万物，让你的记忆被奇妙的经历充满。</div>
+      <div class="jump-button" style="margin-top: 2350px;margin-left: 290px;" @click="changePage('他人日志')" ref="jumpButton2" :class="{hide:true,enter:showJumpButton2}">
+        <div class="jump-button-text" ref="jumpButtonText2" :class="{hide:true,enter:showJumpButtonText2}">立&ensp;即<br><br>查&ensp;询</div>
       </div>
 
       <!--个人日志-->
-      <img class="content-image" src="../assets/home/journal.png" style="margin-top: 3120px;margin-left: -570px;"/>
-      <div class="content-title" style="margin-top: 3220px;width: 600px;">当回忆成为宝贵的宝藏<br>个人日志是打开珍藏之门的钥匙</div>
-      <div class="content-detail" style="margin-top: 3420px;">记录生活，留下情感，探索自我，体验成长。让每一天都有故事，让每一个瞬间都有意义。用个人日志，让你的回忆永不褪色。开始记录，开始珍藏。</div>
-      <div class="jump-button" style="margin-top: 3420px;" @click="changePage('个人日志')">
-        <div class="jump-button-text">立&ensp;即<br><br>查&ensp;询</div>
+      <img class="content-image" src="../assets/home/journal.png" style="margin-top: 3120px;margin-left: -570px;" ref="contentImage3" :class="{hide:true,enter:showContentImage3}"/>
+      <div class="content-title" style="margin-top: 3220px;width: 600px;" ref="contentTitle3" :class="{hide:true,enter:showContentTitle3}">当回忆成为宝贵的宝藏<br>个人日志是打开珍藏之门的钥匙</div>
+      <div class="content-detail" style="margin-top: 3420px;" ref="contentDetail3" :class="{hide:true,enter:showContentDetail3}">记录生活，留下情感，探索自我，体验成长。让每一天都有故事，让每一个瞬间都有意义。用个人日志，让你的回忆永不褪色。开始记录，开始珍藏。</div>
+      <div class="jump-button" style="margin-top: 3420px;" @click="changePage('个人日志')" ref="jumpButton3" :class="{hide:true,enter:showJumpButton3}">
+        <div class="jump-button-text" ref="jumpButtonText3" :class="{hide:true,enter:showJumpButtonText3}">立&ensp;即<br><br>查&ensp;询</div>
       </div>
 
       <!--小队-->
-      <img class="content-image" src="../assets/home/team.png" style="margin-top: 4100px;margin-left: 100px;"/>
-      <div class="content-title" style="margin-top: 4300px;margin-left: 100px;">公开透明的旅游小队召集<br>寻求你的志同道合旅客</div>
-      <div class="content-detail" style="margin-top: 4500px;margin-left: 100px;">一个人的旅行难免孤独，茫茫宇宙中去寻找与你心跳共频的人是多么浪漫，携手走向未知的浪漫。</div>
-      <div class="jump-button" style="margin-top: 4500px;margin-left: 450px;" @click="changePage('小队')">
-        <div class="jump-button-text">立&ensp;即<br><br>查&ensp;询</div>
+      <img class="content-image" src="../assets/home/team.png" style="margin-top: 4100px;margin-left: 100px;" ref="contentImage4" :class="{hide:true,enter:showContentImage4}"/>
+      <div class="content-title" style="margin-top: 4300px;margin-left: 100px;" ref="contentTitle4" :class="{hide:true,enter:showContentTitle4}">公开透明的旅游小队召集<br>寻求你的志同道合旅客</div>
+      <div class="content-detail" style="margin-top: 4500px;margin-left: 100px;" ref="contentDetail4" :class="{hide:true,enter:showContentDetail4}">一个人的旅行难免孤独，茫茫宇宙中去寻找与你心跳共频的人是多么浪漫，携手走向未知的浪漫。</div>
+      <div class="jump-button" style="margin-top: 4500px;margin-left: 450px;" @click="changePage('小队')" ref="jumpButton4" :class="{hide:true,enter:showJumpButton4}">
+        <div class="jump-button-text" ref="jumpButtonText4" :class="{hide:true,enter:showJumpButtonText4}">立&ensp;即<br><br>查&ensp;询</div>
       </div>
 
       <!--最下部的地图-->
@@ -163,6 +163,36 @@ export default {
       // 地球必需图片
       baseTexture: require("../assets/home/baseTexture.jpg"),
       heightTexture: require("../assets/home/heightTexture.jpg"),
+
+      //下部图片依次显现
+      currentScroll:0,
+      showAboutUs:false,
+      showPageDetail:false,
+      showProvide:false,
+      //四个部分
+      showContentImage1:false,
+      showContentTitle1:false,
+      showContentDetail1:false,
+      showJumpButton1:false,
+      showJumpButtonText1:false,
+
+      showContentImage2:false,
+      showContentTitle2:false,
+      showContentDetail2:false,
+      showJumpButton2:false,
+      showJumpButtonText2:false,
+
+      showContentImage3:false,
+      showContentTitle3:false,
+      showContentDetail3:false,
+      showJumpButton3:false,
+      showJumpButtonText3:false,
+
+      showContentImage4:false,
+      showContentTitle4:false,
+      showContentDetail4:false,
+      showJumpButton4:false,
+      showJumpButtonText4:false,
     };
   },
   methods:{
@@ -201,6 +231,84 @@ export default {
       }
       else if(name==='小队'){
         this.$router.push("/Team");
+      }
+    },
+    handleScroll(){
+      this.currentScroll = window.pageYOffset //表示当前滚动的位置
+
+      if (this.currentScroll >= this.$refs.aboutUs.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showAboutUs = true;
+      }
+      if (this.currentScroll >= this.$refs.pageDetail.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showPageDetail = true;
+      }
+      if (this.currentScroll >= this.$refs.Provide.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showProvide = true;
+      }
+
+      //四个部分
+      if (this.currentScroll >= this.$refs.contentImage1.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showContentImage1 = true;
+      }
+      if (this.currentScroll >= this.$refs.contentTitle1.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showContentTitle1 = true;
+      }
+      if (this.currentScroll >= this.$refs.contentDetail1.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showContentDetail1 = true;
+      }
+      if (this.currentScroll >= this.$refs.jumpButton1.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showJumpButton1 = true;
+      }
+      if (this.currentScroll >= this.$refs.jumpButtonText1.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showJumpButtonText1 = true;
+      }
+
+      if (this.currentScroll >= this.$refs.contentImage2.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showContentImage2 = true;
+      }
+      if (this.currentScroll >= this.$refs.contentTitle2.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showContentTitle2 = true;
+      }
+      if (this.currentScroll >= this.$refs.contentDetail2.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showContentDetail2 = true;
+      }
+      if (this.currentScroll >= this.$refs.jumpButton2.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showJumpButton2 = true;
+      }
+      if (this.currentScroll >= this.$refs.jumpButtonText2.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showJumpButtonText2= true;
+      }
+
+      if (this.currentScroll >= this.$refs.contentImage3.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showContentImage3 = true;
+      }
+      if (this.currentScroll >= this.$refs.contentTitle3.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showContentTitle3 = true;
+      }
+      if (this.currentScroll >= this.$refs.contentDetail3.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showContentDetail3 = true;
+      }
+      if (this.currentScroll >= this.$refs.jumpButton3.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showJumpButton3 = true;
+      }
+      if (this.currentScroll >= this.$refs.jumpButtonText3.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showJumpButtonText3 = true;
+      }
+
+      if (this.currentScroll >= this.$refs.contentImage4.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showContentImage4 = true;
+      }
+      if (this.currentScroll >= this.$refs.contentTitle4.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showContentTitle4 = true;
+      }
+      if (this.currentScroll >= this.$refs.contentDetail4.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showContentDetail4 = true;
+      }
+      if (this.currentScroll >= this.$refs.jumpButton4.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showJumpButton4 = true;
+      }
+      if (this.currentScroll >= this.$refs.jumpButtonText4.offsetTop - 100) { //当前滚动位置到达testref的时候，显示div（100作为调整用）
+        this.showJumpButtonText4 = true;
       }
     },
     init() {
@@ -395,7 +503,7 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll,true);
     this.init();
   }
 }
@@ -414,7 +522,7 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  overflow-y: auto;
+  overflow-y: visible;
   margin-right: calc(100% - 100vw);
   padding-right: 17px;
 }
@@ -733,6 +841,9 @@ export default {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+
+  opacity: 0;
+  transform: translateY(10%);
 }
 .provide{
   position: absolute;
@@ -748,6 +859,9 @@ export default {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+
+  opacity: 0;
+  transform: translateY(10%);
 }
 .content-image{
   position: absolute;
@@ -755,6 +869,9 @@ export default {
   height: 700px;
   margin-left: -570px;
   margin-top: 1150px;
+
+  opacity: 0;
+  transform: translateY(10%);
 }
 .content-title{
   position: absolute;
@@ -817,7 +934,7 @@ export default {
 .enter{
   opacity: 1 !important;
   transform: translateY(0%) !important;
-  transition: all .5s ease;
+  transition: all 2s ease;
 }
 .hide{
   opacity: 0;
