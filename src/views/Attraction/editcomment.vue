@@ -207,7 +207,7 @@ export default {
                 rating: this.comment.avgscore,
                 commentSrc: this.comment.picList
             };
-            // 这里有图片上传就有问题
+            
             axios.post('/api/attrations/PostComments', data, null)
                 .then(res => {
                     console.log(res.data);

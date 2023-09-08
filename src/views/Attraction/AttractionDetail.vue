@@ -9,7 +9,7 @@
 
         </Splide>
         <!-- 简介栏 -->
-        <div>
+        <div class="attrdecription">
             <DetailView :title="declist.title" :score="declist.score" :commentnum="totalItems"
                 :location="declist.location" :weekday="declist.weekday" :weekend="declist.weekend" :phone="declist.phone"
                 :price="declist.price" :now="declist.now" :weather="weatherlist.weather" :temNow="weatherlist.temNow"
@@ -420,6 +420,7 @@ export default {
         getData(val) {
             if(val!=false){
                 // 重新渲染
+                this.initializeData();
             
             }
             this.showDialog = false;

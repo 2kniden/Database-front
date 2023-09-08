@@ -71,6 +71,7 @@ export default {
     position: relative;
     margin-left: 10px;
     margin-bottom: 10px;
+    background-color: #fff;
 }
 .tickitdetail:hover {
     box-shadow: 1px 1px 1px rgba(128, 151, 253, 0.4);
