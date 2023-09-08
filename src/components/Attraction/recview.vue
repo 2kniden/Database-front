@@ -35,7 +35,14 @@ export default {
     /* Set the height of the image container */
     margin: 15px;
     /* Create spacing between the image containers */
+    box-shadow: 3px 3px 3px rgba(128, 151, 253, 0.8);
+    border: 1px #fff solid;
+    border-radius: 10px;
 
+}
+.recommend:hover {
+  box-shadow: none;
+  border: 1px #8097FD solid;
 }
 
 .recommendpic {

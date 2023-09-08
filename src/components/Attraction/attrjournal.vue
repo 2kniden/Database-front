@@ -9,7 +9,7 @@
                 <div class="jm">
 
                     <div class="jtag">
-                        <img class="jicon" src="../../assets/attractions/icon/标签.svg" alt="">
+                        <img class="tagicon" src="../../assets/attractions/icon/标签.svg" alt="">
                         <div class="tag" v-for="item in tag" :key="item">{{ item }}</div>
                     </div>
                 </div>
@@ -79,13 +79,18 @@ export default {
 /* 用户日志缩略图 */
 .jback {
     background-color: #fff;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    box-shadow:1px 2px 2px 2px rgba(128, 151, 253, 0.4);
+    border: 1px #fff solid;
+    border-radius: 10px;
     /* 添加阴影效果 */
     width: 85%;
     border-radius: 5px;
     margin-top: 20px;
 }
-
+.jback:hover {
+    box-shadow: 1px 1px 1px rgba(128, 151, 253, 0.4);
+  
+}
 .jhead {
     width: 100%;
 }
@@ -97,7 +102,11 @@ export default {
     border-radius: 5px;
     object-fit: cover;
 }
-
+.tagicon{
+    width: 20px;
+    height: 20px;
+    transform: translate(-20%, 20%);
+}
 .jicon {
     width: 12px;
     height: 12px;

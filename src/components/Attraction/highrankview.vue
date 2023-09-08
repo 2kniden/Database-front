@@ -36,6 +36,13 @@ export default {
     width: 27%;
     padding: 10px;
     margin: 20px;
+    box-shadow:1px 3px 3px 3px rgba(128, 151, 253, 0.4);
+    border: 1px #fff solid;
+    border-radius: 10px;
+}
+.rankitem:hover {
+  box-shadow: none;
+  border: 1px #8097FD solid;
 }
 .rankpic-container {
   width: 100%; 
