@@ -516,6 +516,7 @@ export default{
   margin-left: 10px;
   margin-right: 10px;
   font-weight: bold;
+  white-space: nowrap; 
 }
 .input-container {
   flex: 1;
