@@ -5,7 +5,7 @@
       <li class="choice clearfix">
         <router-link to="/Journal/JournalPlaza" >
           <div class="nav-icon">
-            <img src="../assets/journal/journal-plaza-icon.png">
+            <img src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/journal-plaza-icon.png">
           </div>
           <div class="nav-text">
             <p>日志广场</p>
@@ -16,29 +16,18 @@
       <li class="choice clearfix" style="margin-top: 30px;">
         <router-link to="/Journal/MyJournal">
           <div class="nav-icon">
-            <img src="../assets/journal/my-journal-icon.png"/>
+            <img src="https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/my-journal-icon.png"/>
           </div>
           <div class="nav-text">
             <p>我的日志</p>
            </div>
         </router-link>
       </li>
-      <!-- 仅仅是为了测试一些功能弄的新界面 -->
-      <!-- <li class="choice clearfix">
-        <router-link to="/Journal/JournalTest">
-          <div class="nav-icon">
-            <img src="../assets/journal/my-journal-icon.png"/>
-          </div>
-          <div class="nav-text">
-            <p>测试</p>
-           </div>
-        </router-link>
-      </li> -->
 
       <!-- 图片展示 -->
       <li class="clearfix">
         <!-- 这里应该做成图片的动态展示 -->
-        <img class="bgImg" :src="require('../assets/journal/'+ imgname)"/>
+        <img class="bgImg" :src="src"/>
       <!-- 我的日志 的导航栏背景图片应当可以穿出盒子 -->
       </li>
     </ul>
@@ -52,20 +41,20 @@
     name:"JournalNav",
     setup(){
       // 修改导航栏背景图片
-      let imgname = ref();
+      const src = ref("");
       const route = useRoute();
       watch(route,(to)=>{
         if(route.path === "/Journal/JournalPlaza") {
-          imgname.value = 'journal-plaza-bgPNG.png';
+          src.value = "https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/journal-plaza-bgPNG.png";
         } else if(route.path === "/Journal/MyJournal") {
-          imgname.value = 'my-journal-bgPNG.png';
+          src.value = "https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/my-journal-bgPNG.png";
         } else {
-          imgname.value = 'other-page-bgPNG.png';
+          src.value = "https://jiyi-2023.oss-cn-shanghai.aliyuncs.com/Journal/other-page-bgPNG.png";
         }
       },{immediate:true})
 
       return {
-      imgname
+       src
       }
     }
   }

@@ -37,15 +37,6 @@
             <JournalCardsList :pageSize="mjpagesize" v-model:keyword="mjcurKeyword" :ifInation="mjtoInation" :readerID="mjreaderId" :authorID="mjauthorId" :displayType="mjdisplayType"></JournalCardsList>
         </div>
     </div>
-
-    <!-- <div class="map-display-BG">
-        <div class="map-display">
-            <p>这里尝试插入地图</p>
-        </div>
-        <div class="map-img-display">
-            <img class="map-bgimg" src="@/assets/journal/myJournal_map.png">
-        </div>
-    </div> -->
 </template>
 
 <script setup>
@@ -190,7 +181,7 @@ const postJournal = () => {
             float:left;
             width:280px;
         }
-        ::v-deep .el-input__wrapper {
+        :deep(.el-input__wrapper) {
             border-radius: 20px;
             box-shadow: 1px 3px 5px #8097FD;
         }
@@ -230,23 +221,22 @@ const postJournal = () => {
         margin-top: 40px;
       margin-left: 60px;
     }
-    ::v-deep .cards-list {
+    :deep(.cards-list) {
         height:400px;
     }
 
-    ::v-deep .cards {
+    :deep(.cards) {
         margin-right: 45px;
         margin-bottom: 30px;
         /* margin-bottom: 20px; */
     }
 
-    ::v-deep .pgination-area {
+    :deep(.pgination-area) {
         width: 870px;
         align-items: center;
         display: flex;
         justify-content: center;
     }
-
 
 
 /* 地图展示区背景 */

@@ -21,6 +21,7 @@ import CommentEdit from '@/views/Attraction/editcomment'
 import MyTeamDetails from "@/views/Team/MyTeamDetails.vue";
 import EditTeam from "@/views/Team/EditTeam.vue";
 import SearchTeam from "@/views/Team/SearchTeam.vue";
+
 const routes = [
   {
     path: "/",
@@ -62,11 +63,6 @@ const routes = [
         name: "PostJournal",
         component: PostJournal
       },
-      {
-        path: "/Journal/JournalTest",
-        name: "TestForJournalViews",
-        component: JournalTest
-      }
     ],
     redirect:"/Journal/JournalPlaza"
   },
