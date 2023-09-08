@@ -1,9 +1,9 @@
 <template>
-    <div class="bigtitle">上海迪士尼度假区</div>
+    <div class="bigtitle">{{declist.title}}</div>
     <div class="detailhead">
         <!-- 轮播图 -->
         <Splide class="slides" :options="{ rewind: true }">
-            <SplideSlide v-for="item in declist.slides" :key="item">
+            <SplideSlide v-for="item in declist.attractionSrc" :key="item">
                 <img :src="item">
             </SplideSlide>
 
@@ -12,7 +12,7 @@
         <div>
             <DetailView :title="declist.title" :score="declist.score" :commentnum="declist.commentnum"
                 :location="declist.location" :weekday="declist.weekday" :weekend="declist.weekend" :phone="declist.phone"
-                :price="declist.price" :date="declist.date" :weather="weatherlist.weather" :temNow="weatherlist.temNow"
+                :price="declist.price" :now="declist.now" :weather="weatherlist.weather" :temNow="weatherlist.temNow"
                 :temHigh="weatherlist.temHigh" :temLow="weatherlist.temLow"></DetailView>
         </div>
     </div>
@@ -47,8 +47,8 @@
             <!-- 显示票价信息 -->
             <div class="ticketdetail" ref="t3">
                 <div v-if="ticketshowmore">
-                    <ViewTicket v-for="item in ticketlist" :key="item.ticketid" :titleint="item.titleint"
-                        :isCollectedint="item.isCollectedint" :isRefundint="item.isRefundint" :price="item.price">
+                    <ViewTicket v-for="item in ticketlist" :key="item.id" :titleint="item.type"
+                        :isCollectedint="item.isCollected" :isRefundint="item.isRefund" :price="item.price">
                     </ViewTicket>
                 </div>
                 <div v-else>
@@ -67,7 +67,7 @@
                     <div class="cheadleft">
                         <div>
                             <div class="maintitle">用户点评:</div>
-                            <div class="comnum"> ({{totalItems}}条)</div>
+                            <div class="comnum"> ({{ totalItems }}条)</div>
                         </div>
 
                     </div>
@@ -97,10 +97,11 @@
                             <el-radio-button label="中差评"></el-radio-button>
                         </el-radio-group>
                     </div>
-                    <attrComment v-for="item in currentPageData" :key="item.commentid" :userlog="item.userlog"
-                        :attrname="item.username" :attrstar="item.avgscore" :comword="item.detail"
-                        :comtime="item.commentDate" :comlikes="item.likes" :comunlikes="item.unlikes"
-                        :picsrc="item.picList">
+                    <attrComment v-for="item in currentPageData" :key="item.commentID" :userlog="item.userSrc"
+                        :attrname="item.username" :attrstar="item.commentScore" :comword="item.commentDetail"
+                        :comtime="item.commentDate" :comlikes="item.like" :comunlikes="item.unlike"
+                        :picsrc="item.commentSrc" :comment_id="comment_id">
+                        <!-- 这里commentid先写死 -->
 
                     </attrComment>
                     <div class="endword">
@@ -148,6 +149,7 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus';
 import JournalValue from '../../components/Attraction/attrjournal.vue'
 import Journal from '../Journal.vue'
+
 
 
 export default {
@@ -238,12 +240,13 @@ export default {
                     // 禁用当日日期之前的的日期选择，但是这里没有效果
                     return time.getTime() < new Date().getTime() - 24 * 60 * 60 * 1000;
                 },
-                
+
             },
             morevalue1: '',
-            // 景点id和userid先写死
-            user_id: '123',
-            attraction_id: '123455',
+            // 景点id和userid和commentid先写死
+            user_id: '843526A2B7784E73B28E73C797A2C81C',
+            attraction_id: '1',
+            comment_id:'1',
 
             // 景点介绍+简介栏
             declist: '',
@@ -264,13 +267,16 @@ export default {
             journallist: [],
             totalHeight: 0,
             journalMaxHeight: '1800px',
-            //日志分页相关数据
+            // 评论分页相关数据
             currentPage: 1, // 当前页数
             pageSize: 5,  // 每页显示的条数
             pagestartIndex: '',//每页开始
             pageendIndex: '',//每页结束
             totalItems: '', // 总数据条数
-            activeTab: '1'
+            activeTab: '1',
+
+
+
         };
     },
 
@@ -285,12 +291,15 @@ export default {
             time.setDate(time.getDate() + 2); // 将日期增加2天（后天）
             this.tomtomday = this.formatDateTime(time);
 
-            //获取票价
+
+
+            //获取票价(√)
             axios
-                .get('/Attraction/getticket?attraction_id=' + this.attraction_id + '&date=' + this.currSelectDate)
+                .get('/api/attrations/TicketInformation?attractionID=' + this.attraction_id + '&date=' + this.currSelectDate)
                 .then((response) => {
 
-                    this.ticketlist = response.data.ticketlist;
+                    console.log("景区门票",response)
+                    this.ticketlist = response.data;
                     this.firstticket = this.ticketlist[0];
                     // console.log(this.firstticket)
                 })
@@ -299,46 +308,51 @@ export default {
                 });
 
 
-            // 获取景点相关信息：获取景点图片、介绍、景点简介信息
+            // 获取景点相关信息：获取景点图片、介绍、景点简介信息(√)
             axios
-                .get('/Attraction/getattrdata?attraction_id=' + this.attraction_id)
+                .get('/api/attrations/AttractionDetail?attractionID=' + this.attraction_id)
                 .then((response) => {
+                    console.log("景点详情", response)
+                    // this.declist = response.data;
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+            // 获取景区天气(√)
+            axios
+                .get('/api/attrations/Weather?attractionid=' + this.attraction_id)
+                .then((response) => {
+                    this.weatherlist = response.data;
+                    console.log("景区天气", response)
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+            // 获取评论信息(√)
+            axios
+                .get('/api/attrations/GetPostComments?attractionID=' + this.attraction_id + '&tag=' + this.commenttagint)
+                .then((response) => {
+                    console.log("景区评论", response)
+                    this.commentlist = response.data;
 
-                    this.declist = response.data.declist;
-                })
-                .catch((error) => {
-                    console.error('Error fetching data:', error);
-                });
-            // 获取景区天气
-            axios
-                .get('/Attraction/getweatherdata?attraction_id=' + this.attraction_id)
-                .then((response) => {
 
-                    this.weatherlist = response.data.weatherlist;
-                    // console.log(this.weatherlist)
-                })
-                .catch((error) => {
-                    console.error('Error fetching data:', error);
-                });
-            // 获取评论信息
-            axios
-                .get('/Attraction/getcommentdata?attraction_id=' + this.attraction_id)
-                .then((response) => {
-                    this.commentlist = response.data.commentlist;
                 })
                 .catch((error) => {
                     console.error('Error fetching data:', error);
                 });
 
-            // 获取相关日志信息
+            // 获取相关日志信息(√)
             axios
-                .get('/Attraction/getjournaldata?attraction_id=' + this.attraction_id)
+                .get('/api/attrations/JournalRecommendation?attractionID=' + this.attraction_id)
                 .then((response) => {
-                    this.journallist = response.data.journallist;
+                    console.log("相关日志", response)
+                    this.journallist = response.data;
                 })
                 .catch((error) => {
                     console.error('Error fetching data:', error);
                 });
+
+
         },
         handleResize(entries) {
             for (const entry of entries) {
@@ -399,17 +413,9 @@ export default {
         },
         // 处理关闭逻辑
         getData(val) {
-            if (val != false) {
-                console.log(val);//获取传回来的数据
-                // 添加一条评论数据，然后现在push进comment
-                this.addcommentdata();
-
-            }
             this.showDialog = false;
         },
-        addcommentdata() {
 
-        },
         formatDateTime(date) {
             var y = date.getFullYear();
             var m = date.getMonth() + 1;
@@ -501,7 +507,7 @@ export default {
         EitComment,
         ElMessage,
         JournalValue,
-        Journal
+        Journal,
     }
 }
 

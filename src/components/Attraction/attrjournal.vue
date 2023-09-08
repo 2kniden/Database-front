@@ -7,42 +7,32 @@
         <div class="jmiddle">
             <div class="jmleft">
                 <div class="jm">
-                    <img class="jicon" src="../../assets/attractions/icon/位置.svg" alt="">
-                    {{position}}
-                </div>
-                <div class="jmmi">
-                    <img class="jicon" src="../../assets/attractions/icon/坐标.svg" alt="">
-                    {{axisnum}}个坐标
-                </div>
-                <div class="jm">
-                    
+
                     <div class="jtag">
                         <img class="jicon" src="../../assets/attractions/icon/标签.svg" alt="">
                         <div class="tag" v-for="item in tag" :key="item">{{ item }}</div>
                     </div>
                 </div>
             </div>
-            <div>
-                <img class="jmmap" :src="axispic" alt="">
-            </div>
+
         </div>
         <div class="poster">
-            <div class="ptitle">{{title}}</div>
+            <div class="ptitle">{{ title }}</div>
             <div class="usermsg">
                 <img class="juserlog" :src="userSrc" alt="">
-                {{userName}}
+                {{ userName }}
             </div>
         </div>
         <div class="jbottom">
-            <div class="jbtime">{{posterDate}}</div>
+            <div class="jbtime">{{ formattedDate }}</div>
             <div class="likecol">
                 <div class="jblikes">
                     <img class="jicon" src="../../assets/attractions/icon/点赞.svg" alt="">
-                    {{like}}
+                    {{ like }}
                 </div>
                 <div class="jbcollection">
                     <img class="jicon" src="../../assets/attractions/icon/收藏.svg" alt="">
-                    {{collect}}
+                    {{ collect }}
                 </div>
             </div>
 
@@ -51,22 +41,38 @@
 </template>
 
 <script>
-    export default{
-        props:{
-            userName:String,
-            userSrc:String,
-            position:String,
-            axisnum:Number,
-            axispic:String,
-            tag:Array,
-            title:String,
-            picSrc:String,
-            posterDate:String,
-            like:Number,
-            collect:Number,
+export default {
+    props: {
+        userName: String,
+        userSrc: String,
+        position: String,
+        axisnum: Number,
+        axispic: String,
+        tag: Array,
+        title: String,
+        picSrc: String,
+        posterDate: String,
+        like: Number,
+        collect: Number,
 
+    },
+    
+    
+    computed: {
+        formattedDate() {
+            const date = new Date(this.posterDate);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+            const hours = String(date.getHours()).padStart(2, "0");
+            const minutes = String(date.getMinutes()).padStart(2, "0");
+            const seconds = String(date.getSeconds()).padStart(2, "0");
+
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         }
-    }
+    },
+    
+}
 </script>
 
 <style>
@@ -128,36 +134,45 @@
     margin-right: 5px;
 
 }
-.jtag{
+
+.jtag {
     display: flex;
     flex-direction: row;
 }
-.tag{
+
+.tag {
     margin-left: 5px;
 }
+
 .jmmi {
     margin: 10px 0px;
 
 }
-.ptitle{
+
+.ptitle {
     font-size: 12px;
-    margin:5px 14px 0 14px ;
-    line-height: 1.7; 
-    text-align: left; /* 文本左对齐 */
-    
+    margin: 5px 14px 0 14px;
+    line-height: 1.7;
+    text-align: left;
+    /* 文本左对齐 */
+
 }
-.usermsg{
+
+.usermsg {
     font-size: 12px;
     color: #777;
-    transform: scale(0.9);  
-    text-align: right; /* 文本左对齐 */
+    transform: scale(0.9);
+    text-align: right;
+    /* 文本左对齐 */
 }
-.juserlog{
+
+.juserlog {
     width: 20px;
     height: 20px;
     border-radius: 50px;
     transform: translate(0, 23%);
 }
+
 .jbottom {
     display: flex;
     flex-direction: row;

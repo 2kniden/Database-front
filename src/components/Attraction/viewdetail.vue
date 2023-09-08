@@ -28,7 +28,7 @@
         </div>
         <div class="dweather" >
             <div class="dwpop" @mouseenter="changeValue(true)" @mouseleave="changeValue(false)">
-                {{ date }}&nbsp;&nbsp;&nbsp;{{ weather }}
+                {{ formattedDate }}&nbsp;&nbsp;&nbsp;{{ weather }}
 
             </div>
             <div v-if="visible">
@@ -60,7 +60,7 @@ export default {
         weekend: String,
         phone: String,
         price: Number,
-        date: String,
+        now: String,
         // 这里是天气相关的
         weather: String,
         temNow: Number,
@@ -77,7 +77,20 @@ export default {
             this.visible=onHover;
         },
         
-    }
+    },
+    computed: {
+        formattedDate() {
+            const date = new Date(this.now);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+            const hours = String(date.getHours()).padStart(2, "0");
+            const minutes = String(date.getMinutes()).padStart(2, "0");
+            const seconds = String(date.getSeconds()).padStart(2, "0");
+
+            return `${month}-${day}`;
+        }
+    },
 }
 </script>
 

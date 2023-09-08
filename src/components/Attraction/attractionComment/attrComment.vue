@@ -7,8 +7,8 @@
             </div>
             <div class="attrright">
                 <div class="attrhead">
-                    <div class="attrname">{{ attrname }}</div>
-                    <div class="attrstar">{{ attrstar }}分</div>
+                    <div class="attrname">{{ username }}</div>
+                    <div class="attrstar">{{ comstar }}分</div>
                 </div>
                 <div class="comdetail">
                     <div class="comword">
@@ -24,13 +24,13 @@
 
                 </div>
                 <div class="attrcommeg">
-                    <!-- 这里需要date组件 -->
-                    <div class="commeg comtime">{{ comtime }}</div>
+                    <div class="commeg comtime">{{ formattedDate }}</div>
                     <div class="commeg comlikes">
 
                         <img class="licon" src="../../../assets/attractions/icon/like.svg" alt="" v-if="!is_liked"
                             @click="changelikestatus">
-                        <img class="licon" src="../../../assets/attractions/icon/like-fill.svg" alt="" v-else @click="changelikestatus">
+                        <img class="licon" src="../../../assets/attractions/icon/like-fill.svg" alt="" v-else
+                            @click="changelikestatus">
 
                         {{ comlikes }}
                     </div>
@@ -55,36 +55,85 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     props: {
         userlog: String,
-        attrname: String,
-        attrstar: String,
+        username: String,
+        comstar: String,
         comword: String,
         comtime: String,
         comlikes: Number,
         comunlikes: Number,
         picsrc: Array,
-
+        comment_id: String,
     },
     data() {
         return {
             // 获取到的点赞、拉踩状态码以及删除权限，这里接口还没搞好
             is_liked: false,
             is_unliked: false,
-            is_del:false,
+            is_del: false,
+            liketype: 0,//0-取消点赞或点踩，1-点赞或点踩
+            unliketype: 0,
         }
 
     },
+    mounted(){
+        
+        
+    },
     methods: {
+        // 现在有个问题就是mounted里面不会报错
         changelikestatus() {
             this.is_liked = !this.is_liked;
+            this.liketype = !this.liketype;
+            this.likeChange()
+            
         },
-        changeunlikestatus(){
-            this.is_unliked=!this.is_unliked;
+        changeunlikestatus() {
+            this.is_unliked = !this.is_unliked;
+            this.unliketype = !this.unliketype;
+            this.unlikechange()
+        },
+        likeChange() {
+            axios
+                .get('/api/attrations/LikeComment?commentID=' + this.comment_id + "&type=" + this.liketype)
+                .then((response) => {
+                    console.log("点赞数", response)
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+        },
+        unlikechange(){
+            axios
+                .get('/api/attrations/UnlikeComment?commentID=' + this.comment_id + "&type=" + this.unliketype)
+                .then((response) => {
+                    console.log("点踩数", response)
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+
         }
 
-    }
+    },
+    components: {
+        axios
+    },
+    computed: {
+        formattedDate() {
+            const date = new Date(this.comtime);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+            const hours = String(date.getHours()).padStart(2, "0");
+            const minutes = String(date.getMinutes()).padStart(2, "0");
+            const seconds = String(date.getSeconds()).padStart(2, "0");
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+    },
 }
 
 </script>
@@ -177,4 +226,5 @@ export default {
     width: 12px;
     height: 12px;
     transform: translate(0, 15%);
-}</style>
+}
+</style>

@@ -41,8 +41,6 @@
                     placeholder="请输入评论详情" show-word-limit type="textarea" />
             </el-form-item>
             <el-form-item label="上传图片" :label-width="formLabelWidth">
-                <!-- 这里有问题不能上传图片 -->
-                
                 <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
                     :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3"
                     :on-exceed="handleExceed" :file-list="fileList" :on-success="uploadFileSuccess"
@@ -62,15 +60,22 @@
 
 <script>
 import { ElMessage } from 'element-plus';
+import axios from 'axios';
+import OSS from 'ali-oss'
+import { toRaw } from '@vue/reactivity'
+
 export default {
+    mounted() {
+        this.initializeData();
+    },
     data() {
         return {
             formLabelWidth: "70px",
             iconvalue1: 0,
             iconvalue2: 0,
             iconvalue3: 0,
-            fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
-  
+            fileList: [],
+
             texts: ['极差', '失望', '一般', '满意', '惊喜'],
             comment: {
                 // 确定是哪条评论
@@ -82,15 +87,26 @@ export default {
                 // 评论里要有啥
                 avgscore: 0,//评分带小数点
                 detail: '',
-                picList: [],//照片列表
+                picList: [],//照片列表暂时
                 // 其他信息
                 commentDate: '',//时间
                 commentCity: '',//ip地址这个不方便就不加
             },
+            // 上传至oss相关
+            OSSOptions: {
+                endpoint: '',
+                accessKeyId: '',
+                accessKeySecret: '',
+                bucket: '',
+            },
+            ossClient: '',
         }
     },
     conponents: {
-        ElMessage
+        ElMessage,
+        OSS,
+        axios,
+        toRaw
     },
     computed: {
         calvalue() {
@@ -100,6 +116,37 @@ export default {
     },
 
     methods: {
+        // 把图片传到上面去
+        getOssOptions() {
+            return new Promise((resolve, reject) => {
+                axios.get('/api/Teams/Access')
+                    .then(res => {
+                        console.log('res.data=', res.data);
+                        resolve(res.data);
+                    })
+                    .catch(err => {
+                        console.log("can't get accesskeyId");
+                        reject('no');
+                    })
+            })
+        },
+        initializeData() {
+            var that = this;
+            this.getOssOptions().then((res) => {
+                if (res !== 'no') {
+                    const endpoint = res.endpoint;
+                    // that.OSSOptions.endpoint='oss-cn-shanghai.aliyuncs.com';
+                    that.OSSOptions.endpoint = res.endpoint;
+                    that.OSSOptions.accessKeyId = res.accessKeyId;
+                    that.OSSOptions.accessKeySecret = res.accessKeySecret;
+                    that.OSSOptions.bucket = res.bucketName;
+                    that.ossClient = new OSS(that.OSSOptions);
+                    console.log('that.OSSOptions=', that.OSSOptions);
+                } else {
+                    console.log("fail to initializa");
+                }
+            })//end of promise.then
+        },
         showScore() {
             console.log(this.iconvalue1, this.iconvalue2, this.iconvalue3);
         },
@@ -109,17 +156,16 @@ export default {
         },
         //上传成功
         uploadFileSuccess(response, file, fileList) {
+            // console.log(file.raw)
             this.comment.picList.push(file);
-            console.log(this.comment.picList);
 
         },
         handleRemove(file, fileList) {
-
+            // console.log(file, fileList);
             this.comment.picList = fileList;
         },
         handlePreview(file) {
-
-            console.log(file);
+            // console.log(file);
         },
         // 这里还要设置一下如果选择了其他类型文件也要报错
         handleExceed(files, fileList) {
@@ -128,33 +174,83 @@ export default {
         beforeRemove(file, fileList) {
             return this.$confirm(`确定移除 ${file.name}？`);
         },
-        commitCommet() {
+
+        uploadtoOss(val) {
+            const coverObj = toRaw(val);
+            const storeAs = 'Attraction/';
+            const coverNames = [];
+
+            const uploadPromises = coverObj.map((cover, index) => {
+                const imgCreatedTime = this.formatDateTime(cover.raw.lastModifiedDate);
+                const ext = cover.name.split('.').pop();
+                const coverRename = cover.name.split(ext)[0] + imgCreatedTime + '.' + ext;
+                coverNames.push(coverRename);
+
+                const currentCoverRename = coverNames[index];
+                const currentCoverObj = cover.raw;
+
+                return this.ossClient.put(storeAs + currentCoverRename, currentCoverObj)
+                    .then(res => {
+                        console.log('oss上传成功');
+                        this.comment.picList[index] = res.url;
+                    })
+                    .catch(err => {
+                        console.log('oss上传失败');
+                        throw err; // 上传失败时抛出错误
+                    });
+            });
+
+            return Promise.all(uploadPromises);
+
+        },
+        postAttrComment() {
+            // 现在要换成body传参
+            const data = {
+                userID: '843526A2B7784E73B28E73C797A2C81C',
+                attractionid: 1,
+                commentDetail: this.comment.detail,
+                rating: this.comment.avgscore,
+                commentSrc: this.comment.picList
+            };
+            // 这里有图片上传就有问题
+            axios.post('/api/attrations/PostComments', data, null)
+                .then(res => {
+                    console.log(res.data);
+                    console.log('post上传成功');
+
+                })
+                .catch(error => {
+                    // 处理错误
+                    console.log('post上传失败');
+                });
+        },
+        async commitCommet() {
             // 获取时间
             const currentDate = new Date();
             this.comment.commentDate = this.formatDateTime(currentDate);
             // 获取分数
             this.comment.avgscore = this.calvalue;
             if (this.comment.calvalue === 0 || this.comment.detail.trim() === "") {
-                // 如果评分为0或详情为空，不允许提交
-                // 可以显示错误提示或采取其他适当的操作
                 ElMessage({
                     message: '评分和详情不能为空!',
                     type: 'error',
                 })
                 return;
             }
+            // 让oss上传完再post，需要加一个异步操作
+            try {
+                await this.uploadtoOss(this.comment.picList);
+                await this.postAttrComment();
+                ElMessage({
+                    message: '发布成功！',
+                    type: 'success',
+                });
+                this.dialogInvisible();
+            } catch (error) {
+                console.error('提交评论失败', error);
+            }
 
-            ElMessage({
-                message: '发布成功！',
-                type: 'success',
-            })
-            // 打印一下
-            // console.log(this.comment);
-            // 把这条东西存入数据库
-           
-
-            // 发表完也要关闭
-            this.$emit('getData', this.comment);
+            this.dialogInvisible();
 
         },
         // 关闭页面
@@ -175,7 +271,7 @@ export default {
             var second = date.getSeconds();
             second = second < 10 ? ('0' + second) : second;
             return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
-        }
+        },
 
 
 

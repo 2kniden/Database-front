@@ -9,6 +9,7 @@
   "dependencies": {
     "@splidejs/vue-splide": "^0.6.12",
     "@tinymce/tinymce-vue": "^5.1.0",
+    "ali-oss": "^6.18.0",
     "axios": "^1.4.0",
     "core-js": "^3.8.3",
     "element-china-area-data": "^6.0.2",
