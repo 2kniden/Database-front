@@ -12,7 +12,6 @@ import JournalDetails from "@/views/Journal/JournalDetails.vue";
 import MyJournal from "@/views/Journal/MyJournal.vue";
 import JournalPlaza from "@/views/Journal/JournalPlaza.vue"
 import PostJournal from "@/views/Journal/PostJournal.vue";
-import JournalTest from "@/views/Journal/JournalTest.vue";
 import Login from "@/views/Login/login";
 import MissPass from "@/views/Login/missPass";
 import AttractionSearch from '@/views/Attraction/AttractionSearch';
@@ -102,20 +101,20 @@ const routes = [
     name: "teamDetails",
     component: TeamDetails
   },
-  { 
-    path: "/attraction-search", 
-    name: "attractionsearchs", 
-    component: AttractionSearch 
+  {
+    path: "/attraction-search",
+    name: "attractionsearchs",
+    component: AttractionSearch
   },
-  { 
-    path: "/attraction-detail", 
-    name: "attractiondetails", 
-    component: AttractionDetail 
+  {
+    path: "/attraction-detail",
+    name: "attractiondetails",
+    component: AttractionDetail
   },
-  { 
-    path: "/comment-edit", 
-    name: "commentedit", 
-    component: CommentEdit 
+  {
+    path: "/comment-edit",
+    name: "commentedit",
+    component: CommentEdit
   },
   {
     path: "/Team/MyTeamDetails",

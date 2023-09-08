@@ -26,6 +26,7 @@ export default {
   methods: {
     onClickSearch() {
       let that = this;
+      localStorage.setItem("page","searchout");
       this.$router.push({
         path: "/searchout",
         query: {

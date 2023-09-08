@@ -51,9 +51,9 @@ export default {
     };
   },
   created() {
-    // for (let i = 0; i < response.data.data.length; i++) {
-    //   this.testshow.push(false);
-    // }
+    for (let i = 0; i < response.data.length; i++) {
+      this.testshow.push(false);
+    }
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
@@ -81,6 +81,11 @@ export default {
 
         });
   },
+  beforeRouteLeave(to,from,next) {
+    window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("scroll", this.bindHandleScroll);
+    next();
+  },
   methods: {
     navToPlantinfo(id) {
       console.log("jump to acknowledgeinfo:" + id);
@@ -97,7 +102,7 @@ export default {
       window.addEventListener("scroll", this.bindHandleScroll);
     },
     componentWillUnmount() {
-      window.removeEventListener("scroll", this.bindHandleScroll());
+      window.removeEventListener("scroll", this.bindHandleScroll);
     },
     bindHandleScroll() {
       this.checkScrollHeightAndLoadAnimation();

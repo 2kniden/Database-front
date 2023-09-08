@@ -505,7 +505,11 @@ export default {
   mounted() {
     window.addEventListener("scroll", this.handleScroll,true);
     this.init();
-  }
+  },
+  beforeRouteLeave(to,from,next) {
+    window.removeEventListener("scroll", this.handleScroll,true);
+    next();
+  },
 }
 </script>
 
