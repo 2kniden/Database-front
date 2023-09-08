@@ -14,10 +14,10 @@
       <!--输入框-->
       <div class="input-borad">
         <!--五个输入框-->
-        <input class="input-box" style="margin-top: 10px;" placeholder="昵称"/>
-        <input class="input-box" placeholder="密码"/>
+        <input class="input-box" style="margin-top: 10px;" placeholder="昵称" v-model="registerForm.userName"/>
+        <input class="input-box" placeholder="密码" v-model="registerForm.userPassword"/>
         <div class="warning-text">*要求密码中包含大小写字母和数字，至少8位</div><!--提示栏-->
-        <input class="input-box"  style="margin-top: 5px;" placeholder="确认密码"/>
+        <input class="input-box"  style="margin-top: 5px;" placeholder="确认密码" v-model="registerForm.userPasswordAgain"/>
         <div class="warning-text">*要求此次密码和上次一致</div><!--提示栏-->
         <input class="input-box"  style="margin-top: 5px;" placeholder="手机号码" v-model="registerForm.phone"/>
 
@@ -33,7 +33,7 @@
 
       <!--按钮部分-->
       <div class="button">
-        <div class="button-text">注册</div>
+        <div class="button-text" @click="Register">注册</div>
         <div class="change-button" @click="changePage('登录')">已有账号？登录一下</div>
       </div>
     </div>
@@ -54,11 +54,11 @@
       <!--输入框-->
       <div class="input-borad" style="height: 240px;">
         <!--两个输入框-->
-        <input class="input-box" style="margin-top: 10px;" placeholder="用户ID/手机号/邮箱" v-if="codeLogin === false"/>
-        <input class="input-box" placeholder="密码" v-if="codeLogin === false"/>
+        <input class="input-box" style="margin-top: 10px;" placeholder="用户昵称" v-if="codeLogin === false" v-model="loginForm.userName"/>
+        <input class="input-box" placeholder="密码" v-if="codeLogin === false" v-model="loginForm.userPassword"/>
 
         <!--如果是短信登陆-->
-        <input class="input-box" style="margin-top: 10px;" placeholder="手机号" v-if="codeLogin"/>
+        <input class="input-box" style="margin-top: 10px;" placeholder="手机号" v-if="codeLogin" v-model="loginForm.phone"/>
         <div class="input-box" style="border-radius: 0;background-color: #F1F3FF;padding-left: 0" v-if="codeLogin">
           <!--验证码输入框-->
           <input class="testcode-input-box" style="width: 300px" v-model="loginForm.verificationCode"/>
@@ -77,7 +77,7 @@
 
       <!--按钮部分-->
       <div class="button">
-        <div class="button-text" style="margin-left: 230px;">登录</div>
+        <div class="button-text" style="margin-left: 230px;" @click="Login">登录</div>
         <div class="change-button" @click="changePage('注册')">还没有账号？注册一下</div>
       </div>
     </div>
@@ -97,14 +97,21 @@ export default {
       choosePage:'登录',
       codeLogin:false,
       registerForm: {
+        userId:0,
+        userName:"",
+        userPassword:"",
+        userPasswordAgain:"",
         phone: "",
-        verificationCode: "", //表单中展示的验证码
-        contentText: "", //向手机号发送的随机验证码
+        verificationCode: "123", //表单中展示的验证码
+        contentText: "123", //向手机号发送的随机验证码
         timer: null,
         showCode: true, //判断展示‘获取验证码’或‘倒计时’
         count: "", //倒计时时间
       },
       loginForm: {
+        userId:0,
+        userName:"",
+        userPassword:"",
         phone: "",
         verificationCode: "", //表单中展示的验证码
         contentText: "", //向手机号发送的随机验证码
@@ -123,6 +130,74 @@ export default {
     },
     gotoMissPage(){
       this.$router.push("/missPass");
+    },
+    Register(){
+      let that = this;
+      if (that.registerForm.userName === '') {
+        alert("用户昵称不能为空")
+        return;
+      } else if (that.registerForm.userPassword === '') {
+        alert("密码不能为空")
+        return;
+      }
+      else if(that.registerForm.phone === ''){
+        alert("手机号不能为空")
+        return;
+      }
+      else if(that.registerForm.verificationCode === ''){
+        alert("验证码不能为空")
+        return;
+      }
+      else if(that.registerForm.userPassword !== that.registerForm.userPasswordAgain){
+        alert("两次输入密码不一致")
+        return;
+      }
+      else if(that.registerForm.verificationCode !== that.registerForm.contentText){
+        alert("验证码错误")
+        return;
+      }
+
+      //进行注册
+      axios
+          .post("/api/User/register",{
+            password:that.registerForm.userPassword,
+            nickName:that.registerForm.userName,
+            phoneNumber:that.registerForm.phone,
+          })
+          .then(response => {
+            console.log("post请求成功");
+          })
+          .catch(error => {
+            console.log(error);
+            alert("连接服务器失败");
+          })
+    },
+    Login(){
+      let that = this;
+      if(that.codeLogin === false) {
+        // 用来进行昵称登录
+        if (that.loginForm.userName === '') {
+          alert("用户昵称不能为空")
+          return;
+        } else if (that.loginForm.userPassword === '') {
+          alert("密码不能为空")
+          return;
+        }
+
+        //进行登录
+        axios
+            .post("/api/User/login", {
+              nickName: that.loginForm.userName,
+              password: that.loginForm.userPassword
+            })
+            .then(response => {
+              console.log("post请求成功");
+            })
+            .catch(error => {
+              console.log(error);
+              alert("连接服务器失败");
+            })
+      }
     },
     getRegisterPhoneCode(){
       // 如果未输入手机号，结束执行

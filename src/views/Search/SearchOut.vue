@@ -9,7 +9,7 @@
         plant_background: true,
         SectionContainer: true,
         testenter: true
-      }" :key="result.scientificName" :data-delay="index * 200" @click="navToPlantinfo(result.id)">
+      }" :key="result.title" :data-delay="index * 200" @click="navToPlantinfo(result.id)">
         <!-- <div class="image-hover-thumb">
             <div class="image-container" alt="" />
           </div> -->
@@ -17,7 +17,7 @@
         <div class="article-container">
           <div class="big_info">
             <h2 style="margin-bottom:8px">
-              {{ result.name }}
+              {{ result.title }}
             </h2>
 
           </div>
@@ -51,9 +51,9 @@ export default {
     };
   },
   created() {
-    for (let i = 0; i < response.data.data.length; i++) {
-      this.testshow.push(false);
-    }
+    // for (let i = 0; i < response.data.data.length; i++) {
+    //   this.testshow.push(false);
+    // }
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
@@ -62,16 +62,16 @@ export default {
 
     let that = this;
     axios
-        .post("/Search", {
-          keyword: this.$route.query.key
+        .get("/api/search/AllSearch", {
+          Keyword: this.$route.query.key
         })
 
         .then(function (response) {
           console.log("post请求成功");
-          console.log(response.data.data);
-          for (let i = 0; i < response.data.data.length; i++) {
-            that.searchResults.push(response.data.data[i]);
-
+          console.log(response.data);
+          for (let i = 0; i < response.data.length; i++) {
+            if(response.data[i].type === 'journal')
+              that.searchResults.push(response.data[i]);
           }
           that.LOADING = false;
         })
