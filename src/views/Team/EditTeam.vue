@@ -487,63 +487,85 @@ const changeTeamStatus=()=>{
     return currentTime;
   };
 
-const OSSOptions = {
-        endpoint:'oss-cn-shanghai.aliyuncs.com',
-        accessKeyId:'LTAI5tMoioGDkZfV6raRtiFi',
-        accessKeySecret:'jp9tXLlFAIcf9PNOnRJVB5jDiAL4OV',
-        bucket:'jiyidatabase',
-      }
+  let ossClient={};
+ 
+ const getOssOptions = () => {
+ return new Promise((resolve, reject) => {
+   axios.get("/api/Teams/Access")
+     .then(res => {
+       console.log('get it');
+       console.log(res.data);
+       resolve(res.data); // 返回res.data作为Promise的解决值
+     })
+     .catch(err => {
+       console.log("can't get accesskeyId");
+       reject('no');
+     })
+ });
+}
 
-  const ossClient = new OSS(OSSOptions)
-  console.log(ossClient)
+getOssOptions().then(res => {
+ if (res !== 'no') {
+   const OSSOptions = {
+     endpoint: res.endpoint,
+     accessKeyId: res.accessKeyId,
+     accessKeySecret: res.accessKeySecret,
+     bucket: res.bucketName
+   };
 
-  const fileInput = ref(null)
-  const teamContactImg = ref('')
+   ossClient = new OSS(OSSOptions);
+   console.log(ossClient);
+ }
+});
 
-  const handleClick_cover = () => {
-    fileInput.value.click()
-  }
+ const fileInput = ref(null)
+ const teamContactImg = ref('')
 
-  const handleCoverUpload = (event) => {
-    const files = event.target.files
-    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i
+ const handleClick_cover = () => {
+   fileInput.value.click()
+ }
 
-    if (!allowedExtensions.exec(files[0].name)) {
-      alert('只允许上传图片文件')
-      return
-    }
+ const handleCoverUpload = (event) => {
+   const files = event.target.files
+   const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i
 
-    const formData = new FormData()
-    formData.append('file', files[0])
-    const coverObj = formData.get('file')
+   if (!allowedExtensions.exec(files[0].name)) {
+     alert('只允许上传图片文件')
+     return
+   }
 
-    // 配置oss相关
-    const storeAs = 'contact/'
+   const formData = new FormData()
+   formData.append('file', files[0])
+   const coverObj = formData.get('file')
 
-    // 并不,这个只是对象
-    console.log(coverObj)
-    // 增加时间戳、防止名称重复
-    const imgCreatedTime = getCurrentTime()
+   // 配置oss相关
+   const storeAs = 'contact/'
 
-    // 重命名:
-    const ext = coverObj.name.split('.').pop() // 后缀名只能为最后一个
-    const coverRename = coverObj.name.split(ext)[0] + imgCreatedTime + cur_user_id + '.' + ext
-    console.log(coverRename)
+   // 并不,这个只是对象
+   console.log(coverObj)
+   // 增加时间戳、防止名称重复
+   const imgCreatedTime = getCurrentTime()
 
-    // 上传给oss
-    // const promiseList = Promise(that.ossClient.put(storeAs+coverRename,coverObj));
+   // 重命名:
+   const ext = coverObj.name.split('.').pop() // 后缀名只能为最后一个
+   const coverRename = coverObj.name.split(ext)[0] + imgCreatedTime + cur_user_id + '.' + ext
+   console.log(coverRename)
 
-    ossClient.put(coverRename, coverObj)
-      .then(res => {
-        console.log('yes')
-        teamContactImg.value = res.url
-        team.value.teamContact = teamContactImg.value
-        console.log(team.value.teamContact)
-      })
-      .catch(err => {
-        console.log('no')
-      });
-  }
+   // 上传给oss
+   // const promiseList = Promise(that.ossClient.put(storeAs+coverRename,coverObj));
+
+   ossClient.put(coverRename, coverObj)
+     .then(res => {
+       console.log('yes')
+       teamContactImg.value = res.url
+       team.value.teamContact = teamContactImg.value
+       console.log(team.value.teamContact)
+     })
+     .catch(err => {
+       console.log('no')
+     });
+ }
+
 
   const cur_user_id = "小美";
 // 确认修改
