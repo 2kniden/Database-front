@@ -153,7 +153,7 @@
           <el-form-item label="小队成员" :label-width="formLabelWidth">
             <div class="float-left" style="width: 400px">
               <div>
-                <img class="edit_headImage" :src="IMGSRC" alt="">
+                <img class="edit_headImage" :src="team.publisher.headimage" alt="">
                 <div class="float-left">{{ team.publisher.name }}</div>
                 <div class="publisher" style="padding: 2px 10px; font-size: 14px; margin: 0 0 10px 10px;">
                   发布者
@@ -231,39 +231,6 @@
               </el-collapse>
             </div>
           </el-form-item>
-          <!-- <el-form-item label="小队申请" :label-width="formLabelWidth">
-            <div class="float-left" style="width: 400px">
-              <div
-                v-for="(applicant, appIndex) in team.applicants"
-                :key="appIndex"
-                style="margin-bottom: 10px; border: 1px solid #ccc; padding: 10px; padding: 5px;"
-              >
-                <div style="float: left">{{ applicant.name }}</div>
-                <el-button
-                  type="danger"
-                  :icon="Delete"
-                  circle
-                  style="float: right"
-                  @click="removeApplicant(appIndex)"
-                />
-                <el-button
-                  type="success"
-                  :icon="Check"
-                  circle
-                  style="float: right; margin-right: 16px"
-                  @click="approveApplicant(appIndex)"
-                />
-                <div class="clearfloat"></div>
-                <div style="float: left">申请信息：</div>
-                <div style="float: left">{{ applicant.info }}</div>
-                <div class="clearfloat"></div>
-                <div style="float: left">联系方式：</div>
-                <div style="float: left">{{ applicant.contact }}</div>
-                <div class="clearfloat"></div>
-              </div>
-            </div>
-            <div class="clearfloat"></div>
-          </el-form-item> -->
         </el-form>
         <!-- 放弃和确认按钮 -->
         <div style="margin-top: 40px">
@@ -487,126 +454,84 @@ const changeTeamStatus=()=>{
     return currentTime;
   };
 
-const OSSOptions = {
-        endpoint:'oss-cn-shanghai.aliyuncs.com',
-        accessKeyId:'LTAI5tMoioGDkZfV6raRtiFi',
-        accessKeySecret:'jp9tXLlFAIcf9PNOnRJVB5jDiAL4OV',
-        bucket:'jiyidatabase',
-      }
+  let ossClient={};
+ 
+ const getOssOptions = () => {
+ return new Promise((resolve, reject) => {
+   axios.get("/api/Teams/Access")
+     .then(res => {
+       console.log('get it');
+       console.log(res.data);
+       resolve(res.data); // 返回res.data作为Promise的解决值
+     })
+     .catch(err => {
+       console.log("can't get accesskeyId");
+       reject('no');
+     })
+ });
+}
 
-  const ossClient = new OSS(OSSOptions)
-  console.log(ossClient)
+getOssOptions().then(res => {
+ if (res !== 'no') {
+   const OSSOptions = {
+     endpoint: res.endpoint,
+     accessKeyId: res.accessKeyId,
+     accessKeySecret: res.accessKeySecret,
+     bucket: res.bucketName
+   };
 
-  const fileInput = ref(null)
-  const teamContactImg = ref('')
+   ossClient = new OSS(OSSOptions);
+   console.log(ossClient);
+ }
+});
 
-  const handleClick_cover = () => {
-    fileInput.value.click()
-  }
+ const fileInput = ref(null)
+ const teamContactImg = ref('')
 
-  const handleCoverUpload = (event) => {
-    const files = event.target.files
-    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i
+ const handleClick_cover = () => {
+   fileInput.value.click()
+ }
 
-    if (!allowedExtensions.exec(files[0].name)) {
-      alert('只允许上传图片文件')
-      return
-    }
+ const handleCoverUpload = (event) => {
+   const files = event.target.files
+   const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i
 
-    const formData = new FormData()
-    formData.append('file', files[0])
-    const coverObj = formData.get('file')
+   if (!allowedExtensions.exec(files[0].name)) {
+     alert('只允许上传图片文件')
+     return
+   }
 
-    // 配置oss相关
-    const storeAs = 'contact/'
+   const formData = new FormData()
+   formData.append('file', files[0])
+   const coverObj = formData.get('file')
 
-    // 并不,这个只是对象
-    console.log(coverObj)
-    // 增加时间戳、防止名称重复
-    const imgCreatedTime = getCurrentTime()
+   // 配置oss相关
+   const storeAs = 'contact/'
 
-    // 重命名:
-    const ext = coverObj.name.split('.').pop() // 后缀名只能为最后一个
-    const coverRename = coverObj.name.split(ext)[0] + imgCreatedTime + cur_user_id + '.' + ext
-    console.log(coverRename)
+   // 并不,这个只是对象
+   console.log(coverObj)
+   // 增加时间戳、防止名称重复
+   const imgCreatedTime = getCurrentTime()
 
-    // 上传给oss
-    // const promiseList = Promise(that.ossClient.put(storeAs+coverRename,coverObj));
+   // 重命名:
+   const ext = coverObj.name.split('.').pop() // 后缀名只能为最后一个
+   const coverRename = coverObj.name.split(ext)[0] + imgCreatedTime + cur_user_id + '.' + ext
+   console.log(coverRename)
 
-    ossClient.put(coverRename, coverObj)
-      .then(res => {
-        console.log('yes')
-        teamContactImg.value = res.url
-        team.value.teamContact = teamContactImg.value
-        console.log(team.value.teamContact)
-      })
-      .catch(err => {
-        console.log('no')
-      });
-  }
+   // 上传给oss
+   // const promiseList = Promise(that.ossClient.put(storeAs+coverRename,coverObj));
 
-  const cur_user_id = "小美";
-// 确认修改
-const commitEdit = () => {
-    //获取对应的小队状态码
-    changeTeamStatus();
-    // 这里在控制台打印小队主题进行测试验证修改成功
-    // console.log(team.value.teamId);
-    // console.log(team.value.posttime);
-    // console.log(team.value.destination);
-    console.log(team.value.title);
-    // console.log(team.value.detail);
-    // console.log(team.value.traveltime);
-    // console.log(team.value.members);
-    // console.log(num_of_status.value);
-    // console.log(team.value.applicants);
-    // console.log(team.value.publisher.info);
-    // console.log(team.value.publisher.contact);
-    // console.log(team.value.customTags),
-    console.log(team.value.teamContact),
-    // 根据team_id从数据库中查找到该小队信息，进行更新
-    axios.put("/api/Teams", {
-        teamId: team.value.teamId,
-        pubContact: team.value.publisher.contact,
-        pubInfo: team.value.publisher.info,
-        destination: team.value.destination,
-        title: team.value.title,
-        detail: team.value.detail,
-        status: num_of_status.value,
-        tags: team.value.tags,
-        customTags:team.value.customTags,
-        members: team.value.members,
-        applicants: team.value.applicants,
-        total: team.value.total,
-        traveltime: team.value.traveltime,
-        media: team.value.teamContact
-        })
-        .then((res) => {
-        console.log(res.data);
-        console.log(res.status);
-        ElMessage({
-            message: "成功修改小队！",
-            type: "success",
-        });
-        goMyPublishedTeam();
-        })
-        .catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-        } else if (error.request) {
-            console.log(error.request);
-            ElMessage({
-                message: "提交失败！请保证修改后的相关信息的完整性！",
-                type: "error",
-            });
-        } else {
-            console.log("Error", error.message);
-        }
-        });
-
-};
+   ossClient.put(coverRename, coverObj)
+     .then(res => {
+       console.log('yes')
+       teamContactImg.value = res.url
+       team.value.teamContact = teamContactImg.value
+       console.log(team.value.teamContact)
+     })
+     .catch(err => {
+       console.log('no')
+     });
+ }
 </script>
 
 <style>
