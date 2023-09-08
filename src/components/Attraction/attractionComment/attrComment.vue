@@ -25,7 +25,7 @@
                 </div>
                 <div class="attrcommeg">
                     <div class="commeg comtime">{{ formattedDate }}</div>
-                    <div class="commeg comlikes">
+                    <!-- <div class="commeg comlikes">
 
                         <img class="licon" src="../../../assets/attractions/icon/like.svg" alt="" v-if="!is_liked"
                             @click="changelikestatus">
@@ -42,7 +42,7 @@
                             @click="changeunlikestatus">
 
                         {{ comunlikes }}
-                    </div>
+                    </div> -->
                     <div class="commeg comdel">
                         <img class="licon" src="../../../assets/attractions/icon/delete.svg" alt="" v-if="is_del">
                     </div>
@@ -74,8 +74,9 @@ export default {
             is_liked: false,
             is_unliked: false,
             is_del: false,
-            liketype: 0,//0-取消点赞或点踩，1-点赞或点踩
-            unliketype: 0,
+            // liketype: 0,
+            //0-取消点赞或点踩，1-点赞或点踩
+            // unliketype: 0,
         }
 
     },
@@ -85,38 +86,38 @@ export default {
     },
     methods: {
         // 现在有个问题就是mounted里面不会报错
-        changelikestatus() {
-            this.is_liked = !this.is_liked;
-            this.liketype = !this.liketype;
-            this.likeChange()
+        // changelikestatus() {
+        //     this.is_liked = !this.is_liked;
+        //     this.liketype = !this.liketype;
+        //     this.likeChange()
             
-        },
-        changeunlikestatus() {
-            this.is_unliked = !this.is_unliked;
-            this.unliketype = !this.unliketype;
-            this.unlikechange()
-        },
-        likeChange() {
-            axios
-                .get('/api/attrations/LikeComment?commentID=' + this.comment_id + "&type=" + this.liketype)
-                .then((response) => {
-                    console.log("点赞数", response)
-                })
-                .catch((error) => {
-                    console.error('Error fetching data:', error);
-                });
-        },
-        unlikechange(){
-            axios
-                .get('/api/attrations/UnlikeComment?commentID=' + this.comment_id + "&type=" + this.unliketype)
-                .then((response) => {
-                    console.log("点踩数", response)
-                })
-                .catch((error) => {
-                    console.error('Error fetching data:', error);
-                });
+        // },
+        // changeunlikestatus() {
+        //     this.is_unliked = !this.is_unliked;
+        //     this.unliketype = !this.unliketype;
+        //     this.unlikechange()
+        // },
+        // likeChange() {
+        //     axios
+        //         .get('/api/attrations/LikeComment?commentID=' + this.comment_id + "&type=" + this.liketype)
+        //         .then((response) => {
+        //             console.log("点赞数", response)
+        //         })
+        //         .catch((error) => {
+        //             console.error('Error fetching data:', error);
+        //         });
+        // },
+        // unlikechange(){
+        //     axios
+        //         .get('/api/attrations/UnlikeComment?commentID=' + this.comment_id + "&type=" + this.unliketype)
+        //         .then((response) => {
+        //             console.log("点踩数", response)
+        //         })
+        //         .catch((error) => {
+        //             console.error('Error fetching data:', error);
+        //         });
 
-        }
+        // }
 
     },
     components: {
