@@ -7,7 +7,7 @@ import './mock';
 
 import axios from "axios";
 import $ from "jquery";
-import './mock/mock';
+// import './mock/mock';
 // 引入jQuery、bootstrap
 
 import vue3videoPlay from 'vue3-video-play' // 引入组件
@@ -44,6 +44,10 @@ axios.defaults.baseURL = "http://8.130.25.70:5000";
 
 // 注册全局变量
 app.config.globalProperties.$globalData = globalData;
+
+// 注册全局的baseURL
+app.config.globalProperties.$http=axios;
+axios.defaults.baseURL="http://8.130.25.70:5000";
 
 app.use(VueSplide);
 app.use(store);

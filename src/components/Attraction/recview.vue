@@ -2,7 +2,7 @@
     <!-- 热门景点部分 -->
     <div class="recommend">
         <img class="recommendpic" :src="picsrc" :alt="title">
-        <div class="recommendtitle">{{ title }}</div>
+        <div class="recommendtitle custom-font">{{ title }}</div>
     </div>
 </template>
 
@@ -18,7 +18,15 @@ export default {
 </script>
 
 <style>
-
+@font-face {
+  font-family: 'FAMILYDUANNINGMAOBI-XINGYI';
+  src: url('../../fonts/段宁毛笔行艺体.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+.custom-font {
+  font-family: 'FAMILYDUANNINGMAOBI-XINGYI', sans-serif;
+}
 .recommend {
     position: relative;
     width: 250px;
@@ -52,8 +60,8 @@ export default {
     letter-spacing: 2px;
     padding: 10px;
     /* 可选：如果添加了背景颜色，可以调整内边距以适应文本样式 */
-    font-size: 24px;
-    font-weight: bold;
-    color: #000;
+    font-size: 20px;
+    font-weight: 300px;
+    color: #F1F3FF;
 }
 </style>

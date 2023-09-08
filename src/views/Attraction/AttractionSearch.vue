@@ -27,7 +27,7 @@
                 <div v-else>
                     <SearchView v-for="item in currentPageData" :key="item.id" :picsrc="item.pic" :title="item.title"
                         :location="item.location" :score="item.score" :commentnum="item.commentnum"
-                        :username="item.username" :commentdetail="item.commentdetail"></SearchView>
+                        :username="item.username" :commentdetail="item.commentdetail" @click="gotoAttrDetail"></SearchView>
                 </div>
 
 
@@ -155,7 +155,7 @@ export default {
                 });
         },
         handleMenuSelect(index) {
-            this.activeMenu = index-1;//和后端对应
+            this.activeMenu = index - 1;//和后端对应
             console.log(this.activeMenu);
             // 在这里处理菜单项点击事件，可以进行页面跳转或其他操作
         },
@@ -195,6 +195,13 @@ export default {
                 this.activeTab = this.currentPage.toString();
 
             }
+        },
+        goToTop() {
+            window.scrollTo(0, 0);
+        },
+        gotoAttrDetail() {
+            this.goToTop();
+            this.$router.push('/attraction-detail');
         }
 
     },
@@ -215,32 +222,36 @@ export default {
     height: 30px;
     margin-right: 10px;
 }
-.searchimg{
+
+.searchimg {
     position: fixed;
-    top:200px;
+    top: 200px;
     left: 5px;
     width: 250px;
     height: 350px;
     z-index: 100;
 }
-.imgbottom{
+
+.imgbottom {
     width: 210px;
     height: 7px;
     border-radius: 3px;
     background-color: #a7b3e9;
     position: fixed;
-    top:425px;
+    top: 425px;
     left: 10px;
     opacity: 0.5;
 }
+
 .el-menu-vertical-demo {
     font-weight: bold;
     letter-spacing: 1px;
 }
-.el-menu .el-menu-item:hover{
+
+.el-menu .el-menu-item:hover {
     outline: 0 !important;
     color: #8097FD !important;
-    background: linear-gradient(270deg, #F2F7FC 0%, #FEFEFE 100%)!important;
+    background: linear-gradient(270deg, #F2F7FC 0%, #FEFEFE 100%) !important;
 }
 
 .el-menu-item.is-active {
@@ -260,7 +271,7 @@ export default {
 .tolnum {
     display: flex;
     margin-left: 30px;
-    margin-top:10px;
+    margin-top: 10px;
     font-size: 14px;
     font-weight: bold;
 }
@@ -316,5 +327,6 @@ export default {
 
 .tolpage {
     margin-left: 10px;
-}</style>
+}
+</style>
   

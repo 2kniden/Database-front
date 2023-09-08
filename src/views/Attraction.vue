@@ -16,7 +16,7 @@
       <div class="location">
         选择你所在的城市
         <img src="../assets/location.svg" alt="location icon" class="imgicon" @click="showCascader">
-        {{chosencity}}
+        {{ chosencity }}
         <!-- 遮罩层 -->
         <div class="mask" v-show="showMask">
           <!-- 内容区域，包含 el-cascader -->
@@ -51,8 +51,8 @@
         <!-- 高分推荐缩略图 -->
         <div class="rank">
           <div class="container">
-            <RankView v-for="item in highranklist" :key="item.id" :picsrc="item.picsrc" :title="item.title"
-              :score="item.score" :dec="item.dec" @click="ToDetail()"></RankView>
+            <RankView v-for="item in highranklist" :key="item.id" :picsrc="item.picsrc[0]" :title="item.title"
+              :score="item.score" :dec="item.position" @click="ToDetail()"></RankView>
           </div>
           <div class="endline">
             -- 搜索查看更多精彩 --
@@ -70,6 +70,7 @@ import RankView from '@/components/Attraction/highrankview.vue'
 import Search from '@/components/Attraction/search.vue'
 import StartTitle from '@/components/Attraction/smallfunc/startline.vue'
 import Header from '@/components/Header.vue'
+import { ElMessage } from 'element-plus';
 import axios from 'axios'
 // 城市选择器
 import { pcTextArr } from "element-china-area-data";
@@ -90,8 +91,16 @@ export default {
       showMask: false, // 控制遮罩层显示/隐藏
       options: [
         {
+          value: '上海市',
+          label: '上海市'
+        },
+        {
           value: '北京市',
           label: '北京市'
+        },
+        {
+          value: '广东省',
+          label: '广东省'
         },
         {
           value: '天津市',
@@ -121,10 +130,7 @@ export default {
           value: '黑龙江省',
           label: '黑龙江省'
         },
-        {
-          value: '上海市',
-          label: '上海市'
-        },
+
         {
           value: '江苏省',
           label: '江苏省'
@@ -161,10 +167,7 @@ export default {
           value: '湖南省',
           label: '湖南省'
         },
-        {
-          value: '广东省',
-          label: '广东省'
-        },
+
         {
           value: '广西壮族自治区',
           label: '广西壮族自治区'
@@ -215,7 +218,7 @@ export default {
         }
       ],
       selectedOptions: [],
-      chosencity:'上海市',
+      chosencity: '上海市',//先按照这个存
     }
   },
 
@@ -234,8 +237,18 @@ export default {
     },
     hideCascader() {
       // 隐藏遮罩层
-      this.showMask = false;
-      this.chosencity=this.selectedOptions[0];
+      if (this.selectedOptions.length === 0) {
+        ElMessage({
+          message: '选择不能为空!',
+          type: 'error',
+        })
+      }
+      else {
+        this.showMask = false;
+        this.chosencity = this.selectedOptions[0];
+        this.initializeData();
+      }
+
     },
     goToTop() {
       window.scrollTo(0, 0);
@@ -243,23 +256,27 @@ export default {
     initializeData() {
       // 获取热门景点
       axios
-        .get('/Attraction/recommendAttr?attr_position=' + this.chosencity)
+        .get('/api/attrations/PopularAttractions?city=' + this.chosencity)
         .then((response) => {
-          this.recommendpiclist = response.data.recommendList;
+          console.log("热门景点", response)
+          this.recommendpiclist = response.data
+
         })
         .catch((error) => {
           console.error('Error fetching data:', error);
         });
+
       // 获取高分推荐
       axios
-        .get('/Attraction/highrank?attr_position=' + this.chosencity)
+        .get('/api/attrations/HighScoreRecommends?city=' + this.chosencity)
         .then((response) => {
-          this.highranklist = response.data.highrankList;
-          console.log(this.highranklist)
+          console.log("高分推荐", response)
+          this.highranklist = response.data
         })
         .catch((error) => {
           console.error('Error fetching data:', error);
         });
+
 
     },
 
@@ -273,7 +290,8 @@ export default {
     Search,
     Header,
     axios,
-    pcTextArr
+    pcTextArr,
+    ElMessage
   }
 }
 
@@ -397,10 +415,9 @@ export default {
   padding: 20px;
   border-radius: 5px;
 }
-.mapbtn{
+
+.mapbtn {
   margin-top: 10px;
 
 }
-
-
 </style>
