@@ -1,7 +1,7 @@
 <template>
-  <div class="header">
+  <div class="header" :style="changeBackgroundColor">
     <!--首先绘制左上角的网页名称-->
-    <div class="main_logo">
+    <div class="main_logo" @click="backToHome">
       <img class="main_logo_icon" src="../assets/main_logo.svg"/>
       <div class="main_logo_text">迹忆旅游平台</div>
     </div>
@@ -62,6 +62,15 @@ export default {
           };
         }
       };
+    },
+    changeBackgroundColor(){
+      //根据页面是不是home来判断背景色应该是什么
+      if(this.$globalData.navbarActive!=='home'){
+        //如果不是home，那么背景色就应该变成白色
+        return{
+          backgroundColor:"#FFFFFF",
+        };
+      }
     }
   },
   methods: {
@@ -71,20 +80,29 @@ export default {
       const routeName = name;
       this.$globalData.navbarActive=routeName;
       this.$router.push("/"+routeName);
+      localStorage.setItem("page",routeName);
     },
     //进入个人主页
     goToPersonal() {
       console.log("跳转到个人页面");
       this.$globalData.navbarActive="personal";
       this.$router.push({ name: "personal" });
+      localStorage.setItem("page","personal");
     },
+    backToHome(){
+      console.log("返回主页");
+      this.$globalData.navbarActive="home";
+      this.$router.push("/");
+      localStorage.setItem("page","home");
+    }
   },
   mounted() {
 
   },
   created() {
-    // 在created生命周期钩子中获取全局变量的值并赋给本地变量
-    // this.activeTab=this.$globalData.navbarActive;
+    if(localStorage.getItem("page")!=null){
+      this.$globalData.navbarActive = localStorage.getItem("page");
+    }//如果浏览器存储了这个page，那么直接用储存的变量
   }
 };
 </script>
@@ -95,11 +113,12 @@ export default {
   /*background-color: #ffffff;*/
   /*padding: 20px;*/
   width: 100vw;
-  height: 80px;
+  height: 65px;
   position: fixed;
   display: flex;
   top: 0;
   left: 0;
+  z-index: 999;
 }
 
 .main_logo{
@@ -114,8 +133,8 @@ export default {
 .main_logo_icon{
   position: relative;
   display: flex;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   margin-top: 12px;
   margin-left: 19px;
 }
@@ -130,7 +149,7 @@ export default {
 
   color: #8097FD;
   font-family: Microsoft YaHei;
-  font-size: 26px;
+  font-size: 22px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
