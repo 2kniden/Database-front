@@ -153,7 +153,7 @@
           <el-form-item label="小队成员" :label-width="formLabelWidth">
             <div class="float-left" style="width: 400px">
               <div>
-                <img class="edit_headImage" :src="IMGSRC" alt="">
+                <img class="edit_headImage" :src="team.publisher.headimage" alt="">
                 <div class="float-left">{{ team.publisher.name }}</div>
                 <div class="publisher" style="padding: 2px 10px; font-size: 14px; margin: 0 0 10px 10px;">
                   发布者
