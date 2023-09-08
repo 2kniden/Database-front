@@ -157,6 +157,7 @@ export default {
 
     mounted() {
         // 获取景区id
+        // this.attraction_id='1';
         this.attraction_id=this.$route.query.attractionID;
         this.initializeData();
         const elementsToObserve = [
