@@ -41,8 +41,8 @@ export default {
     border-radius: 10px;
 }
 .rankitem:hover {
-  box-shadow: none;
-  border: 1px #8097FD solid;
+    box-shadow: 1px 1px 1px rgba(128, 151, 253, 0.4);
+  
 }
 .rankpic-container {
   width: 100%; 

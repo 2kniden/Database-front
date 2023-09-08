@@ -41,10 +41,9 @@ export default {
 
 }
 .recommend:hover {
-  box-shadow: none;
-  border: 1px #8097FD solid;
+    box-shadow: 1px 1px 1px rgba(128, 151, 253, 0.4);
+  
 }
-
 .recommendpic {
     width: 100%;
     /* Set the width to 100% */

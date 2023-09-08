@@ -159,7 +159,9 @@ export default {
     border-radius: 50px;
     margin-right: 10px;
 }
-
+.attrright{
+    width: 100%;
+}
 .attrhead {
     display: flex;
     flex-direction: row;
