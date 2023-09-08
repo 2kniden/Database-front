@@ -5,11 +5,11 @@
     <Loading v-if="LOADING"></Loading>
     <div class="sections">
 
-      <div v-for="(result, index) in searchResults" :class="{
+      <div v-for="(result, index) in attractionResults" :class="{
         plant_background: true,
         SectionContainer: true,
         testenter: true
-      }" :key="result.title" :data-delay="index * 200" @click="navToPlantinfo(result.id)">
+      }" :key="result.title" :data-delay="index * 200" @click="navToPlantinfo(result.id)" v-if="type === 'attraction'">
         <!-- <div class="image-hover-thumb">
             <div class="image-container" alt="" />
           </div> -->
@@ -24,7 +24,53 @@
         </div>
 
         <div class="morphology-container">
-          点击查看详细知识点
+          {{ result.location }}
+        </div>
+      </div>
+
+      <div v-for="(result, index) in journalResults" :class="{
+        plant_background: true,
+        SectionContainer: true,
+        testenter: true
+      }" :key="result.title" :data-delay="index * 200" v-bind:style="{backgroundImage:'url('+journalResults.photoUrl+')'}" @click="navToPlantinfo(result.id)" v-if="type === 'journal'">
+        <!-- <div class="image-hover-thumb">
+            <div class="image-container" alt="" />
+          </div> -->
+
+        <div class="article-container">
+          <div class="big_info">
+            <h2 style="margin-bottom:8px">
+              {{ result.title }}
+            </h2>
+
+          </div>
+        </div>
+
+        <div class="morphology-container">
+          {{ result.tag }}
+        </div>
+      </div>
+
+      <div v-for="(result, index) in teamResults" :class="{
+        plant_background: true,
+        SectionContainer: true,
+        testenter: true
+      }" :key="result.title" :data-delay="index * 200" :style="{backgroundImage:'url('+teamResults.photoUrl+')'}" @click="navToPlantinfo(result.id)" v-if="type === 'team'">
+        <!-- <div class="image-hover-thumb">
+            <div class="image-container" alt="" />
+          </div> -->
+
+        <div class="article-container">
+          <div class="big_info">
+            <h2 style="margin-bottom:8px">
+              {{ result.title }}
+            </h2>
+
+          </div>
+        </div>
+
+        <div class="morphology-container">
+          {{ result.tag }}
         </div>
       </div>
 
@@ -46,8 +92,12 @@ export default {
   data() {
     return {
       testshow: [],
-      searchResults: [],
-      LOADING: true
+      attractionResults:[],
+      journalResults: [],
+      teamResults:[],
+      LOADING: true,
+      type:"attraction",
+      keyWord:''
     };
   },
   created() {
@@ -59,20 +109,27 @@ export default {
     // window.addEventListener("scroll", this.handleScroll);
     //当前滚动位置到达testref的时候，显示div（100作为调整用）
     // window.scroll(0, Math.max(window.pageYOffset - 50, 0));
-
     let that = this;
+    that.keyWord = this.$route.query.key
+
     axios
         .get("/api/search/AllSearch", {
-          Keyword: this.$route.query.key
+          Keyword: that.keyWord
         })
-
         .then(function (response) {
           console.log("post请求成功");
           console.log(response.data);
           for (let i = 0; i < response.data.length; i++) {
-            if(response.data[i].type === 'journal')
-              that.searchResults.push(response.data[i]);
+            if(response.data[i].type === 'attraction')
+              that.attractionResults.push(response.data[i]);
+            else if(response.data[i].type === 'journal')
+              that.journalResults.push(response.data[i]);
+            else if(response.data[i].type === 'team')
+              that.teamResults.push(response.data[i]);
           }
+          console.log(that.attractionResults)
+          console.log(that.journalResults)
+          console.log(that.teamResults)
           that.LOADING = false;
         })
         .catch(function (error) {
@@ -82,7 +139,7 @@ export default {
         });
   },
   beforeRouteLeave(to,from,next) {
-    window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("scroll", this.bindHandleScroll);
     next();
   },
   methods: {
@@ -272,7 +329,6 @@ body
 .plant_background
 {
   z-index: 3;
-  background-image: url(../../assets/default_avatar.png);
   background-size: cover;
   background-position: 50% 50%;
   background-size: 300px 300px;

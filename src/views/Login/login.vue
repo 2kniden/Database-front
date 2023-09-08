@@ -77,7 +77,7 @@
 
       <!--按钮部分-->
       <div class="button">
-        <div class="button-text" style="margin-left: 230px;" @click="Login">登录</div>
+        <div class="button-text" style="margin-left: 230px;" @click="nameLogin">登录</div>
         <div class="change-button" @click="changePage('注册')">还没有账号？注册一下</div>
       </div>
     </div>
@@ -172,7 +172,7 @@ export default {
             alert("连接服务器失败");
           })
     },
-    Login(){
+    nameLogin(){
       let that = this;
       if(that.codeLogin === false) {
         // 用来进行昵称登录
@@ -186,7 +186,7 @@ export default {
 
         //进行登录
         axios
-            .post("/api/User/login", {
+            .post("/api/User/namelogin", {
               nickName: that.loginForm.userName,
               password: that.loginForm.userPassword
             })

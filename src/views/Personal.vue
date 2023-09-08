@@ -179,7 +179,7 @@
                 <div class="icon-container">
                   <img :src="item.icon" alt="" class="info-icon" />
                 </div>
-                <div class="content">
+                <div>
                   <label class="icon-title">&ensp;{{ item.title }}&ensp;</label>
                   <input v-model="item.value" type="text" class="input-field" v-if="index!==3"/>
                   <input v-model="selectedDate" type="text" class="input-field" v-if="index===3"/>
@@ -220,7 +220,7 @@
                 <div class="icon-container">
                   <img :src="item.icon" alt="" class="info-icon" />
                 </div>
-                <div class="content">
+                <div>
                   <label class="icon-title">&ensp;{{ item.title }}&ensp;</label>
                   <input v-model="item.value" type="text" class="input-field" />
                 </div>
