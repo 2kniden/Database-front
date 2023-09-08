@@ -51,12 +51,12 @@ export default {
     };
   },
   created() {
-    for (let i = 0; i < response.data.length; i++) {
-      this.testshow.push(false);
-    }
+    // for (let i = 0; i < response.data.length; i++) {
+    //   this.testshow.push(false);
+    // }
   },
   mounted() {
-    window.addEventListener("scroll", this.handleScroll);
+    // window.addEventListener("scroll", this.handleScroll);
     //当前滚动位置到达testref的时候，显示div（100作为调整用）
     // window.scroll(0, Math.max(window.pageYOffset - 50, 0));
 
@@ -83,7 +83,6 @@ export default {
   },
   beforeRouteLeave(to,from,next) {
     window.removeEventListener("scroll", this.handleScroll);
-    window.removeEventListener("scroll", this.bindHandleScroll);
     next();
   },
   methods: {
