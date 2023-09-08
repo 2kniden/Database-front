@@ -70,6 +70,7 @@ export default {
     display: flex;
     flex: 1;
     margin: 10px 5px 5px 5px;
+    font-size: 14px;
 }
 
 .ranklocpic {
