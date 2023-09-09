@@ -27,7 +27,7 @@
         <div class="team-button">
           <el-button v-if="item.status === '招募中'" type="primary" size="large" color="#8097FD" plain style="float: right;"
           @click="joinTeamDialogVisible = true">加入小队</el-button>
-          <el-button v-if="item.status === '招募结束'" type="primary" size="large" plain disabled 
+          <el-button v-if="item.status === '招募结束'" type="primary" size="large" plain disabled
           style="float: right; background-color: rgb(242, 245, 255); color: rgb(169, 185, 253); border-color: rgb(192, 203, 254);"
           @click="joinTeamDialogVisible = true">加入小队</el-button>
         </div>
@@ -351,7 +351,7 @@ axios.post('/api/Teams/Apply',{
   padding: 50px;
   background-color: #fff;
   width: 1090px;
-  height: auto;
+  height: 650px;
 }
 
 .float-left {
@@ -377,7 +377,7 @@ axios.post('/api/Teams/Apply',{
 
 .clickable-area:hover {
   color: #333;   /*鼠标悬停时改变颜色，可以根据需要调整 */
-} 
+}
 
 .line-name {
     float: left;

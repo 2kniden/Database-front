@@ -3,13 +3,23 @@
     <div class="sbackground" />
     <Header></Header>
     <Loading v-if="LOADING"></Loading>
+
+    <!--导航栏-->
+    <!-- 标准流排列两个choice -->
+    <!-- choice1 -->
+    <li class="choice clearfix" :style="chooseChangeStyle('attraction')" @click="setActive('attraction')">景点</li>
+    <!-- choice2 -->
+    <li class="choice clearfix" style="margin-top: 280px;" :style="chooseChangeStyle('journal')" @click="setActive('journal')">日志</li>
+    <!-- choice3 -->
+    <li class="choice clearfix" style="margin-top: 410px;" :style="chooseChangeStyle('team')" @click="setActive('team')">小队</li>
+
     <div class="sections">
 
       <div v-for="(result, index) in attractionResults" :class="{
         plant_background: true,
         SectionContainer: true,
         testenter: true
-      }" :key="result.title" :data-delay="index * 200" @click="navToPlantinfo(result.id)" v-if="type === 'attraction'">
+      }" :key="result.title" :data-delay="index * 200" @click="navToPage('attraction',result.id)" v-if="type === 'attraction'">
         <!-- <div class="image-hover-thumb">
             <div class="image-container" alt="" />
           </div> -->
@@ -32,7 +42,7 @@
         plant_background: true,
         SectionContainer: true,
         testenter: true
-      }" :key="result.title" :data-delay="index * 200" v-bind:style="{backgroundImage:'url('+journalResults.photoUrl+')'}" @click="navToPlantinfo(result.id)" v-if="type === 'journal'">
+      }" :key="result.title" :data-delay="index * 200" @click="navToPage('journal',result.id)" v-if="type === 'journal'">
         <!-- <div class="image-hover-thumb">
             <div class="image-container" alt="" />
           </div> -->
@@ -55,7 +65,7 @@
         plant_background: true,
         SectionContainer: true,
         testenter: true
-      }" :key="result.title" :data-delay="index * 200" :style="{backgroundImage:'url('+teamResults.photoUrl+')'}" @click="navToPlantinfo(result.id)" v-if="type === 'team'">
+      }" :key="result.title" :data-delay="index * 200" @click="navToPage('team',result.id)" v-if="type === 'team'">
         <!-- <div class="image-hover-thumb">
             <div class="image-container" alt="" />
           </div> -->
@@ -146,14 +156,25 @@ export default {
     next();
   },
   methods: {
-    navToPlantinfo(id) {
-      console.log("jump to acknowledgeinfo:" + id);
-      this.$router.push({
-        path: "/acknowledgeinfo",
-        query: {
-          key: id
-        }
-      });
+    setActive(name) {
+      let that=this;
+      that.type=name;
+      console.log(that.activeChoose)
+    },
+    chooseChangeStyle(name){
+      let that=this;
+      if(that.type===name){
+        return{
+          backgroundColor:"#FFFFFF",
+        };
+      }
+    },
+    navToPage(name,id) {
+      if(name === 'attraction'){
+        this.$router.push({
+          path: "/attraction-detail?attractionID="+id,
+        });
+      }
       this.reload();
     },
     componentDidMount() {
@@ -333,6 +354,7 @@ body
 {
   z-index: 3;
   background-size: cover;
+  background-image: url("../../assets/jizhua.jpg");
   background-position: 50% 50%;
   background-size: 300px 300px;
   background-repeat: no-repeat;
@@ -430,4 +452,56 @@ body
   height: 83%;
   width: 600px;
 }
+
+/*导航栏*/
+
+/* 清除浮动 */
+.clearfix::before,.clearfix::after{
+  content:"";
+  display: block;
+}
+
+.clearfix::after{
+  clear:both;
+}
+
+/* 设置按键样式 */
+li.choice{
+  /* background-color:pink; */
+  position:absolute;
+  margin-top: 150px;
+  height:60px;
+  width:200px;
+  left: 10px;
+  border-radius: 25px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 修改路由链接样式 */
+li.choice a {
+  text-decoration-style: none;
+  font-family: MiSans;
+  font-weight: bold;
+  color: #8097FD;
+}
+
+/* 设置鼠标悬浮样式 */
+li.choice:hover {
+  background-color: #FFFFFF;
+}
+
+/* 设置选中样式 */
+/* 为啥这个没有效果呢我说……  -----啊已经解决了*/
+/* 设置了height后就可以显示了，但是形状非常奇怪
+不知道为什么这个不能继承父选择器的样式
+可能是我忘记的某个知识点吧 */
+li.choice a.router-link-active.router-link-exact-active {
+  background-color: #FFFFFF;
+  display: block;
+  height: 60px;
+  /* z-index: auto; */
+  border-radius: 25px;
+}
+
 </style>

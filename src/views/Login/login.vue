@@ -210,7 +210,7 @@ export default {
       else{
         //用来进行短信登陆
         if (that.loginForm.phone === '') {
-          alert("用户昵称不能为空")
+          alert("用户手机号不能为空")
           return;
         } else if (that.loginForm.verificationCode !== that.loginForm.contentText) {
           alert("验证码输入错误")

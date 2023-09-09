@@ -64,9 +64,17 @@ export default {
   methods:{
     gotoLoginPage(){
       let that = this;
-      if(that.Form.verificationCode === that.Form.contentText){
-        this.$router.push("/login");
+      if (that.loginForm.phone === '') {
+        alert("用户手机号不能为空")
+        return;
+      } else if (that.loginForm.verificationCode !== that.loginForm.contentText) {
+        alert("验证码输入错误")
+        return;
       }
+
+      axios
+          .post()
+        this.$router.push("/login");
     },
     getPhoneCode(){
       // 如果未输入手机号，结束执行
