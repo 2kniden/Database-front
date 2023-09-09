@@ -44,7 +44,7 @@
                         {{ comunlikes }}
                     </div> -->
                     <div class="commeg comdel">
-                        <img class="licon" src="../../../assets/attractions/icon/delete.svg" alt="" v-if="is_del" @click="delcomment">
+                        <img class="licon" src="../../../assets/attractions/icon/delete.svg" alt="" v-if="poster_id===cookie_id" @click="delcomment">
                     </div>
                 </div>
 
@@ -57,6 +57,7 @@
 <script>
 import axios from 'axios'
 export default {
+   
     inject: ['reload'],
     props: {
         userlog: String,
@@ -75,19 +76,16 @@ export default {
             // 获取到的点赞、拉踩状态码以及删除权限，这里接口还没搞好
             is_liked: false,
             is_unliked: false,
-            is_del: true,
+            is_del: false,
             // liketype: 0,
             //0-取消点赞或点踩，1-点赞或点踩
             // unliketype: 0,
             // 这个是要cookie获取的，暂且写死
-            user_id:"843526A2B7784E73B28E73C797A2C81C"
+            cookie_id:"843526A2B7784E73B28E73C797A2C81C"
         }
 
     },
-    mounted(){
-        
-        
-    },
+    
     methods: {
         delcomment(){
             axios
