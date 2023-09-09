@@ -44,7 +44,8 @@
                         {{ comunlikes }}
                     </div> -->
                     <div class="commeg comdel">
-                        <img class="licon" src="../../../assets/attractions/icon/delete.svg" alt="" v-if="poster_id===cookie_id" @click="delcomment">
+                        <img class="licon" src="../../../assets/attractions/icon/delete.svg" alt=""
+                            v-if="poster_id === cookie_id" @click="delcomment">
                     </div>
                 </div>
 
@@ -56,8 +57,9 @@
 
 <script>
 import axios from 'axios'
+import { ElMessage } from 'element-plus';
 export default {
-   
+
     inject: ['reload'],
     props: {
         userlog: String,
@@ -69,7 +71,7 @@ export default {
         comunlikes: Number,
         picsrc: Array,
         comment_id: String,
-        poster_id:String
+        poster_id: String
     },
     data() {
         return {
@@ -81,21 +83,26 @@ export default {
             //0-取消点赞或点踩，1-点赞或点踩
             // unliketype: 0,
             // 这个是要cookie获取的，暂且写死
-            cookie_id:"843526A2B7784E73B28E73C797A2C81C"
+            cookie_id: "843526A2B7784E73B28E73C797A2C81C"
         }
 
     },
-    
+
     methods: {
-        delcomment(){
+        delcomment() {
             axios
                 .get('/api/attrations/DeleteComment?commentID=' + this.comment_id)
                 .then((response) => {
                     console.log(response)
+                    ElMessage({
+                        message: '删除成功!',
+                        type: 'success',
+                    })
                 })
                 .catch((error) => {
                     console.error('Error fetching data:', error);
                 });
+
             this.reload()
         }
         // 现在有个问题就是mounted里面不会报错
@@ -103,7 +110,7 @@ export default {
         //     this.is_liked = !this.is_liked;
         //     this.liketype = !this.liketype;
         //     this.likeChange()
-            
+
         // },
         // changeunlikestatus() {
         //     this.is_unliked = !this.is_unliked;
@@ -173,9 +180,11 @@ export default {
     border-radius: 50px;
     margin-right: 10px;
 }
-.attrright{
+
+.attrright {
     width: 100%;
 }
+
 .attrhead {
     display: flex;
     flex-direction: row;
@@ -242,5 +251,4 @@ export default {
     width: 12px;
     height: 12px;
     transform: translate(0, 15%);
-}
-</style>
+}</style>
