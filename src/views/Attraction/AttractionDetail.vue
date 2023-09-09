@@ -101,7 +101,7 @@
                         </el-radio-group>
                     </div>
                     <attrComment v-for="item in currentPageData" :key="item.commentID" :userlog="item.userSrc"
-                        :username="item.username" :comstar="item.commentScore" :comword="item.commentDetail"
+                        :username="item.userName" :comstar="item.commentScore" :comword="item.commentDetail"
                         :comtime="item.commentDate" :comlikes="item.like" :comunlikes="item.unlike"
                         :picsrc="item.commentSrc" :comment_id="item.commentID" :poster_id="item.userID">
 
