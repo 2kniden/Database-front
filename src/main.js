@@ -34,7 +34,7 @@ app.config.globalProperties.$http = axios;
 // 全局配置axios请求根路径(axios.默认配置.请求根路径)
 
 //连接服务器用这个
-axios.defaults.baseURL = "http://8.130.25.70:5000";
+// axios.defaults.baseURL = "http://8.130.25.70:5000";
 
 //连接本地服务器用这个
 // axios.defaults.baseURL = "http://8.130.25.70:5000";

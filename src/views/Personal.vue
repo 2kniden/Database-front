@@ -113,17 +113,14 @@
           我的日志
         </div>
         <div class="display-box">
-          <div class="page" v-for="pageIndex in totalMyPostPages" :key="pageIndex" v-show="currentMyPostPage === pageIndex">
-            <div class="row" v-for="rowIndex in 2" :key="rowIndex">
-              <div class="box" v-for="boxIndex in 4" :key="boxIndex">
-                <div class="box_title">
-                  <div class="box_name">
-                    上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！
-                  </div>
-                  <div class="box_time">
-                    2023/07/03
-                  </div>
-                </div>
+          <div class="box" v-for="(journal,pageIndex) in journal_form" :key="journal.journal_id">
+            <img style="position:absolute;width: 100%;height: 100%;border-radius: 15px" :src="journal.photoUrl"/>
+            <div class="box_title">
+              <div class="box_name">
+                {{ journal.tabs[0] }}
+              </div>
+              <div class="box_time">
+                {{ journal.postDate }}
               </div>
             </div>
           </div>
@@ -134,7 +131,7 @@
                 :disabled="currentMyPostPage === 1"
                 v-if="currentMyPostPage !== 1"
             >
-              <img class="turnleft" src="../assets/personal/turnleft.png">
+              <img class="turnleft" src="../assets/personal/turnleft.png" @click="changeLeftJournal">
               <i class="fas fa-chevron-left"></i>
             </button>
             <div class="page-list">
@@ -153,7 +150,7 @@
                 :disabled="currentMyPostPage === totalMyPostPages"
                 v-if="currentMyPostPage !== totalMyPostPages"
             >
-              <img class="turnleft" src="../assets/personal/turnright.png">
+              <img class="turnleft" src="../assets/personal/turnright.png" @click="changeRightJournal">
               <i class="fas fa-chevron-right"></i>
             </button>
           </div>
@@ -244,48 +241,45 @@
           看看你收藏的日志吧！
         </div>
       </div>
-      <div class="display-box" style="margin-top: -200px">
-        <div class="page" v-for="pageIndex in totalFavPostPages" :key="pageIndex" v-show="currentFavPostPage === pageIndex">
-          <div class="row" v-for="rowIndex in 2" :key="rowIndex">
-            <div class="box" v-for="boxIndex in 4" :key="boxIndex">
-              <div class="box_title">
-                <div class="box_name">
-                  上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！
-                </div>
-                <div class="box_time">
-                  2023/07/03
-                </div>
-              </div>
+      <div class="display-box" style="margin-top: -250px">
+        <div class="box" v-for="(journal,pageIndex) in journal_form" :key="journal.journal_id">
+          <img style="position:absolute;width: 100%;height: 100%;border-radius: 15px" :src="journal.photoUrl"/>
+          <div class="box_title">
+            <div class="box_name">
+              {{ journal.tabs[0] }}
+            </div>
+            <div class="box_time">
+              {{ journal.postDate }}
             </div>
           </div>
         </div>
         <div class="pagination">
           <button
               class="arrow-btn prev-btn"
-              @click="prevPage('日志')"
-              :disabled="currentFavPostPage === 1"
-              v-if="currentFavPostPage !== 1"
+              @click="prevPage('个人中心')"
+              :disabled="currentMyPostPage === 1"
+              v-if="currentMyPostPage !== 1"
           >
-            <img class="turnleft" src="../assets/personal/turnleft.png">
+            <img class="turnleft" src="../assets/personal/turnleft.png" @click="changeLeftJournal">
             <i class="fas fa-chevron-left"></i>
           </button>
           <div class="page-list">
             <button
-                v-for="pageIndex in totalFavPostPages"
+                v-for="pageIndex in totalMyPostPages"
                 :key="pageIndex"
-                :class="['page-btn', { 'pag_active': currentFavPostPage === pageIndex }]"
-                @click="changePage('日志',pageIndex)"
+                :class="['page-btn', { 'pag_active': currentMyPostPage === pageIndex }]"
+                @click="changePage('个人中心',pageIndex)"
             >
               {{ pageIndex }}
             </button>
           </div>
           <button
               class="arrow-btn next-btn"
-              @click="nextPage('日志')"
-              :disabled="currentFavPostPage === totalFavPostPages"
-              v-if="currentFavPostPage !== totalFavPostPages"
+              @click="nextPage('个人中心')"
+              :disabled="currentMyPostPage === totalMyPostPages"
+              v-if="currentMyPostPage !== totalMyPostPages"
           >
-            <img class="turnleft" src="../assets/personal/turnright.png">
+            <img class="turnleft" src="../assets/personal/turnright.png" @click="changeRightJournal">
             <i class="fas fa-chevron-right"></i>
           </button>
         </div>
@@ -303,46 +297,43 @@
           看看你收藏的小队吧！
         </div>
       </div>
-      <div class="display-box" style="margin-top: -200px">
-        <div class="page" v-for="pageIndex in totalFavTeamPages" :key="pageIndex" v-show="currentFavTeamPage === pageIndex">
-          <div class="row" v-for="rowIndex in 2" :key="rowIndex">
-            <div class="box" v-for="boxIndex in 4" :key="boxIndex">
-              <div class="box_title">
-                <div class="box_name">
-                  上海周末家庭旅行的好去处？浦东这3个小众旅游地我逢人必推！
-                </div>
-                <div class="box_time">
-                  2023/07/03
-                </div>
-              </div>
+      <div class="display-box" style="margin-top: -250px">
+        <div class="box" v-for="(team,pageIndex) in myteam" :key="team.teamId">
+          <img style="position:absolute;width: 100%;height: 100%;border-radius: 15px" :src="team.media"/>
+          <div class="box_title">
+            <div class="box_name">
+              {{ team.title+"\br"+team.tags[0] }}
+            </div>
+            <div class="box_time">
+              {{ team.posttime }}
             </div>
           </div>
         </div>
         <div class="pagination">
           <button
               class="arrow-btn prev-btn"
-              @click="prevPage('小队')"
-              :disabled="currentFavTeamPage === 1"
-              v-if="currentFavTeamPage !== 1"
+              @click="prevPage('个人中心')"
+              :disabled="currentMyPostPage === 1"
+              v-if="currentMyPostPage !== 1"
           >
-            <img class="turnleft" src="../assets/personal/turnleft.png">
+            <img class="turnleft" src="../assets/personal/turnleft.png" >
             <i class="fas fa-chevron-left"></i>
           </button>
           <div class="page-list">
             <button
-                v-for="pageIndex in totalFavTeamPages"
+                v-for="pageIndex in totalMyPostPages"
                 :key="pageIndex"
-                :class="['page-btn', { 'pag_active': currentFavTeamPage === pageIndex }]"
-                @click="changePage('小队',pageIndex)"
+                :class="['page-btn', { 'pag_active': currentMyPostPage === pageIndex }]"
+                @click="changePage('个人中心',pageIndex)"
             >
               {{ pageIndex }}
             </button>
           </div>
           <button
               class="arrow-btn next-btn"
-              @click="nextPage('小队')"
-              :disabled="currentFavTeamPage === totalFavTeamPages"
-              v-if="currentFavTeamPage !== totalFavTeamPages"
+              @click="nextPage('个人中心')"
+              :disabled="currentMyPostPage === totalMyPostPages"
+              v-if="currentMyPostPage !== totalMyPostPages"
           >
             <img class="turnleft" src="../assets/personal/turnright.png">
             <i class="fas fa-chevron-right"></i>
@@ -439,7 +430,7 @@ import Header from "@/components/Header";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import moment from "moment";
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 import axios from "axios";
 import OSS from "ali-oss";
 
@@ -488,6 +479,22 @@ export default {
       },
       cover_url:'../assets/default_avatar.png',
 
+      //收藏日志
+      journal_form:reactive([]),
+      totalNum:ref(),
+      curPageNum:ref(1),//默认为第一面
+      page_size:8,
+      display_type:1,
+
+      //个人日志
+      myjournal_form:reactive([]),
+      mytotalNum:ref(),
+      mycurPageNum:ref(1),//默认为第一面
+      mypage_size:8,
+
+      //个人小队
+      myteam:[],
+
       activeIndex: 0,
       currentMyPostPage: 1,
       totalMyPostPages: 5,
@@ -509,7 +516,7 @@ export default {
       // selectedDate:ref(new Date()),
     };
   },
-  mounted() {
+  created() {
     let that = this;
 
     if(!localStorage.getItem("isLogin")){
@@ -535,6 +542,11 @@ export default {
 
     //更新展示的表
     this.updateForm();
+
+    //展示日志
+    this.getJournal();
+    this.getMyJournal();
+    this.getMyTeam();
 
     this.initializeData();
   },
@@ -571,6 +583,167 @@ export default {
               reject('no');
             })
       })
+    },
+    getMyTeam(){
+      let that=this;
+      let username = localStorage.getItem("username")
+
+      axios
+          .get("/api/Teams/")
+          .then(res=>{
+            console.log(res)
+            // that.totalNum.value = res.data.totalNum;
+            that.myteam.length = 0;
+            res.data.forEach(element => {
+              const publishTime = new Date(element.posttime);
+              element.posttime = publishTime.getFullYear() + '-' + (publishTime.getMonth() + 1) + '-' + publishTime.getDate();
+              this.myteam.push(element);
+            })
+          })
+          .catch(err =>{
+            console.log("can't get cards info");
+            console.log(err)
+          })
+    },
+    getJournal(){
+      let that = this;
+      let user_id = localStorage.getItem("userid")
+
+      //请求
+      axios
+          .get("/api/Journals/page/"+String(this.curPageNum)+"/"+String(this.page_size)+"/"+String(this.display_type))
+          .then(res=> {
+            console.log(res)
+            // that.totalNum.value = res.data.totalNum;
+            that.journal_form.length = 0;
+            res.data.journalList.forEach(element => {
+              const publishTime = new Date(element.publishTime);
+              element.postDate = publishTime.getFullYear() + '-' + (publishTime.getMonth() + 1) + '-' + publishTime.getDate();
+              this.journal_form.push(element);
+            })
+          })
+          .catch(err =>{
+            console.log("can't get cards info");
+            console.log(err)
+          })
+    },
+    changeLeftJournal(){
+      let that = this;
+      that.curPageNum--;
+
+      let user_id = localStorage.getItem("userid")
+
+      //请求
+      axios
+          .get("/api/Journals/page/"+String(this.curPageNum)+"/"+String(this.page_size)+"/"+String(this.display_type))
+          .then(res=> {
+            console.log(res)
+            // that.totalNum.value = res.data.totalNum;
+            that.journal_form.length = 0;
+            res.data.journalList.forEach(element => {
+              const publishTime = new Date(element.publishTime);
+              element.postDate = publishTime.getFullYear() + '-' + (publishTime.getMonth() + 1) + '-' + publishTime.getDate();
+              this.journal_form.push(element);
+            })
+          })
+          .catch(err =>{
+            console.log("can't get cards info");
+            console.log(err)
+          })
+    },
+    changeRightJournal(){
+      let that = this;
+      that.curPageNum++;
+
+      let user_id = localStorage.getItem("userid")
+
+      //请求
+      axios
+          .get("/api/Journals/page/"+String(this.curPageNum)+"/"+String(this.page_size)+"/"+String(this.display_type))
+          .then(res=> {
+            console.log(res)
+            // that.totalNum.value = res.data.totalNum;
+            that.journal_form.length = 0;
+            res.data.journalList.forEach(element => {
+              const publishTime = new Date(element.publishTime);
+              element.postDate = publishTime.getFullYear() + '-' + (publishTime.getMonth() + 1) + '-' + publishTime.getDate();
+              this.journal_form.push(element);
+            })
+          })
+          .catch(err =>{
+            console.log("can't get cards info");
+            console.log(err)
+          })
+    },
+    getMyJournal(){
+      let that = this;
+      let user_id = "843526A2B7784E73B28E73C797A2C81C"
+
+      //请求
+      axios
+          .get("/api/Journals/page/"+String(this.mycurPageNum)+"/"+String(this.mypage_size)+"/"+String(this.display_type))
+          .then(res=> {
+            console.log(res)
+            // that.totalNum.value = res.data.totalNum;
+            that.myjournal_form.length = 0;
+            res.data.journalList.forEach(element => {
+              const publishTime = new Date(element.publishTime);
+              element.postDate = publishTime.getFullYear() + '-' + (publishTime.getMonth() + 1) + '-' + publishTime.getDate();
+              this.myjournal_form.push(element);
+            })
+          })
+          .catch(err =>{
+            console.log("can't get cards info");
+            console.log(err)
+          })
+    },
+    changeMyLeftJournal(){
+      let that = this;
+      that.mycurPageNum--;
+
+      let user_id = "843526A2B7784E73B28E73C797A2C81C"
+
+      //请求
+      axios
+          .get("/api/Journals/user/page/"+String(this.mycurPageNum)+"/"+String(this.mypage_size)+"/"+String(this.display_type))
+          .then(res=> {
+            console.log(res)
+            // that.totalNum.value = res.data.totalNum;
+            that.myjournal_form.length = 0;
+            res.data.journalList.forEach(element => {
+              const publishTime = new Date(element.publishTime);
+              element.postDate = publishTime.getFullYear() + '-' + (publishTime.getMonth() + 1) + '-' + publishTime.getDate();
+              this.myjournal_form.push(element);
+            })
+          })
+          .catch(err =>{
+            console.log("can't get cards info");
+            console.log(err)
+          })
+    },
+    changeMyRightJournal(){
+      let that = this;
+      that.mycurPageNum++;
+
+      let user_id = "843526A2B7784E73B28E73C797A2C81C"
+
+      //请求
+      axios
+          .get("/api/Journals/page/"+String(this.mycurPageNum)+"/"+String(this.mypage_size)+"/"+String(this.display_type))
+          .then(res=> {
+            console.log(res)
+            // that.totalNum.value = res.data.totalNum;
+            that.myjournal_form.length = 0;
+            res.data.journalList.forEach(element => {
+              const publishTime = new Date(element.publishTime);
+              element.postDate = publishTime.getFullYear() + '-' + (publishTime.getMonth() + 1) + '-' + publishTime.getDate();
+              this.myjournal_form.push(element);
+            })
+          })
+          .catch(err =>{
+            console.log("can't get cards info");
+            console.log(err)
+          })
     },
     // 上传图片,先获取图片,最后一起上传
     handleClick_cover() {
@@ -683,6 +856,7 @@ export default {
     },
     updateUserInfo(){
       let that= this;
+      that.userForm.id = localStorage.getItem("userid")
       that.userForm.nickname = that.formFields[0].value
       that.userForm.location = that.formFields[1].value
       that.userForm.gender = that.formFields[2].value
@@ -691,7 +865,15 @@ export default {
       that.userForm.email = that.formFields2[1].value
 
       axios
-          .post("/api/User/updateUserInfo",that.userForm)
+          .post("/api/User/updateUserInfo",{
+            userId:that.userForm.id,
+            nickName:that.userForm.nickname,
+            location:that.userForm.location,
+            gender:that.userForm.gender,
+            birthday:that.userForm.birthday,
+            phoneNumber:that.userForm.phone,
+            email:that.userForm.email
+          })
           .then(response=>{
             console.log("POST上传成功")
           })
@@ -1167,9 +1349,9 @@ export default {
 .display-box{
     position: relative;
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     align-items: center;
-    width: max-content;
+    width: 1100px;
     height: 629px;
     margin-top: 50px;
     margin-left: 69px;
@@ -1199,6 +1381,7 @@ export default {
     background-image: url("../assets/personal/record.png");
     width: 240px;
     height: 209px;
+  margin-left: 30px;
     border-radius: 15px;
 }
 
@@ -1235,7 +1418,7 @@ export default {
 
 .box_time{
     position: relative;
-    width: 55px;
+    width: max-content;
     height: 16px;
     text-align: left;
     margin-top: 5px;
@@ -1253,6 +1436,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+  margin-left: 420px;
 }
 
 .arrow-btn {

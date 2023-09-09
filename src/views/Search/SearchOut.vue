@@ -171,9 +171,7 @@ export default {
     },
     navToPage(name,id) {
       if(name === 'attraction'){
-        this.$router.push({
-          path: "/attraction-detail?attractionID="+id,
-        });
+        this.$router.push({ name: 'attractiondetails', query: { attractionID:id  } });
       }
       this.reload();
     },

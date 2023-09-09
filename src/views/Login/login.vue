@@ -87,6 +87,11 @@
 <script>
 import axios from "axios";
 
+// 创建Axios实例1
+const axiosInstance1 = axios.create({
+  baseURL: 'http://106.ihuyi.com', // 目标网站1
+});
+
 export default {
   name: "login",
   components:{
@@ -260,7 +265,7 @@ export default {
 
       //调用接口
       axios
-          .post("/api/webservice/sms.php?method=Submit",phoneCode)
+          .post("/code/webservice/sms.php?method=Submit",phoneCode)
           .then((res)=>{
             if (res.status != 200) {
               alert("验证码发送失败！")
@@ -310,7 +315,7 @@ export default {
 
       //调用接口
       axios
-          .post("/api/webservice/sms.php?method=Submit",phoneCode)
+          .post("/code/webservice/sms.php?method=Submit",phoneCode)
           .then((res)=>{
             if (res.status != 200) {
               alert("验证码发送失败！")
