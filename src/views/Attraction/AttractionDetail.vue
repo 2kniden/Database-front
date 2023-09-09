@@ -1,5 +1,5 @@
 <template>
-    <div class="bigtitle">{{declist.title}}</div>
+    <div class="bigtitle">{{ declist.title }}</div>
     <div class="detailhead">
         <!-- 轮播图 -->
         <Splide class="slides" :options="{ rewind: true }">
@@ -10,9 +10,9 @@
         </Splide>
         <!-- 简介栏 -->
         <div class="attrdecription">
-            <DetailView :title="declist.title" :score="declist.score" :commentnum="totalItems"
-                :location="declist.location" :weekday="declist.weekday" :weekend="declist.weekend" :phone="declist.phone"
-                :price="declist.price" :now="declist.now" :weather="weatherlist.weather" :temNow="weatherlist.temNow"
+            <DetailView :title="declist.title" :score="declist.score" :commentnum="totalItems" :location="declist.location"
+                :weekday="declist.weekday" :weekend="declist.weekend" :phone="declist.phone" :price="declist.price"
+                :now="declist.now" :weather="weatherlist.weather" :temNow="weatherlist.temNow"
                 :temHigh="weatherlist.temHigh" :temLow="weatherlist.temLow"></DetailView>
         </div>
     </div>
@@ -48,14 +48,15 @@
             <div class="ticketdetail" ref="t3">
                 <div v-if="ticketshowmore">
                     <ViewTicket v-for="item in ticketlist" :key="item.id" :titleint="item.type"
-                        :isCollectedint="item.isCollected" :isRefundint="item.isRefund" :price="item.price" :date="currSelectDate">
+                        :isCollectedint="item.isCollected" :isRefundint="item.isRefund" :price="item.price"
+                        :date="currSelectDate">
                     </ViewTicket>
                 </div>
                 <!-- 这里有点问题 -->
                 <div v-else>
-                    
-                    <ViewTicket :titleint="0" :isCollectedint="0"
-                        :isRefundint="0" :price="firstticket.price" :date="currSelectDate"></ViewTicket>
+
+                    <ViewTicket :titleint="0" :isCollectedint="firstticket.isCollected" :isRefundint="firstticket.isRefund"
+                        :price="firstticket.price" :date="currSelectDate"></ViewTicket>
                 </div>
                 <div class="ticshow" @click="ticshowmore">{{ ticketshowmore ? '收起' : '展示更多' }} </div>
 
@@ -74,7 +75,7 @@
 
                     </div>
                     <div>
-                        
+
                         <el-button class="cheadbtn" type="primary" plain color="#8097FD" @click="ToEdit">
                             <el-icon>
                                 <EditPen />
@@ -154,11 +155,11 @@ import Journal from '../Journal.vue'
 
 
 export default {
-
+    inject:['reload'],
     mounted() {
         // 获取景区id
         // this.attraction_id='1';
-        this.attraction_id=this.$route.query.attractionID;
+        this.attraction_id = this.$route.query.attractionID;
         this.initializeData();
         const elementsToObserve = [
             this.$refs.t1,
@@ -288,7 +289,7 @@ export default {
 
     methods: {
         // 获取景区id
-        
+
         initializeData() {
             // 默认是展示今日票价
             this.currSelectDate = this.selectTicketDate(new Date());
@@ -305,7 +306,7 @@ export default {
                 .get('/api/attrations/TicketInformation?attractionID=' + this.attraction_id + '&date=' + this.currSelectDate)
                 .then((response) => {
 
-                    console.log("景区门票",response)
+                    console.log("景区门票", response)
                     this.ticketlist = response.data;
                     this.firstticket = this.ticketlist[0];
                     console.log(this.firstticket)
@@ -418,12 +419,11 @@ export default {
         },
         // 处理关闭逻辑
         getData(val) {
-            if(val!=false){
-                // 重新渲染
-                this.initializeData();
-            
-            }
             this.showDialog = false;
+
+            // this.$router.push({ name: 'blank', query: { attractionID:this.attraction_id  } });
+            this.initializeData();
+
         },
 
         formatDateTime(date) {
@@ -452,7 +452,7 @@ export default {
             minute = minute < 10 ? ('0' + minute) : minute;
             var second = date.getSeconds();
             second = second < 10 ? ('0' + second) : second;
-            return y+'-'+ m + '-' + d;
+            return y + '-' + m + '-' + d;
         },
         // 日期选择的选择器显示与否
         showtimepicker() {
@@ -511,13 +511,13 @@ export default {
         handlecomtagChange(value) {
             if (value === '全部') {
                 this.commenttagint = 0;
-                
+
             } else if (value === '好评') {
                 this.commenttagint = 1;
-                
+
             } else {
                 this.commenttagint = 2;
-                
+
             }
             // 回到评论第一页
             this.initializeData();
