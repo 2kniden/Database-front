@@ -201,6 +201,7 @@ export default {
         postAttrComment() {
             // 现在要换成body传参
             const data = {
+                // userID是cookie获取的
                 userID: '843526A2B7784E73B28E73C797A2C81C',
                 attractionid: this.attractionID,
                 commentDetail: this.comment.detail,

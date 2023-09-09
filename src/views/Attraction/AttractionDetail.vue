@@ -35,7 +35,8 @@
                     </el-radio>
                 </el-radio-group>
                 <el-dialog title="选择更多日期" v-model="showpicker" width="50%" destroy-on-close :show-dialog="showpicker">
-                    <el-date-picker v-model="morevalue1" type="date" placeholder="选择日期" :picker-options="pickerOptions">
+                    <el-date-picker v-model="morevalue1" type="date" placeholder="选择日期" :picker-options="pickerOptions"
+                        @change="handleDateChange">
                     </el-date-picker>
                     <div class="dialog-footer">
                         <el-button size="large" @click="pickerInvisible">取消</el-button>
@@ -52,7 +53,6 @@
                         :date="currSelectDate">
                     </ViewTicket>
                 </div>
-                <!-- 这里有点问题 -->
                 <div v-else>
 
                     <ViewTicket :titleint="0" :isCollectedint="firstticket.isCollected" :isRefundint="firstticket.isRefund"
@@ -155,7 +155,7 @@ import Journal from '../Journal.vue'
 
 
 export default {
-    inject:['reload'],
+    inject: ['reload'],
     mounted() {
         // 获取景区id
         // this.attraction_id='1';
@@ -196,12 +196,12 @@ export default {
             const endIndex = this.pageSize < this.commentlist.length - startIndex ? this.pageSize + startIndex : this.commentlist.length;
 
             // 设置 pagestartIndex 和 pageendIndex
-            if(this.totalItems===0){
-                this.pagestartIndex=0;
-            }else{
+            if (this.totalItems === 0) {
+                this.pagestartIndex = 0;
+            } else {
                 this.pagestartIndex = startIndex + 1;
             }
-            
+
             this.pageendIndex = endIndex;
 
 
@@ -481,7 +481,15 @@ export default {
             }
 
         },
-
+        handleDateChange(value) {
+            const clickedDate = new Date(value);
+            const today = new Date();
+            const maxSelectableDate = new Date(today.getTime() + this.declist.availabledays * 24 * 60 * 60 * 1000);
+            if (clickedDate > maxSelectableDate) {
+                this.$message.error('选择的日期超过了景区最大可预约天数'+this.declist.availabledays+'天！');
+                this.morevalue1 = null; // 清空选择的日期
+            }
+        },
         // 评论分页部分
         handleTabClick(tab, event) {
 

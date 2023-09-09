@@ -67,6 +67,7 @@ export default {
         comunlikes: Number,
         picsrc: Array,
         comment_id: String,
+        poster_id:String
     },
     data() {
         return {
@@ -77,6 +78,8 @@ export default {
             // liketype: 0,
             //0-取消点赞或点踩，1-点赞或点踩
             // unliketype: 0,
+            // 这个是要cookie获取的，暂且写死
+            user_id:"843526A2B7784E73B28E73C797A2C81C"
         }
 
     },
@@ -85,6 +88,16 @@ export default {
         
     },
     methods: {
+        deleteData(){
+            axios
+                .get('/api/attrations/DeleteComment' + this.comment_id)
+                .then((response) => {
+                    this.searchMatchList = response.data.searchmatchlist;
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+        }
         // 现在有个问题就是mounted里面不会报错
         // changelikestatus() {
         //     this.is_liked = !this.is_liked;
