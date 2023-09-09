@@ -217,7 +217,17 @@ export default {
       console.log(ev, '可以播放')
     },
     changeToLogin(){
-      this.$router.push("/login");
+      if(localStorage.getItem("isLogin")!=='true'){
+        this.$router.push("/login");
+        localStorage.setItem("page","login");
+      }
+      else{
+        localStorage.setItem("isLogin",false)
+        localStorage.setItem("userid",-1)
+        localStorage.setItem("username",-1)
+        localStorage.setItem("page","login");
+        this.$router.push("/login");
+      }
     },
     changePage(name){
       if(name==='景点'){

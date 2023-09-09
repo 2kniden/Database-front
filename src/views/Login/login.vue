@@ -197,7 +197,8 @@ export default {
               console.log("post请求成功");
               localStorage.setItem("isLogin",true);
               localStorage.setItem("userid",response.data.userId)
-              localStorage.setItem("username",response.data.userName)
+              localStorage.setItem("username",that.loginForm.userName)
+              localStorage.setItem("page","home");
               this.$globalData.navbarActive="home";
               this.$router.push("/")
             })
@@ -226,6 +227,7 @@ export default {
               localStorage.setItem("isLogin",true);
               localStorage.setItem("userid",response.data.userId)
               localStorage.setItem("username",response.data.userName)
+              localStorage.setItem("page","home");
               this.$globalData.navbarActive="home";
               this.$router.push("/")
             })

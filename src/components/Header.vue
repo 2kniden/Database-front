@@ -78,28 +78,32 @@ export default {
     handleTabChange(name) {
       console.log("选项卡切换到:", name);
       const routeName = name;
-      if(localStorage.getItem("isLogin") === false){
+      let islogin=localStorage.getItem("isLogin");
+      if(islogin !== 'true'){
         this.$globalData.navbarActive='/Login';
         this.$router.push("/Login");
+        localStorage.setItem("page",'login');
       }
       else{
         this.$globalData.navbarActive=routeName;
         this.$router.push("/"+routeName);
+        localStorage.setItem("page",routeName);
       }
-      localStorage.setItem("page",routeName);
     },
     //进入个人主页
     goToPersonal() {
       console.log("跳转到个人页面");
-      if(localStorage.getItem("isLogin") === false){
+      let islogin=localStorage.getItem("isLogin");
+      if(islogin !== 'true'){
         this.$globalData.navbarActive='/Login';
         this.$router.push("/Login");
+        localStorage.setItem("page",'login');
       }
       else {
         this.$globalData.navbarActive = "personal";
         this.$router.push({name: "personal"});
+        localStorage.setItem("page","personal");
       }
-      localStorage.setItem("page","personal");
     },
     backToHome(){
       console.log("返回主页");
