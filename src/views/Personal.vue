@@ -53,11 +53,6 @@
             <img class="son_cycle" src="../assets/personal/purple_cycle.png" v-if="setActiveChoose !== '账号'"/>
             <div class="son_text">账号</div>
           </div>
-          <div class="big_content_son" :style="choose_set_style('隐私')" @click="setSetSmallActive('隐私')" v-if="activeChoose==='设置'">
-            <img class="son_cycle" src="../assets/personal/white_cycle.png" v-if="setActiveChoose === '隐私'"/>
-            <img class="son_cycle" src="../assets/personal/purple_cycle.png" v-if="setActiveChoose !== '隐私'"/>
-            <div class="son_text">隐私</div>
-          </div>
           <div class="big_content_son" :style="choose_set_style('登录')" @click="setSetSmallActive('登录')" v-if="activeChoose==='设置'">
             <img class="son_cycle" src="../assets/personal/white_cycle.png" v-if="setActiveChoose === '登录'"/>
             <img class="son_cycle" src="../assets/personal/purple_cycle.png" v-if="setActiveChoose !== '登录'"/>
@@ -69,7 +64,7 @@
         <div class="writeimg">
           <img class="200px" src="../assets/personal/writepassage.png">
         </div>
-        <div class="writesth">
+        <div class="writesth" @click="changeToPost">
           <img class="writeicon" src="../assets/personal/writeicon.png">
           <div class="writecontent">
             添加日志
@@ -179,7 +174,7 @@
                 <div class="icon-container">
                   <img :src="item.icon" alt="" class="info-icon" />
                 </div>
-                <div class="content">
+                <div>
                   <label class="icon-title">&ensp;{{ item.title }}&ensp;</label>
                   <input v-model="item.value" type="text" class="input-field" v-if="index!==3"/>
                   <input v-model="selectedDate" type="text" class="input-field" v-if="index===3"/>
@@ -198,11 +193,9 @@
           <div class="right-info">
             <div class="headpic">
               <div class="head_picture">
-                <img class="shushupic" src="../assets/personal/shushu.jpg">
+                <img class="shushupic" :src="cover_url" @click="handleClick_cover"/>
               </div>
-              <div class="shushuchange">
-                点击更换
-              </div>
+              <input class="shushuchange" type="file" ref="fileInput" @change="handleCoverUpload"/>
               <div class="name_box">
                 <div class="name_box_1">
                   账户1234
@@ -220,7 +213,7 @@
                 <div class="icon-container">
                   <img :src="item.icon" alt="" class="info-icon" />
                 </div>
-                <div class="content">
+                <div>
                   <label class="icon-title">&ensp;{{ item.title }}&ensp;</label>
                   <input v-model="item.value" type="text" class="input-field" />
                 </div>
@@ -229,10 +222,10 @@
           </div>
         </div>
         <div class="yes-no">
-          <div class="ohyes">
+          <div class="ohyes" @click="updateUserInfo">
             确认更改
           </div>
-          <div class="ohno">
+          <div class="ohno" @click="updateForm">
             取消更改
           </div>
         </div>
@@ -447,6 +440,8 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import moment from "moment";
 import {ref} from "vue";
+import axios from "axios";
+import OSS from "ali-oss";
 
 export default {
   name:"Personal",
@@ -476,6 +471,22 @@ export default {
         { icon: require('../assets/personal/email.png'), title: '邮箱', value: '827868303@qq.com' },
         { icon: require('../assets/personal/easytalk.png'), title: '简介', value: 'hahahaha' },
       ],
+      userForm: {
+        id: '',
+        nickname:'',
+        phone:'',
+        gender:'',
+        location:'',
+        email:'',
+        birthday:moment(new Date()).format("YYYY-MM-DD")
+      },
+      OSSOptions: {
+        endpoint:'',
+        accessKeyId:'',
+        accessKeySecret:'',
+        bucket:'',
+      },
+      cover_url:'../assets/default_avatar.png',
 
       activeIndex: 0,
       currentMyPostPage: 1,
@@ -498,7 +509,129 @@ export default {
       // selectedDate:ref(new Date()),
     };
   },
+  mounted() {
+    let that = this;
+
+    if(!localStorage.getItem("isLogin")){
+      //跳转到登陆页面
+      this.$router.push("/login");
+    }
+    //如果登录
+    this.userForm.id = localStorage.getItem("userid")
+    this.userForm.nickname = localStorage.getItem("username")
+
+    //获取用户个人信息
+    axios
+        .get("/api/User",{
+          id : this.userForm.id
+        })
+        .then(response=>{
+          that.userForm.location = response.data.location
+          that.userForm.gender = response.data.gender
+          that.userForm.birthday =response.data.birthday
+          that.userForm.phone = response.data.phoneNumber
+          that.userForm.email = response.data.email
+        })
+
+    //更新展示的表
+    this.updateForm();
+
+    this.initializeData();
+  },
   methods:{
+    initializeData(){
+      var that = this;
+      const query = this.$route.query;
+      that.mode = query.mode;
+      this.getOssOptions().then((res)=>{
+        if(res !== 'no'){
+          console.log('res=',res);
+          const endpoint = res.endpoint;
+          // that.OSSOptions.endpoint='oss-cn-shanghai.aliyuncs.com';
+          that.OSSOptions.endpoint=res.endpoint;
+          that.OSSOptions.accessKeyId=res.accessKeyId;
+          that.OSSOptions.accessKeySecret=res.accessKeySecret;
+          that.OSSOptions.bucket=res.bucketName;
+          that.ossClient = new OSS(that.OSSOptions);
+          console.log('that.OSSOptions=',that.OSSOptions);
+        }
+      })
+    },
+    getOssOptions() {
+      return new Promise((resolve,reject)=>{
+        axios
+            .get('/api/Teams/Access')
+            .then (res=>{
+              console.log('get it');
+              console.log('res.data=',res.data);
+              resolve(res.data);
+            })
+            .catch(err=>{
+              console.log("can't get accesskeyId");
+              reject('no');
+            })
+      })
+    },
+    // 上传图片,先获取图片,最后一起上传
+    handleClick_cover() {
+      this.$refs.fileInput.click();
+    },
+    formatDateTime(d) {
+      const date = new Date(d);      //发布日期
+      const date_year = date.getFullYear();
+      const date_month = date.getMonth() + 1;
+      const date_day = date.getDate();
+
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? ('0' + m) : m;
+      var d = date.getDate();
+      d = d < 10 ? ('0' + d) : d;
+      var h = date.getHours();
+      h = h < 10 ? ('0' + h) : h;
+      var minute = date.getMinutes();
+      minute = minute < 10 ? ('0' + minute) : minute;
+      var second=date.getSeconds();
+      second=second < 10 ? ('0' + second) : second;
+      return y + m + d + h + minute + second;
+    },
+    handleCoverUpload(event) {
+      var that = this;
+      const files = event.target.files;
+      const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+
+      if (!allowedExtensions.exec(files[0].name)) {
+        alert('只允许上传图片文件');
+        return;
+      }
+      const formData = new FormData();
+      formData.append('file', files[0]);
+
+      const coverObj = formData.get('file');
+
+      const storeAs = 'Journal/';
+
+      // 并不,这个只是对象
+      console.log(coverObj);
+      // 增加时间戳、防止名称重复
+      const imgCreatedTime = that.formatDateTime(coverObj.lastModifiedDate);
+
+      // 重命名:
+      const ext = coverObj.name.split('.').pop();//后缀名只能为最后一个
+      const coverRename = coverObj.name.split(ext)[0] + imgCreatedTime + '.' + ext;
+
+      that.ossClient.put(storeAs+coverRename,coverObj)
+          .then (res=>{
+            console.log('yes');
+            that.cover_url = res.url;
+            console.log(that.cover_url);
+          })
+          .catch(err=>{
+            console.log('no');
+            console.log(err)
+          })
+      // that.cover_url = "https://dimg04.c-ctrip.com/images/01051120009q53j342A87_R_1600_10000.jpg";
+    },
     choose_fav_style(name){
       let that=this;
       if(that.favActiveChoose === name){
@@ -519,16 +652,9 @@ export default {
     },
     chooseChangeStyle(name){
       let that=this;
-      if(that.activeChoose===name&&that.activeChoose==="收藏夹"){
+      if((that.activeChoose===name&&that.activeChoose==="收藏夹")||(that.activeChoose===name&&that.activeChoose==="设置")){
         return{
           height:"223px",
-          backgroundColor:"#FFFFFF",
-        };
-      }
-      else if(that.activeChoose===name&&that.activeChoose==="设置"){
-
-        return{
-          height: "265px",
           backgroundColor:"#FFFFFF",
         };
       }
@@ -547,6 +673,41 @@ export default {
           backgroundColor:"#FFFFFF",
         };
       }
+    },
+    changeToPost(){
+      this.$router.push("/Journal/PostJournal")
+    },
+    updateAvatar(){
+      let that = this;
+
+    },
+    updateUserInfo(){
+      let that= this;
+      that.userForm.nickname = that.formFields[0].value
+      that.userForm.location = that.formFields[1].value
+      that.userForm.gender = that.formFields[2].value
+      that.userForm.birthday =that.formFields[3].value
+      that.userForm.phone = that.formFields2[0].value
+      that.userForm.email = that.formFields2[1].value
+
+      axios
+          .post("/api/User/updateUserInfo",that.userForm)
+          .then(response=>{
+            console.log("POST上传成功")
+          })
+          .catch(error=>{
+            console.log(error);
+            console.log("POST上传失败")
+          })
+    },
+    updateForm(){
+      let that= this;
+      that.formFields[0].value=that.userForm.nickname
+      that.formFields[1].value = that.userForm.location
+      that.formFields[2].value = that.userForm.gender
+      that.formFields[3].value = that.userForm.birthday
+      that.formFields2[0].value = that.userForm.phone
+      that.formFields2[1].value = that.userForm.email
     },
     setActive(name) {
       let that=this;
@@ -1253,14 +1414,16 @@ export default {
     height: 159px;
     border-radius: 159px;
     border: 4px solid #D9DFFD;
+    z-index: 2;
 }
 
 .shushuchange{
-    position: relative;
-    width: 48px;
-    height: 16px;
-    margin-left: -34px;
-    margin-top: 149px;
+    position: absolute;
+    width: 159px;
+    height: 159px;
+    border-radius: 159px;
+    border: 4px solid #D9DFFD;
+    opacity: 0;
 
     color: #D9D9D9;
     font-family: MiSans;
@@ -1268,6 +1431,7 @@ export default {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    z-index: 1;
 }
 
 .name_box{
