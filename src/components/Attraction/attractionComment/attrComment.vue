@@ -44,7 +44,7 @@
                         {{ comunlikes }}
                     </div> -->
                     <div class="commeg comdel">
-                        <img class="licon" src="../../../assets/attractions/icon/delete.svg" alt="" v-if="is_del">
+                        <img class="licon" src="../../../assets/attractions/icon/delete.svg" alt="" v-if="is_del" @click="delcomment">
                     </div>
                 </div>
 
@@ -57,6 +57,7 @@
 <script>
 import axios from 'axios'
 export default {
+    inject: ['reload'],
     props: {
         userlog: String,
         username: String,
@@ -74,7 +75,7 @@ export default {
             // 获取到的点赞、拉踩状态码以及删除权限，这里接口还没搞好
             is_liked: false,
             is_unliked: false,
-            is_del: false,
+            is_del: true,
             // liketype: 0,
             //0-取消点赞或点踩，1-点赞或点踩
             // unliketype: 0,
@@ -88,15 +89,16 @@ export default {
         
     },
     methods: {
-        deleteData(){
+        delcomment(){
             axios
-                .get('/api/attrations/DeleteComment' + this.comment_id)
+                .get('/api/attrations/DeleteComment?commentID=' + this.comment_id)
                 .then((response) => {
-                    this.searchMatchList = response.data.searchmatchlist;
+                    console.log(response)
                 })
                 .catch((error) => {
                     console.error('Error fetching data:', error);
                 });
+            this.reload()
         }
         // 现在有个问题就是mounted里面不会报错
         // changelikestatus() {

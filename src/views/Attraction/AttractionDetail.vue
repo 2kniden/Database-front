@@ -103,7 +103,7 @@
                     <attrComment v-for="item in currentPageData" :key="item.commentID" :userlog="item.userSrc"
                         :username="item.username" :comstar="item.commentScore" :comword="item.commentDetail"
                         :comtime="item.commentDate" :comlikes="item.like" :comunlikes="item.unlike"
-                        :picsrc="item.commentSrc" :comment_id="item.comment_id">
+                        :picsrc="item.commentSrc" :comment_id="item.commentID">
 
                     </attrComment>
                     <div class="endword">
