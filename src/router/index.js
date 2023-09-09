@@ -18,7 +18,7 @@ import MissPass from "@/views/Login/missPass";
 import AttractionSearch from '@/views/Attraction/AttractionSearch';
 import AttractionDetail from '@/views/Attraction/AttractionDetail';
 import CommentEdit from '@/views/Attraction/editcomment'
-import blank from '@/views/Attraction/supplyblank'
+
 
 const routes = [
   {
@@ -108,7 +108,6 @@ const routes = [
   { path: "/attraction-search", name: "attractionsearchs", component: AttractionSearch },
   { path: "/attraction-detail", name: "attractiondetails", component: AttractionDetail },
   { path: "/comment-edit", name: "commentedit", component: CommentEdit },
-  { path: "/blank", name: "blank", component: blank }
 ];
 
 const router = createRouter({

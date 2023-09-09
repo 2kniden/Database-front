@@ -196,7 +196,12 @@ export default {
             const endIndex = this.pageSize < this.commentlist.length - startIndex ? this.pageSize + startIndex : this.commentlist.length;
 
             // 设置 pagestartIndex 和 pageendIndex
-            this.pagestartIndex = startIndex + 1;
+            if(this.totalItems===0){
+                this.pagestartIndex=0;
+            }else{
+                this.pagestartIndex = startIndex + 1;
+            }
+            
             this.pageendIndex = endIndex;
 
 
@@ -420,8 +425,7 @@ export default {
         // 处理关闭逻辑
         getData(val) {
             this.showDialog = false;
-
-            // this.$router.push({ name: 'blank', query: { attractionID:this.attraction_id  } });
+            this.reload()
             this.initializeData();
 
         },
