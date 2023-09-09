@@ -78,15 +78,27 @@ export default {
     handleTabChange(name) {
       console.log("选项卡切换到:", name);
       const routeName = name;
-      this.$globalData.navbarActive=routeName;
-      this.$router.push("/"+routeName);
+      if(localStorage.getItem("isLogin") === false){
+        this.$globalData.navbarActive='/Login';
+        this.$router.push("/Login");
+      }
+      else{
+        this.$globalData.navbarActive=routeName;
+        this.$router.push("/"+routeName);
+      }
       localStorage.setItem("page",routeName);
     },
     //进入个人主页
     goToPersonal() {
       console.log("跳转到个人页面");
-      this.$globalData.navbarActive="personal";
-      this.$router.push({ name: "personal" });
+      if(localStorage.getItem("isLogin") === false){
+        this.$globalData.navbarActive='/Login';
+        this.$router.push("/Login");
+      }
+      else {
+        this.$globalData.navbarActive = "personal";
+        this.$router.push({name: "personal"});
+      }
       localStorage.setItem("page","personal");
     },
     backToHome(){
