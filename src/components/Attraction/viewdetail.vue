@@ -106,6 +106,7 @@ export default {
     height: 310px;
     padding: 20px 20px;
     position: relative;
+    background-color: #fff;
 }
 
 .dlocation {

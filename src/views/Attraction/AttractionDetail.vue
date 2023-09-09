@@ -1,5 +1,5 @@
 <template>
-    <div class="bigtitle">{{declist.title}}</div>
+    <div class="bigtitle">{{ declist.title }}</div>
     <div class="detailhead">
         <!-- 轮播图 -->
         <Splide class="slides" :options="{ rewind: true }">
@@ -9,10 +9,10 @@
 
         </Splide>
         <!-- 简介栏 -->
-        <div>
-            <DetailView :title="declist.title" :score="declist.score" :commentnum="declist.commentnum"
-                :location="declist.location" :weekday="declist.weekday" :weekend="declist.weekend" :phone="declist.phone"
-                :price="declist.price" :now="declist.now" :weather="weatherlist.weather" :temNow="weatherlist.temNow"
+        <div class="attrdecription">
+            <DetailView :title="declist.title" :score="declist.score" :commentnum="totalItems" :location="declist.location"
+                :weekday="declist.weekday" :weekend="declist.weekend" :phone="declist.phone" :price="declist.price"
+                :now="declist.now" :weather="weatherlist.weather" :temNow="weatherlist.temNow"
                 :temHigh="weatherlist.temHigh" :temLow="weatherlist.temLow"></DetailView>
         </div>
     </div>
@@ -35,7 +35,8 @@
                     </el-radio>
                 </el-radio-group>
                 <el-dialog title="选择更多日期" v-model="showpicker" width="50%" destroy-on-close :show-dialog="showpicker">
-                    <el-date-picker v-model="morevalue1" type="date" placeholder="选择日期" :picker-options="pickerOptions">
+                    <el-date-picker v-model="morevalue1" type="date" placeholder="选择日期" :picker-options="pickerOptions"
+                        @change="handleDateChange">
                     </el-date-picker>
                     <div class="dialog-footer">
                         <el-button size="large" @click="pickerInvisible">取消</el-button>
@@ -48,12 +49,14 @@
             <div class="ticketdetail" ref="t3">
                 <div v-if="ticketshowmore">
                     <ViewTicket v-for="item in ticketlist" :key="item.id" :titleint="item.type"
-                        :isCollectedint="item.isCollected" :isRefundint="item.isRefund" :price="item.price">
+                        :isCollectedint="item.isCollected" :isRefundint="item.isRefund" :price="item.price"
+                        :date="currSelectDate">
                     </ViewTicket>
                 </div>
                 <div v-else>
-                    <ViewTicket :titleint="firstticket.titleint" :isCollectedint="firstticket.isCollectedint"
-                        :isRefundint="firstticket.isRefundint" :price="firstticket.price"></ViewTicket>
+
+                    <ViewTicket :titleint="0" :isCollectedint="firstticket.isCollected" :isRefundint="firstticket.isRefund"
+                        :price="firstticket.price" :date="currSelectDate"></ViewTicket>
                 </div>
                 <div class="ticshow" @click="ticshowmore">{{ ticketshowmore ? '收起' : '展示更多' }} </div>
 
@@ -72,7 +75,7 @@
 
                     </div>
                     <div>
-                        <!-- 这里会移动一下 -->
+
                         <el-button class="cheadbtn" type="primary" plain color="#8097FD" @click="ToEdit">
                             <el-icon>
                                 <EditPen />
@@ -83,7 +86,7 @@
                         <!-- 弹窗组件 -->
                         <el-dialog title="发布评论" v-model="showDialog" width="50%" destroy-on-close :show-close="false"
                             :show-dialog="showDialog">
-                            <EitComment @getData="getData"></EitComment>
+                            <EitComment :attractionID="attraction_id" @getData="getData"></EitComment>
                         </el-dialog>
                     </div>
 
@@ -98,10 +101,9 @@
                         </el-radio-group>
                     </div>
                     <attrComment v-for="item in currentPageData" :key="item.commentID" :userlog="item.userSrc"
-                        :attrname="item.username" :attrstar="item.commentScore" :comword="item.commentDetail"
+                        :username="item.userName" :comstar="item.commentScore" :comword="item.commentDetail"
                         :comtime="item.commentDate" :comlikes="item.like" :comunlikes="item.unlike"
-                        :picsrc="item.commentSrc" :comment_id="comment_id">
-                        <!-- 这里commentid先写死 -->
+                        :picsrc="item.commentSrc" :comment_id="item.commentID" :poster_id="item.userID">
 
                     </attrComment>
                     <div class="endword">
@@ -153,8 +155,11 @@ import Journal from '../Journal.vue'
 
 
 export default {
-
+    inject: ['reload'],
     mounted() {
+        // 获取景区id
+        // this.attraction_id='1';
+        this.attraction_id = this.$route.query.attractionID;
         this.initializeData();
         const elementsToObserve = [
             this.$refs.t1,
@@ -191,7 +196,12 @@ export default {
             const endIndex = this.pageSize < this.commentlist.length - startIndex ? this.pageSize + startIndex : this.commentlist.length;
 
             // 设置 pagestartIndex 和 pageendIndex
-            this.pagestartIndex = startIndex + 1;
+            if (this.totalItems === 0) {
+                this.pagestartIndex = 0;
+            } else {
+                this.pagestartIndex = startIndex + 1;
+            }
+
             this.pageendIndex = endIndex;
 
 
@@ -243,10 +253,12 @@ export default {
 
             },
             morevalue1: '',
-            // 景点id和userid和commentid先写死
+            // userid先写死,需要获取加上判断用户是否登录逻辑
             user_id: '843526A2B7784E73B28E73C797A2C81C',
-            attraction_id: '1',
-            comment_id:'1',
+
+            // 获取景区id
+            attraction_id: '',
+
 
             // 景点介绍+简介栏
             declist: '',
@@ -281,10 +293,11 @@ export default {
     },
 
     methods: {
+        // 获取景区id
 
         initializeData() {
             // 默认是展示今日票价
-            this.currSelectDate = new Date();
+            this.currSelectDate = this.selectTicketDate(new Date());
             // 获取票价后日日期展示
             const time = new Date();
             this.today = this.formatDateTime(time);
@@ -298,10 +311,10 @@ export default {
                 .get('/api/attrations/TicketInformation?attractionID=' + this.attraction_id + '&date=' + this.currSelectDate)
                 .then((response) => {
 
-                    console.log("景区门票",response)
+                    console.log("景区门票", response)
                     this.ticketlist = response.data;
                     this.firstticket = this.ticketlist[0];
-                    // console.log(this.firstticket)
+                    console.log(this.firstticket)
                 })
                 .catch((error) => {
                     console.error('Error fetching data:', error);
@@ -313,7 +326,7 @@ export default {
                 .get('/api/attrations/AttractionDetail?attractionID=' + this.attraction_id)
                 .then((response) => {
                     console.log("景点详情", response)
-                    // this.declist = response.data;
+                    this.declist = response.data;
                 })
                 .catch((error) => {
                     console.error('Error fetching data:', error);
@@ -334,8 +347,6 @@ export default {
                 .then((response) => {
                     console.log("景区评论", response)
                     this.commentlist = response.data;
-
-
                 })
                 .catch((error) => {
                     console.error('Error fetching data:', error);
@@ -385,21 +396,21 @@ export default {
         },
         // 点击日期按钮选择
         btn1() {
-            this.currSelectDate = new Date();
+            this.currSelectDate = this.selectTicketDate(new Date());
             this.moreday = '更多日期';
             // console.log(this.currSelectDate);
         },
         btn2() {
             const time = new Date();
             time.setDate(time.getDate() + 1); // 将日期增加1天（明天）
-            this.currSelectDate = time;
+            this.currSelectDate = this.selectTicketDate(time);
             this.moreday = '更多日期';
             // console.log(this.currSelectDate);
         },
         btn3() {
             const time = new Date();
             time.setDate(time.getDate() + 2); // 将日期增加2天（后天）
-            this.currSelectDate = time;
+            this.currSelectDate = this.selectTicketDate(time);
             this.moreday = '更多日期';
             // console.log(this.currSelectDate);
         },
@@ -414,6 +425,9 @@ export default {
         // 处理关闭逻辑
         getData(val) {
             this.showDialog = false;
+            this.reload()
+            this.initializeData();
+
         },
 
         formatDateTime(date) {
@@ -429,6 +443,20 @@ export default {
             var second = date.getSeconds();
             second = second < 10 ? ('0' + second) : second;
             return m + '-' + d;
+        },
+        selectTicketDate(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            m = m < 10 ? ('0' + m) : m;
+            var d = date.getDate();
+            d = d < 10 ? ('0' + d) : d;
+            var h = date.getHours();
+            h = h < 10 ? ('0' + h) : h;
+            var minute = date.getMinutes();
+            minute = minute < 10 ? ('0' + minute) : minute;
+            var second = date.getSeconds();
+            second = second < 10 ? ('0' + second) : second;
+            return y + '-' + m + '-' + d;
         },
         // 日期选择的选择器显示与否
         showtimepicker() {
@@ -448,12 +476,20 @@ export default {
             } else {
 
                 this.moreday = this.formatDateTime(this.morevalue1);//更多日期选项内容变成选择日期
-                this.currSelectDate = this.morevalue1;
+                this.currSelectDate = this.selectTicketDate(this.morevalue1);
                 this.pickerInvisible();
             }
 
         },
-
+        handleDateChange(value) {
+            const clickedDate = new Date(value);
+            const today = new Date();
+            const maxSelectableDate = new Date(today.getTime() + this.declist.availabledays * 24 * 60 * 60 * 1000);
+            if (clickedDate > maxSelectableDate) {
+                this.$message.error('选择的日期超过了景区最大可预约天数'+this.declist.availabledays+'天！');
+                this.morevalue1 = null; // 清空选择的日期
+            }
+        },
         // 评论分页部分
         handleTabClick(tab, event) {
 
@@ -487,11 +523,16 @@ export default {
         handlecomtagChange(value) {
             if (value === '全部') {
                 this.commenttagint = 0;
+
             } else if (value === '好评') {
                 this.commenttagint = 1;
+
             } else {
                 this.commenttagint = 2;
+
             }
+            // 回到评论第一页
+            this.initializeData();
             console.log(this.commenttagint)
         }
 

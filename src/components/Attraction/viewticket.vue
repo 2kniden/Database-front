@@ -26,7 +26,7 @@
         </div>
         <div class="tbottom">
             <!-- 这里还没想好 -->
-            <span class="tpresent">所选日期</span>
+            <span class="tpresent">所选日期:{{ date }}</span>
             
         </div>
         <div class="tprice">
@@ -50,6 +50,7 @@ export default {
         availabledays: Number,//可选票未来天数
         price: Number,
         buynum: Number,
+        date:String
     },
     
    
@@ -58,7 +59,9 @@ export default {
 
 <style>
 .tickitdetail {
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+    box-shadow:1px 2px 2px 2px rgba(128, 151, 253, 0.4);
+    border: 1px #fff solid;
+    border-radius: 10px;
     width: 600px;
     padding: 10px;
     border-radius: 10px;
@@ -68,8 +71,12 @@ export default {
     position: relative;
     margin-left: 10px;
     margin-bottom: 10px;
+    background-color: #fff;
 }
-
+.tickitdetail:hover {
+    box-shadow: 1px 1px 1px rgba(128, 151, 253, 0.4);
+  
+}
 .tickettitle {
     font-size: 16px;
     font-weight: bold;

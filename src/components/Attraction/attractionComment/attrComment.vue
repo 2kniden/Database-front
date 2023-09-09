@@ -25,7 +25,7 @@
                 </div>
                 <div class="attrcommeg">
                     <div class="commeg comtime">{{ formattedDate }}</div>
-                    <div class="commeg comlikes">
+                    <!-- <div class="commeg comlikes">
 
                         <img class="licon" src="../../../assets/attractions/icon/like.svg" alt="" v-if="!is_liked"
                             @click="changelikestatus">
@@ -42,9 +42,10 @@
                             @click="changeunlikestatus">
 
                         {{ comunlikes }}
-                    </div>
+                    </div> -->
                     <div class="commeg comdel">
-                        <img class="licon" src="../../../assets/attractions/icon/delete.svg" alt="" v-if="is_del">
+                        <img class="licon" src="../../../assets/attractions/icon/delete.svg" alt=""
+                            v-if="poster_id === cookie_id" @click="delcomment">
                     </div>
                 </div>
 
@@ -56,7 +57,10 @@
 
 <script>
 import axios from 'axios'
+import { ElMessage } from 'element-plus';
 export default {
+
+    inject: ['reload'],
     props: {
         userlog: String,
         username: String,
@@ -67,6 +71,7 @@ export default {
         comunlikes: Number,
         picsrc: Array,
         comment_id: String,
+        poster_id: String
     },
     data() {
         return {
@@ -74,49 +79,65 @@ export default {
             is_liked: false,
             is_unliked: false,
             is_del: false,
-            liketype: 0,//0-取消点赞或点踩，1-点赞或点踩
-            unliketype: 0,
+            // liketype: 0,
+            //0-取消点赞或点踩，1-点赞或点踩
+            // unliketype: 0,
+            // 这个是要cookie获取的，暂且写死
+            cookie_id: "843526A2B7784E73B28E73C797A2C81C"
         }
 
     },
-    mounted(){
-        
-        
-    },
+
     methods: {
-        // 现在有个问题就是mounted里面不会报错
-        changelikestatus() {
-            this.is_liked = !this.is_liked;
-            this.liketype = !this.liketype;
-            this.likeChange()
-            
-        },
-        changeunlikestatus() {
-            this.is_unliked = !this.is_unliked;
-            this.unliketype = !this.unliketype;
-            this.unlikechange()
-        },
-        likeChange() {
+        delcomment() {
             axios
-                .get('/api/attrations/LikeComment?commentID=' + this.comment_id + "&type=" + this.liketype)
+                .get('/api/attrations/DeleteComment?commentID=' + this.comment_id)
                 .then((response) => {
-                    console.log("点赞数", response)
-                })
-                .catch((error) => {
-                    console.error('Error fetching data:', error);
-                });
-        },
-        unlikechange(){
-            axios
-                .get('/api/attrations/UnlikeComment?commentID=' + this.comment_id + "&type=" + this.unliketype)
-                .then((response) => {
-                    console.log("点踩数", response)
+                    console.log(response)
+                    ElMessage({
+                        message: '删除成功!',
+                        type: 'success',
+                    })
                 })
                 .catch((error) => {
                     console.error('Error fetching data:', error);
                 });
 
+            this.reload()
         }
+        // 现在有个问题就是mounted里面不会报错
+        // changelikestatus() {
+        //     this.is_liked = !this.is_liked;
+        //     this.liketype = !this.liketype;
+        //     this.likeChange()
+
+        // },
+        // changeunlikestatus() {
+        //     this.is_unliked = !this.is_unliked;
+        //     this.unliketype = !this.unliketype;
+        //     this.unlikechange()
+        // },
+        // likeChange() {
+        //     axios
+        //         .get('/api/attrations/LikeComment?commentID=' + this.comment_id + "&type=" + this.liketype)
+        //         .then((response) => {
+        //             console.log("点赞数", response)
+        //         })
+        //         .catch((error) => {
+        //             console.error('Error fetching data:', error);
+        //         });
+        // },
+        // unlikechange(){
+        //     axios
+        //         .get('/api/attrations/UnlikeComment?commentID=' + this.comment_id + "&type=" + this.unliketype)
+        //         .then((response) => {
+        //             console.log("点踩数", response)
+        //         })
+        //         .catch((error) => {
+        //             console.error('Error fetching data:', error);
+        //         });
+
+        // }
 
     },
     components: {
@@ -158,6 +179,10 @@ export default {
     height: 65px;
     border-radius: 50px;
     margin-right: 10px;
+}
+
+.attrright {
+    width: 100%;
 }
 
 .attrhead {
@@ -226,5 +251,4 @@ export default {
     width: 12px;
     height: 12px;
     transform: translate(0, 15%);
-}
-</style>
+}</style>

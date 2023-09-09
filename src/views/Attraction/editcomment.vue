@@ -65,6 +65,9 @@ import OSS from 'ali-oss'
 import { toRaw } from '@vue/reactivity'
 
 export default {
+    props:{
+        attractionID:Number,
+    },
     mounted() {
         this.initializeData();
     },
@@ -78,19 +81,11 @@ export default {
 
             texts: ['极差', '失望', '一般', '满意', '惊喜'],
             comment: {
-                // 确定是哪条评论
-                attractionid: "123",//景区id
-                commentid: "123",//评论id
-                userid: "123",//用户id
-                username: "123",//用户名
-                uesrsrc: '123',//用户头像
                 // 评论里要有啥
                 avgscore: 0,//评分带小数点
                 detail: '',
                 picList: [],//照片列表暂时
-                // 其他信息
-                commentDate: '',//时间
-                commentCity: '',//ip地址这个不方便就不加
+               
             },
             // 上传至oss相关
             OSSOptions: {
@@ -206,13 +201,14 @@ export default {
         postAttrComment() {
             // 现在要换成body传参
             const data = {
+                // userID是cookie获取的
                 userID: '843526A2B7784E73B28E73C797A2C81C',
-                attractionid: 1,
+                attractionid: this.attractionID,
                 commentDetail: this.comment.detail,
                 rating: this.comment.avgscore,
                 commentSrc: this.comment.picList
             };
-            // 这里有图片上传就有问题
+            
             axios.post('/api/attrations/PostComments', data, null)
                 .then(res => {
                     console.log(res.data);

@@ -5,7 +5,6 @@
 
 
     <div class="front">
-      <!-- 这里稍微有点问题先 -->
       <Header></Header>
       <img class="imghead" src="../assets/travel.png" alt="一张美丽的海景图片">
 
@@ -40,7 +39,7 @@
         <!-- 热门景点缩略图 -->
         <div class="rec">
           <RecView v-for="item in recommendpiclist" :key="item.id" :picsrc="item.picsrc" :title="item.title"
-            @click="ToDetail()"></RecView>
+            @click="ToDetail(item.id)"></RecView>
         </div>
 
       </div>
@@ -52,7 +51,7 @@
         <div class="rank">
           <div class="container">
             <RankView v-for="item in highranklist" :key="item.id" :picsrc="item.picsrc[0]" :title="item.title"
-              :score="item.score" :dec="item.position" @click="ToDetail()"></RankView>
+              :score="item.score" :dec="item.position" @click="ToDetail(item.id)"></RankView>
           </div>
           <div class="endline">
             -- 搜索查看更多精彩 --
@@ -227,9 +226,13 @@ export default {
       //value代表每个地方的区域码
       console.log(value);
     },
-    ToDetail() {
+    ToDetail(val) {
+      // 先获取attractionID
+      console.log(val);
       this.goToTop();
-      this.$router.push('/attraction-detail');
+      // 传参
+      this.$router.push({ name: 'attractiondetails', query: { attractionID:val  } });
+      // this.$router.push('/attraction-detail');
     },
     showCascader() {
       // 显示遮罩层
@@ -315,7 +318,7 @@ export default {
 
 .imghead {
   width: 100%;
-  height: 600px;
+  height: 630px;
 }
 
 .imgtitle {
@@ -325,7 +328,7 @@ export default {
   /* 将文字的顶部定位到父容器的中间 */
   left: 50%;
   /* 将文字的左边定位到父容器的中间 */
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -30%);
   /* 使用transform属性将文字向左和向上移动其自身宽度和高度的一半，使其处于准确的中心位置 */
   letter-spacing: 6px;
   padding: 10px;

@@ -21,6 +21,7 @@ import MyTeamDetails from "@/views/Team/MyTeamDetails.vue";
 import EditTeam from "@/views/Team/EditTeam.vue";
 import SearchTeam from "@/views/Team/SearchTeam.vue";
 
+
 const routes = [
   {
     path: "/",
