@@ -111,10 +111,13 @@ export default {
     // window.scroll(0, Math.max(window.pageYOffset - 50, 0));
     let that = this;
     that.keyWord = this.$route.query.key
+    console.log(that.keyWord)
 
     axios
         .get("/api/search/AllSearch", {
-          Keyword: that.keyWord
+          params: {
+            Keyword: that.keyWord
+          }
         })
         .then(function (response) {
           console.log("post请求成功");
@@ -205,7 +208,7 @@ export default {
 
 body
 {
-  background-color: #f6f6f6;
+  background-color:#D9DFFD;
 }
 
 .article-container p
@@ -239,7 +242,7 @@ body
   /* 出现竖直滚动条计算内容偏移 */
   margin-right: calc(100% - 100vw);
   padding-right: 17px;
-  background-color: #f6f6f6;
+  background-color: #D9DFFD;
 }
 
 .sbackground

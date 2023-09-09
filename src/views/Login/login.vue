@@ -77,7 +77,7 @@
 
       <!--按钮部分-->
       <div class="button">
-        <div class="button-text" style="margin-left: 230px;" @click="nameLogin">登录</div>
+        <div class="button-text" style="margin-left: 230px;" @click="Login">登录</div>
         <div class="change-button" @click="changePage('注册')">还没有账号？注册一下</div>
       </div>
     </div>
@@ -114,7 +114,7 @@ export default {
         userPassword:"",
         phone: "",
         verificationCode: "", //表单中展示的验证码
-        contentText: "", //向手机号发送的随机验证码
+        contentText: "123", //向手机号发送的随机验证码
         timer: null,
         showCode: true, //判断展示‘获取验证码’或‘倒计时’
         count: "", //倒计时时间
@@ -166,13 +166,16 @@ export default {
           })
           .then(response => {
             console.log("post请求成功");
+            alert("注册成功")
+
+            this.choosePage = '登录'
           })
           .catch(error => {
             console.log(error);
             alert("连接服务器失败");
           })
     },
-    nameLogin(){
+    Login(){
       let that = this;
       if(that.codeLogin === false) {
         // 用来进行昵称登录
@@ -192,6 +195,39 @@ export default {
             })
             .then(response => {
               console.log("post请求成功");
+              localStorage.setItem("isLogin",true);
+              localStorage.setItem("userid",response.data.userId)
+              localStorage.setItem("username",response.data.userName)
+              this.$globalData.navbarActive="home";
+              this.$router.push("/")
+            })
+            .catch(error => {
+              console.log(error);
+              alert("连接服务器失败");
+            })
+      }
+      else{
+        //用来进行短信登陆
+        if (that.loginForm.phone === '') {
+          alert("用户昵称不能为空")
+          return;
+        } else if (that.loginForm.verificationCode !== that.loginForm.contentText) {
+          alert("验证码输入错误")
+          return;
+        }
+
+        //进行登录
+        axios
+            .post("/api/User/phonelogin", {
+              PhoneNumber: that.loginForm.phone,
+            })
+            .then(response => {
+              console.log("post请求成功");
+              localStorage.setItem("isLogin",true);
+              localStorage.setItem("userid",response.data.userId)
+              localStorage.setItem("username",response.data.userName)
+              this.$globalData.navbarActive="home";
+              this.$router.push("/")
             })
             .catch(error => {
               console.log(error);
